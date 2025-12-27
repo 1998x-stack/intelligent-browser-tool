@@ -1,0 +1,679 @@
+{
+  "title": "Stanford University",
+  "author": null,
+  "hostname": "stanford.edu",
+  "date": "2025-12-01",
+  "fingerprint": "bc41321c77bb9309",
+  "id": null,
+  "license": null,
+  "comments": "",
+  "raw_text": "At Stanford, our mission of discovery and learning is energized by a spirit of optimism and possibility that dates to our founding. Here you’ll find a place of intellectual expansiveness, wide-ranging perspectives, and freedom to explore new lines of thinking. Buzzing with ideas and innovation, approaching questions with openness and curiosity, pursuing excellence in all we do – this is Stanford. Driving discoveries vital to our world, our health, and our intellectual life 6,699 Inventions created by federally funded Stanford research 3,029 U.S. patents based on federally funded Stanford research 400+ Start-up companies founded based on federally funded research at Stanford 350,000+ Jobs created by companies that started with federally funded Stanford research $94 Billion Private investment in start-up companies that grew out of federally funded Stanford research $11+ trillion Market value of the top 30 companies founded by Stanford alumni Providing student-athletes the opportunity to achieve excellence both in competition and in the classroom Home of Champions Stanford’s 137 NCAA championships are the most for any university, a product of an unrivaled culture of excellence and continued support from the campus community",
+  "text": "At Stanford, our mission of discovery and learning is energized by a spirit of optimism and possibility that dates to our founding. Here you’ll find a place of intellectual expansiveness, wide-ranging perspectives, and freedom to explore new lines of thinking. Buzzing with ideas and innovation, approaching questions with openness and curiosity, pursuing excellence in all we do – this is Stanford.\nDriving discoveries vital to our world, our health, and our intellectual life\n6,699 Inventions created by federally funded Stanford research\n3,029 U.S. patents based on federally funded Stanford research\n400+ Start-up companies founded based on federally funded research at Stanford\n350,000+ Jobs created by companies that started with federally funded Stanford research\n$94 Billion Private investment in start-up companies that grew out of federally funded Stanford research\n$11+ trillion Market value of the top 30 companies founded by Stanford alumni\nProviding student-athletes the opportunity to achieve excellence both in competition and in the classroom\nHome of Champions\nStanford’s 137 NCAA championships are the most for any university, a product of an unrivaled culture of excellence and continued support from the campus community",
+  "language": null,
+  "image": "https://www.stanford.edu/wp-content/uploads/2023/03/Community.png",
+  "pagetype": "website",
+  "filedate": "2025-12-27",
+  "source": "https://www.stanford.edu/",
+  "source-hostname": "Stanford University",
+  "excerpt": "Our mission of discovery and learning is energized by a spirit of optimism and possibility that dates to our founding.",
+  "categories": "",
+  "tags": "",
+  "links": [
+    {
+      "url": "https://admission.stanford.edu/",
+      "text": "Undergraduate",
+      "type": "admission",
+      "is_internal": false,
+      "priority": 17
+    },
+    {
+      "url": "https://www.stanford.edu/faculty-staff-gateway/",
+      "text": "Faculty & Staff",
+      "type": "faculty",
+      "is_internal": true,
+      "priority": 13
+    },
+    {
+      "url": "https://www.stanford.edu/list/research/",
+      "text": "Research Centers A - to  Z",
+      "type": "research",
+      "is_internal": true,
+      "priority": 13
+    },
+    {
+      "url": "https://www.stanford.edu/admission/",
+      "text": "Admission",
+      "type": "admission",
+      "is_internal": true,
+      "priority": 12
+    },
+    {
+      "url": "https://www.stanford.edu/research/",
+      "text": "Research",
+      "type": "research",
+      "is_internal": true,
+      "priority": 10
+    },
+    {
+      "url": "https://www.stanford.edu/about/",
+      "text": "About",
+      "type": "about",
+      "is_internal": true,
+      "priority": 10
+    },
+    {
+      "url": "https://news.stanford.edu/features/research-at-stanford",
+      "text": "",
+      "type": "research",
+      "is_internal": false,
+      "priority": 10
+    },
+    {
+      "url": "https://www.stanford.edu/about/history",
+      "text": "History",
+      "type": "about",
+      "is_internal": true,
+      "priority": 10
+    },
+    {
+      "url": "https://gradadmissions.stanford.edu/explore-programs",
+      "text": "Graduate Programs",
+      "type": "general",
+      "is_internal": false,
+      "priority": 9
+    },
+    {
+      "url": "https://undergrad.stanford.edu/",
+      "text": "Undergraduate Education",
+      "type": "general",
+      "is_internal": false,
+      "priority": 5
+    },
+    {
+      "url": "https://vpge.stanford.edu/",
+      "text": "Graduate Education",
+      "type": "general",
+      "is_internal": false,
+      "priority": 5
+    },
+    {
+      "url": "https://majors.stanford.edu/majors",
+      "text": "Undergraduate Majors",
+      "type": "academic",
+      "is_internal": false,
+      "priority": 5
+    },
+    {
+      "url": "https://gradadmissions.stanford.edu",
+      "text": "Graduate",
+      "type": "general",
+      "is_internal": false,
+      "priority": 4
+    },
+    {
+      "url": "https://www.stanford.edu/",
+      "text": "Stanford University",
+      "type": "general",
+      "is_internal": true,
+      "priority": 3
+    },
+    {
+      "url": "https://www.stanford.edu/health-care/",
+      "text": "Health Care",
+      "type": "general",
+      "is_internal": true,
+      "priority": 3
+    },
+    {
+      "url": "https://www.stanford.edu/campus-life/",
+      "text": "Campus Life",
+      "type": "general",
+      "is_internal": true,
+      "priority": 3
+    },
+    {
+      "url": "https://lifelonglearning.stanford.edu/",
+      "text": "Lifelong Learning",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "http://humsci.stanford.edu/",
+      "text": "Humanities & Sciences",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "http://engineering.stanford.edu/",
+      "text": "Engineering",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://sustainability.stanford.edu/",
+      "text": "Sustainability",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "http://studentaffairs.stanford.edu/",
+      "text": "Student Affairs",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://rec.stanford.edu/",
+      "text": "Recreation & Wellness",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://arts.stanford.edu/learn/interdisciplinary/",
+      "text": "Interdisciplinary Arts",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "http://museum.stanford.edu",
+      "text": "Cantor Arts Center",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "http://anderson.stanford.edu",
+      "text": "Anderson Collection",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "http://live.stanford.edu/",
+      "text": "Stanford Live",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://arts.stanford.edu/",
+      "text": "More about the arts",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://events.stanford.edu/event/public_tour_papua_new_guinea_sculpture_walk_1489?utm_campaign=widget&utm_medium=widget&utm_source=Stanford+University",
+      "text": "Public Tour | Papua New Guinea Sculpture Walk",
+      "type": "event",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://events.stanford.edu/event/branner-library-monthly-exhibit-oceans-krill-extreme-life?utm_campaign=widget&utm_medium=widget&utm_source=Stanford+University",
+      "text": "Branner Library Monthly Book & Map Exhibit - Oceans: Krill and Life in Extreme conditions",
+      "type": "event",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://events.stanford.edu/event/stanford-energy-seminar-allocating-electricity-klass?utm_campaign=widget&utm_medium=widget&utm_source=Stanford+University",
+      "text": "Stanford Energy Seminar | Allocating Electricity | Alexandra Klass, University of Michigan Law School",
+      "type": "event",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://events.stanford.edu/event/aiddiplomacy-mergers-and-the-future-of-global-security?utm_campaign=widget&utm_medium=widget&utm_source=Stanford+University",
+      "text": "Aid–Diplomacy Mergers and the Future of Global Security",
+      "type": "financial",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "http://events.stanford.edu",
+      "text": "More events",
+      "type": "event",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://med.stanford.edu/",
+      "text": "Stanford Medicine",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://stanfordhealthcare.org/",
+      "text": "Stanford Health Care",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://stanfordchildrens.org/",
+      "text": "Stanford Children’s Health",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://gostanford.com/sports/2017/5/22/home-of-champions.aspx",
+      "text": "National Championships",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://gostanford.com/sports/featured",
+      "text": "Athlete Stories",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://engineering.stanford.edu/",
+      "text": "Engineering",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://humsci.stanford.edu/",
+      "text": "Humanities & Sciences",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://www.stanfordchildrens.org/",
+      "text": "Stanford Children's Health",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://online.stanford.edu/",
+      "text": "Stanford Online",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://wasc.stanford.edu/",
+      "text": "Accreditation",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://financialaid.stanford.edu/",
+      "text": "Financial Aid",
+      "type": "financial",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://community.stanford.edu/",
+      "text": "Community Engagement",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://openfacultypositions.stanford.edu/",
+      "text": "Faculty Positions",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://visit.stanford.edu/plan/",
+      "text": "Maps & Directions",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://emergency.stanford.edu/",
+      "text": "Emergency Info",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://www.stanford.edu/site/terms/",
+      "text": "Terms of Use",
+      "type": "general",
+      "is_internal": true,
+      "priority": 3
+    },
+    {
+      "url": "https://studentservices.stanford.edu/more-resources/student-policies/non-academic/non-discrimination",
+      "text": "Non-Discrimination",
+      "type": "general",
+      "is_internal": false,
+      "priority": 3
+    },
+    {
+      "url": "https://www.stanford.edu/site/accessibility/",
+      "text": "Accessibility",
+      "type": "general",
+      "is_internal": true,
+      "priority": 3
+    },
+    {
+      "url": "https://news.stanford.edu/stories/2025/05/meet-khoi-young-graduate-profile",
+      "text": "Read more",
+      "type": "news",
+      "is_internal": false,
+      "priority": 2
+    },
+    {
+      "url": "https://www.stanford.edu/student-gateway/",
+      "text": "Students",
+      "type": "general",
+      "is_internal": true,
+      "priority": 0
+    },
+    {
+      "url": "http://parents.stanford.edu/",
+      "text": "Families",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://visit.stanford.edu",
+      "text": "Visitors",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "http://alumni.stanford.edu/",
+      "text": "Alumni",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://www.stanford.edu/academics/",
+      "text": "Academics",
+      "type": "academic",
+      "is_internal": true,
+      "priority": 0
+    },
+    {
+      "url": "https://gostanford.com/",
+      "text": "Athletics",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://news.stanford.edu/",
+      "text": "News",
+      "type": "news",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://events.stanford.edu/",
+      "text": "Events",
+      "type": "event",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://campus-map.stanford.edu/",
+      "text": "Map",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://profiles.stanford.edu/",
+      "text": "Profiles",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://news.stanford.edu/stories/2025/12/deep-ocean-earthquakes-phytoplankton-research-study",
+      "text": "",
+      "type": "news",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://news.stanford.edu/stories/2025/12/photos-research-campus-life-performances",
+      "text": "",
+      "type": "news",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://news.stanford.edu/stories/2025/12/neurodiversity-human-evolution-research",
+      "text": "",
+      "type": "news",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://news.stanford.edu/stories/2025/12/students-fidgeting-creativity-research",
+      "text": "",
+      "type": "news",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://news.stanford.edu/stories/2025/12/science-medicine-engineering-innovations-space-medical-breakthroughs",
+      "text": "",
+      "type": "news",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "http://med.stanford.edu/",
+      "text": "Medicine",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "http://www.law.stanford.edu/",
+      "text": "Law",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "http://ed.stanford.edu/",
+      "text": "Education",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "http://gsb.stanford.edu/",
+      "text": "Business",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://epluribus.stanford.edu/",
+      "text": "ePluribus",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://news.stanford.edu/stories/2022/06/meet-helena-zhang",
+      "text": "Learn more",
+      "type": "news",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://gostanford.com/news/2023/5/25/athletics-stanford-olympic-history.aspx",
+      "text": "Medals",
+      "type": "news",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://www.facebook.com/stanford",
+      "text": "Facebook",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://twitter.com/stanford",
+      "text": "Twitter",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://www.instagram.com/stanford/",
+      "text": "Instagram",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://www.linkedin.com/school/stanford-university/",
+      "text": "LinkedIn",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://www.youtube.com/stanford",
+      "text": "YouTube",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://podcasts.apple.com/us/artist/stanford/1280771285",
+      "text": "iTunes U",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://www.gsb.stanford.edu/",
+      "text": "Business",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://ed.stanford.edu/",
+      "text": "Education",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://law.stanford.edu/",
+      "text": "Law",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "http://library.stanford.edu/",
+      "text": "Libraries",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://facts.stanford.edu/",
+      "text": "Facts",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://stanfordwho.stanford.edu/",
+      "text": "Directory",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://giving.stanford.edu/",
+      "text": "Giving",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://careersearch.stanford.edu/",
+      "text": "Careers",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://www.stanford.edu/contact",
+      "text": "Contact",
+      "type": "general",
+      "is_internal": true,
+      "priority": 0
+    },
+    {
+      "url": "https://www.stanford.edu/site/privacy",
+      "text": "Privacy",
+      "type": "general",
+      "is_internal": true,
+      "priority": 0
+    },
+    {
+      "url": "https://uit.stanford.edu/security/copyright-infringement",
+      "text": "Copyright",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    },
+    {
+      "url": "https://adminguide.stanford.edu/chapter-1/subchapter-5/policy-1-5-4",
+      "text": "Trademarks",
+      "type": "general",
+      "is_internal": false,
+      "priority": 0
+    }
+  ],
+  "chunks": [],
+  "text_truncated": false,
+  "text_preview": "At Stanford, our mission of discovery and learning is energized by a spirit of optimism and possibility that dates to our founding. Here you’ll find a place of intellectual expansiveness, wide-ranging perspectives, and freedom to explore new lines of thinking. Buzzing with ideas and innovation, approaching questions with openness and curiosity, pursuing excellence in all we do – this is Stanford.",
+  "stats": {
+    "text_length": 1240,
+    "word_count": 183,
+    "num_links": 91,
+    "num_chunks": 0,
+    "content_hash": "4d163d0f95b4227c",
+    "internal_links": 15,
+    "external_links": 76
+  },
+  "url": "https://www.stanford.edu",
+  "depth": 0,
+  "_meta": {
+    "url": "https://www.stanford.edu",
+    "extracted_at": "2025-12-27T19:29:44.038836",
+    "filename": "general_4c947da1_stanford_university"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "task_name": "browser_crawl",
+  "start_url": "https://www.stanford.edu",
+  "user_intent": "招生信息",
+  "created_at": "2025-12-27T19:29:35.676597",
+  "config": {
+    "ollama": {
+      "host": "http://localhost:11434",
+      "small_model": "qwen2.5:0.5b",
+      "large_model": "qwen2.5:3b",
+      "temperature": 0.1
+    },
+    "selenium": {
+      "headless": true,
+      "browser_type": "chrome",
+      "page_load_timeout": 30
+    },
+    "trafilatura": {
+      "include_links": true,
+      "max_text_length": 10000
+    },
+    "crawl": {
+      "max_pages": 50,
+      "max_depth": 3,
+      "allowed_domains": [
+        "stanford.edu"
+      ]
+    },
+    "task": {
+      "task_name": "browser_crawl",
+      "start_url": "https://www.stanford.edu",
+      "user_intent": "招生信息"
+    }
+  }
+}

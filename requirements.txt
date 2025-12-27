@@ -1,0 +1,42 @@
+# ============ Core Dependencies ============
+
+# Web Scraping
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+trafilatura>=1.12.0
+
+# HTML Processing
+lxml>=5.0.0
+beautifulsoup4>=4.12.0
+
+# HTTP Requests
+requests>=2.31.0
+
+# Logging
+loguru>=0.7.0
+
+# ============ Optional Dependencies ============
+
+# For faster HTML parsing
+# cchardet>=2.1.7
+# selectolax>=0.3.0
+
+# For PDF handling (if needed)
+# PyPDF2>=3.0.0
+
+# For Excel export (if needed)
+# openpyxl>=3.1.0
+# pandas>=2.0.0
+
+# ============ Development Dependencies ============
+
+# Testing
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+
+# Type checking
+# mypy>=1.5.0
+
+# Formatting
+# black>=23.0.0
+# isort>=5.12.0

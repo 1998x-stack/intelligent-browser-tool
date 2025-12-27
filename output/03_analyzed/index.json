@@ -1,0 +1,15 @@
+{
+  "https://www.stanford.edu": {
+    "url": "https://www.stanford.edu",
+    "filename": "general_4c947da1_stanford_university",
+    "category": "other",
+    "title": "Stanford University",
+    "timestamp": "2025-12-27T19:29:58.497014",
+    "status": "analyzed",
+    "content_hash": "",
+    "metadata": {
+      "relevance_score": 0,
+      "model": "qwen2.5:3b"
+    }
+  }
+}

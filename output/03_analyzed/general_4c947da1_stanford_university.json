@@ -1,0 +1,49 @@
+{
+  "summary": "斯坦福大学致力于创新和发现，通过其联邦资助的研究产生了大量的发明、专利和创业公司，并为学生运动员提供了在课堂内外取得成功的机遇。",
+  "key_points": [
+    "斯坦福大学的使命是促进发现和学习",
+    "斯坦福大学拥有137个NCAA冠军头衔，这是任何大学中最多的",
+    "联邦资助的研究产生了6,699项发明、3,029项美国专利、400多家创业公司等",
+    "斯坦福校友创办了价值超过11万亿美元的顶级公司"
+  ],
+  "entities": [
+    "斯坦福大学"
+  ],
+  "facts": [
+    "6,699",
+    "3,029",
+    "400+",
+    "$94B",
+    "$11T"
+  ],
+  "keywords": [
+    "斯坦福大学",
+    "联邦资助的研究",
+    "NCAA冠军头衔",
+    "发明",
+    "专利",
+    "创业公司",
+    "学生运动员",
+    "课堂内外",
+    "价值超过11万亿美元的顶级公司"
+  ],
+  "url": "https://www.stanford.edu",
+  "title": "Stanford University",
+  "model": "qwen2.5:3b",
+  "elapsed": 11.701804637908936,
+  "category": "other",
+  "depth": 0,
+  "classification": {
+    "category": "other",
+    "confidence": 0.5,
+    "should_extract": true,
+    "reason": "classification_failed",
+    "model": "qwen2.5:0.5b",
+    "elapsed": 2.7505531311035156
+  },
+  "_meta": {
+    "url": "https://www.stanford.edu",
+    "analyzed_at": "2025-12-27T19:29:58.496257",
+    "filename": "general_4c947da1_stanford_university"
+  }
+}
