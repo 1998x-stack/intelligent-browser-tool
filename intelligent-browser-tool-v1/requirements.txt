@@ -1,0 +1,36 @@
+# ============ 核心依赖 ============
+
+# 网页抓取
+selenium>=4.15.0
+webdriver-manager>=4.0.1
+trafilatura>=1.8.0
+
+# HTTP请求
+requests>=2.31.0
+
+# HTML/XML解析
+lxml>=5.1.0
+beautifulsoup4>=4.12.0
+
+# 日志
+loguru>=0.7.2
+
+# ============ 可选依赖 ============
+
+# 数据处理
+pandas>=2.1.0  # 用于数据分析和导出
+
+# 配置文件支持
+pyyaml>=6.0.1  # 如果需要YAML配置
+python-dotenv>=1.0.0  # 环境变量管理
+
+# 性能优化
+cchardet>=2.1.7  # 字符编码检测(trafilatura推荐)
+py3langid>=0.2.2  # 语言检测(trafilatura推荐)
+
+# ============ 开发依赖 ============
+# 如果需要开发和测试,可以额外安装:
+# pytest>=7.4.0
+# black>=23.0.0
+# flake8>=6.1.0
+# mypy>=1.7.0

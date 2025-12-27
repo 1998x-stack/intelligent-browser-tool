@@ -15,6 +15,14 @@ requests>=2.31.0
 # Logging
 loguru>=0.7.0
 
+# ============ Anti-Detection (Recommended) ============
+
+# Selenium stealth mode - highly recommended
+selenium-stealth>=1.0.6
+
+# Undetected ChromeDriver - for advanced anti-bot bypass
+# undetected-chromedriver>=3.5.0
+
 # ============ Optional Dependencies ============
 
 # For faster HTML parsing

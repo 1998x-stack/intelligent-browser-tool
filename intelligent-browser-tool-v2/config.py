@@ -21,8 +21,8 @@ import json
 class OllamaConfig:
     """Ollama模型配置"""
     host: str = "http://localhost:11434"
-    small_model: str = "qwen2.5:0.5b"  # 分类和意图判断
-    large_model: str = "qwen2.5:0.5b"    # 内容分析和提取
+    small_model: str = "qwen3:1.7b"  # 分类和意图判断
+    large_model: str = "qwen3:1.7b"    # 内容分析和提取
     temperature: float = 0.1           # 低温度保证稳定性
     max_tokens: int = 2048
     timeout: int = 60

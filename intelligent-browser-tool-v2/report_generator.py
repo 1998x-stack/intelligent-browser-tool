@@ -262,6 +262,9 @@ class ReportGenerator:
             title = page.get('title', 'Untitled')
             url = page.get('url', '')
             summary = page.get('summary', 'No summary available')
+            # 确保summary是字符串
+            if not isinstance(summary, str):
+                summary = str(summary) if summary else 'No summary available'
             
             content += f"""### [{title}]({url})
 
@@ -270,8 +273,14 @@ class ReportGenerator:
 **关键点:**
 """
             key_points = page.get('key_points', [])
-            for point in key_points[:5]:
-                content += f"- {point}\n"
+            if isinstance(key_points, list):
+                for point in key_points[:5]:
+                    if isinstance(point, str):
+                        content += f"- {point}\n"
+                    elif isinstance(point, dict):
+                        content += f"- {point.get('text', str(point))}\n"
+                    else:
+                        content += f"- {str(point)}\n"
             
             content += "\n---\n\n"
         
@@ -306,8 +315,13 @@ class ReportGenerator:
 
 """
         
-        for point in page.get('key_points', []):
-            content += f"- {point}\n"
+        key_points = page.get('key_points', [])
+        if isinstance(key_points, list):
+            for point in key_points:
+                if isinstance(point, str):
+                    content += f"- {point}\n"
+                elif isinstance(point, dict):
+                    content += f"- {point.get('text', str(point))}\n"
         
         content += """
 ## 实体信息
@@ -315,12 +329,29 @@ class ReportGenerator:
 """
         
         entities = page.get('entities', {})
-        for entity_type, values in entities.items():
-            if values:
-                content += f"### {entity_type}\n"
-                for val in values:
-                    content += f"- {val}\n"
-                content += "\n"
+        # 处理entities可能是字典或列表的情况
+        if isinstance(entities, dict):
+            for entity_type, values in entities.items():
+                if values:
+                    content += f"### {entity_type}\n"
+                    if isinstance(values, list):
+                        for val in values:
+                            if isinstance(val, str):
+                                content += f"- {val}\n"
+                            elif isinstance(val, dict):
+                                content += f"- {val.get('name', str(val))}\n"
+                    elif isinstance(values, str):
+                        content += f"- {values}\n"
+                    content += "\n"
+        elif isinstance(entities, list):
+            # entities是列表的情况
+            for entity in entities:
+                if isinstance(entity, str):
+                    content += f"- {entity}\n"
+                elif isinstance(entity, dict):
+                    entity_type = entity.get('type', 'entity')
+                    entity_value = entity.get('value', entity.get('name', str(entity)))
+                    content += f"- **{entity_type}**: {entity_value}\n"
         
         content += """
 ## 关键事实
@@ -328,15 +359,23 @@ class ReportGenerator:
 """
         
         facts = page.get('facts', [])
-        for fact in facts:
-            content += f"- **{fact.get('type', 'info')}**: {fact.get('value', '')}\n"
+        if isinstance(facts, list):
+            for fact in facts:
+                if isinstance(fact, dict):
+                    content += f"- **{fact.get('type', 'info')}**: {fact.get('value', '')}\n"
+                elif isinstance(fact, str):
+                    content += f"- {fact}\n"
         
         content += """
 ## 关键词
 
 """
         keywords = page.get('keywords', [])
-        content += ", ".join(keywords)
+        if isinstance(keywords, list):
+            keyword_strs = [kw if isinstance(kw, str) else str(kw) for kw in keywords]
+            content += ", ".join(keyword_strs)
+        elif isinstance(keywords, str):
+            content += keywords
         
         content += f"""
 
@@ -370,8 +409,11 @@ class ReportGenerator:
         # 收集高频关键词
         keyword_counts = {}
         for page in all_analyzed:
-            for kw in page.get('keywords', []):
-                keyword_counts[kw] = keyword_counts.get(kw, 0) + 1
+            keywords = page.get('keywords', [])
+            if isinstance(keywords, list):
+                for kw in keywords:
+                    if isinstance(kw, str):
+                        keyword_counts[kw] = keyword_counts.get(kw, 0) + 1
         
         top_keywords = sorted(
             keyword_counts.items(), 
@@ -386,18 +428,31 @@ class ReportGenerator:
         
         # 收集重要事实
         for page in all_analyzed:
-            for fact in page.get('facts', []):
-                if fact.get('type') in ['deadline', 'requirement', 'date']:
-                    findings.append(
-                        f"{fact.get('type')}: {fact.get('value')} "
-                        f"(来源: {page.get('title', 'Unknown')[:30]})"
-                    )
+            facts = page.get('facts', [])
+            if isinstance(facts, list):
+                for fact in facts:
+                    # 处理fact可能是字符串或字典的情况
+                    if isinstance(fact, dict):
+                        fact_type = fact.get('type', '')
+                        if fact_type in ['deadline', 'requirement', 'date']:
+                            findings.append(
+                                f"{fact_type}: {fact.get('value', '')} "
+                                f"(来源: {page.get('title', 'Unknown')[:30]})"
+                            )
+                    elif isinstance(fact, str) and fact.strip():
+                        # 如果fact是字符串，直接添加
+                        findings.append(
+                            f"事实: {fact[:80]} "
+                            f"(来源: {page.get('title', 'Unknown')[:30]})"
+                        )
         
         # 收集高相关页面摘要
         for page in all_analyzed:
-            if page.get('relevance_score', 0) > 0.7:
+            relevance = page.get('relevance_score', 0)
+            # 确保relevance是数字
+            if isinstance(relevance, (int, float)) and relevance > 0.7:
                 summary = page.get('summary', '')
-                if summary:
+                if summary and isinstance(summary, str):
                     findings.append(summary[:100] + "...")
         
         return findings[:15]
@@ -415,6 +470,14 @@ class ReportGenerator:
         Returns:
             报告路径
         """
+        # 确保synthesized_info是字典
+        if not isinstance(synthesized_info, dict):
+            synthesized_info = {}
+        
+        topic_summary = synthesized_info.get('topic_summary', '暂无概述')
+        if not isinstance(topic_summary, str):
+            topic_summary = str(topic_summary) if topic_summary else '暂无概述'
+        
         content = f"""# 🎯 意图分析报告
 
 > 用户意图: {self.config.user_intent}  
@@ -422,50 +485,127 @@ class ReportGenerator:
 
 ## 概述
 
-{synthesized_info.get('topic_summary', '暂无概述')}
+{topic_summary}
 
 ## 详细内容
 
 """
         
-        for section in synthesized_info.get('sections', []):
-            content += f"""### {section.get('title', 'Section')}
+        sections = synthesized_info.get('sections', [])
+        if isinstance(sections, list):
+            for section in sections:
+                if isinstance(section, dict):
+                    title = section.get('title', 'Section')
+                    section_content = section.get('content', '')
+                    sources = section.get('sources', [])
+                    
+                    # 确保content是字符串
+                    if not isinstance(section_content, str):
+                        section_content = str(section_content) if section_content else ''
+                    
+                    # 确保sources是列表
+                    if isinstance(sources, list):
+                        sources_str = ', '.join(str(s) for s in sources)
+                    elif isinstance(sources, str):
+                        sources_str = sources
+                    else:
+                        sources_str = str(sources) if sources else ''
+                    
+                    content += f"""### {title}
 
-{section.get('content', '')}
+{section_content}
 
-*来源: {', '.join(section.get('sources', []))}*
+*来源: {sources_str}*
 
 """
+                elif isinstance(section, str):
+                    content += f"{section}\n\n"
         
         content += """## 关键发现
 
 """
         
-        for finding in synthesized_info.get('key_findings', []):
-            content += f"- {finding}\n"
+        key_findings = synthesized_info.get('key_findings', [])
+        if isinstance(key_findings, list):
+            for finding in key_findings:
+                if isinstance(finding, str):
+                    content += f"- {finding}\n"
+                elif isinstance(finding, dict):
+                    content += f"- {finding.get('text', str(finding))}\n"
+                else:
+                    content += f"- {str(finding)}\n"
+        elif isinstance(key_findings, str):
+            content += f"- {key_findings}\n"
         
         content += """
 ## 建议行动
 
 """
         
-        for action in synthesized_info.get('action_items', []):
-            content += f"- {action}\n"
+        action_items = synthesized_info.get('action_items', [])
+        if isinstance(action_items, list):
+            for action in action_items:
+                if isinstance(action, str):
+                    content += f"- {action}\n"
+                elif isinstance(action, dict):
+                    content += f"- {action.get('text', str(action))}\n"
+                else:
+                    content += f"- {str(action)}\n"
+        elif isinstance(action_items, str):
+            content += f"- {action_items}\n"
         
         # 数据质量评估
         quality = synthesized_info.get('data_quality', {})
+        if not isinstance(quality, dict):
+            quality = {}
+        
+        completeness = quality.get('completeness', 0)
+        reliability = quality.get('reliability', 0)
+        
+        # 确保是数字
+        try:
+            completeness = float(completeness) if completeness else 0
+            reliability = float(reliability) if reliability else 0
+        except (TypeError, ValueError):
+            completeness = 0
+            reliability = 0
+        
         content += f"""
 ## 数据质量评估
 
 | 指标 | 评分 |
 |------|------|
-| 完整性 | {quality.get('completeness', 0):.0%} |
-| 可靠性 | {quality.get('reliability', 0):.0%} |
+| 完整性 | {completeness:.0%} |
+| 可靠性 | {reliability:.0%} |
 
 ### 信息缺口
 
 """
         
+        gaps = quality.get('gaps', [])
+        if isinstance(gaps, list):
+            for gap in gaps:
+                if isinstance(gap, str):
+                    content += f"- {gap}\n"
+                else:
+                    content += f"- {str(gap)}\n"
+        elif isinstance(gaps, str):
+            content += f"- {gaps}\n"
+        
+        content += """
+---
+
+*本报告由 AI 自动生成，请结合实际情况使用*
+"""
+        
+        filepath = self.data_manager.save_report(
+            name='intent_analysis',
+            content=content,
+            format='md'
+        )
+        
+        return filepath
+
         for gap in quality.get('gaps', []):
             content += f"- {gap}\n"
         

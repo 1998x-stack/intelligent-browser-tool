@@ -1,0 +1,757 @@
+2025-12-27 18:52:57 | INFO     | __main__:setup_logging:46 - 日志系统初始化完成
+2025-12-27 18:52:57 | INFO     | __main__:crawl_website:66 - 开始爬取网站: https://www.stanford.edu
+2025-12-27 18:52:57 | INFO     | __main__:crawl_website:67 - 配置 - 最大深度: 2, 最大页面数: 20
+2025-12-27 18:52:59 | INFO     | browser_engine:__init__:49 - 浏览器引擎初始化完成 (类型: chrome, 无头模式: False)
+2025-12-27 18:52:59 | INFO     | content_processor:__init__:45 - 内容处理器初始化完成
+2025-12-27 18:52:59 | INFO     | ai_analyzer:__init__:43 - AI分析器初始化完成 (小模型: qwen3:1.7b, 大模型: qwen3:1.7b)
+2025-12-27 18:52:59 | INFO     | __main__:crawl_website:86 - [1/20] 爬取URL (深度0): https://www.stanford.edu
+2025-12-27 18:52:59 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu (尝试 1/3)
+2025-12-27 18:53:09 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu (大小: 174278 字节)
+2025-12-27 18:53:11 | DEBUG    | content_processor:_extract_links:233 - 提取了 96 个唯一链接
+2025-12-27 18:53:11 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1240, 链接数: 96
+2025-12-27 18:53:11 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:53:40 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.85)
+2025-12-27 18:53:40 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:54:40 | ERROR    | ai_analyzer:_call_ollama:102 - Ollama API超时 (模型: qwen3:1.7b)
+2025-12-27 18:54:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/
+2025-12-27 18:54:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/
+2025-12-27 18:54:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/features/research-at-stanford
+2025-12-27 18:54:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics
+2025-12-27 18:54:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research
+2025-12-27 18:54:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-27 18:54:40 | INFO     | __main__:crawl_website:86 - [2/20] 爬取URL (深度1): https://www.stanford.edu/academics/
+2025-12-27 18:54:40 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/academics/ (尝试 1/3)
+2025-12-27 18:54:44 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/academics/ (大小: 119230 字节)
+2025-12-27 18:54:45 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-27 18:54:45 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1854, 链接数: 68
+2025-12-27 18:54:45 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:55:03 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.95)
+2025-12-27 18:55:03 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:56:03 | ERROR    | ai_analyzer:_call_ollama:102 - Ollama API超时 (模型: qwen3:1.7b)
+2025-12-27 18:56:03 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: N/A
+2025-12-27 18:56:03 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:57:03 | ERROR    | ai_analyzer:_call_ollama:102 - Ollama API超时 (模型: qwen3:1.7b)
+2025-12-27 18:57:03 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/#main-content
+2025-12-27 18:57:03 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/
+2025-12-27 18:57:03 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facts.stanford.edu/academics/undergraduate
+2025-12-27 18:57:03 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/schools/
+2025-12-27 18:57:03 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facts.stanford.edu/academics/graduate-profile
+2025-12-27 18:57:03 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-27 18:57:03 | INFO     | __main__:crawl_website:86 - [3/20] 爬取URL (深度1): https://www.stanford.edu/research/
+2025-12-27 18:57:03 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/research/ (尝试 1/3)
+2025-12-27 18:57:08 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/research/ (大小: 128230 字节)
+2025-12-27 18:57:09 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-27 18:57:09 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 966, 链接数: 68
+2025-12-27 18:57:09 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:57:23 | INFO     | __main__:crawl_website:107 - 页面分类: research (置信度: 0.95)
+2025-12-27 18:57:23 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:58:23 | ERROR    | ai_analyzer:_call_ollama:102 - Ollama API超时 (模型: qwen3:1.7b)
+2025-12-27 18:58:23 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: N/A
+2025-12-27 18:58:23 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:59:11 | WARNING  | __main__:crawl_website:145 - 用户中断爬取
+2025-12-27 18:59:11 | INFO     | browser_engine:close:299 - 浏览器已关闭
+2025-12-27 18:59:11 | INFO     | __main__:crawl_website:152 - 爬取完成. 总页面数: 2, 提取数据条数: 2
+2025-12-27 18:59:11 | INFO     | __main__:save_results:205 - 结果已保存到: /Users/mx/Desktop/intelligent-browser-tool/results.json
+2025-12-27 18:59:11 | INFO     | __main__:save_results:209 - 输出文件大小: 27.05 KB
+2025-12-27 18:59:11 | SUCCESS  | __main__:main:288 - 任务完成! 共提取 2 个页面的数据
+2025-12-27 18:59:27 | INFO     | __main__:setup_logging:46 - 日志系统初始化完成
+2025-12-27 18:59:27 | INFO     | __main__:crawl_website:66 - 开始爬取网站: https://www.stanford.edu
+2025-12-27 18:59:27 | INFO     | __main__:crawl_website:67 - 配置 - 最大深度: 2, 最大页面数: 20
+2025-12-27 18:59:30 | INFO     | browser_engine:__init__:49 - 浏览器引擎初始化完成 (类型: chrome, 无头模式: False)
+2025-12-27 18:59:30 | INFO     | content_processor:__init__:45 - 内容处理器初始化完成
+2025-12-27 18:59:30 | INFO     | ai_analyzer:__init__:43 - AI分析器初始化完成 (小模型: qwen3:1.7b, 大模型: qwen3:1.7b)
+2025-12-27 18:59:30 | INFO     | __main__:crawl_website:86 - [1/20] 爬取URL (深度0): https://www.stanford.edu
+2025-12-27 18:59:30 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu (尝试 1/3)
+2025-12-27 18:59:39 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu (大小: 174276 字节)
+2025-12-27 18:59:40 | DEBUG    | content_processor:_extract_links:233 - 提取了 96 个唯一链接
+2025-12-27 18:59:40 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1240, 链接数: 96
+2025-12-27 18:59:40 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:59:42 | WARNING  | ai_analyzer:_parse_json_response:421 - 无法解析JSON响应: {
+    "category": "general_info",
+    "confidence": 1.0,
+    "reasoning": "网页标题为"Stanford University"，内容主要描述了斯坦福大学的使命、历史和成就，因此可以判断这是一个关于学术信息的网页。"
+}
+2025-12-27 18:59:42 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.50)
+2025-12-27 18:59:42 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:59:45 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/faculty-staff-gateway/
+2025-12-27 18:59:45 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/
+2025-12-27 18:59:45 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/
+2025-12-27 18:59:45 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/12/neurodiversity-human-evolution-research
+2025-12-27 18:59:45 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/12/science-medicine-engineering-innovations-space-medical-breakthroughs
+2025-12-27 18:59:45 | INFO     | __main__:crawl_website:86 - [2/20] 爬取URL (深度1): https://www.stanford.edu/faculty-staff-gateway/
+2025-12-27 18:59:45 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/faculty-staff-gateway/ (尝试 1/3)
+2025-12-27 18:59:49 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/faculty-staff-gateway/ (大小: 142768 字节)
+2025-12-27 18:59:51 | DEBUG    | content_processor:_extract_links:233 - 提取了 132 个唯一链接
+2025-12-27 18:59:51 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 7198, 链接数: 132
+2025-12-27 18:59:51 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:59:52 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.90)
+2025-12-27 18:59:52 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 18:59:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/
+2025-12-27 18:59:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards
+2025-12-27 18:59:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://stanfordcareers.stanford.edu/explore-careers
+2025-12-27 18:59:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/staff/resources/training_cat.html
+2025-12-27 18:59:54 | INFO     | __main__:crawl_website:86 - [3/20] 爬取URL (深度1): https://www.stanford.edu/academics/
+2025-12-27 18:59:54 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/academics/ (尝试 1/3)
+2025-12-27 18:59:59 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/academics/ (大小: 119314 字节)
+2025-12-27 19:00:00 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-27 19:00:00 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1854, 链接数: 68
+2025-12-27 19:00:00 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:02 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 1.00)
+2025-12-27 19:00:02 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:04 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/schools/
+2025-12-27 19:00:04 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/admission/
+2025-12-27 19:00:04 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/about/
+2025-12-27 19:00:04 | INFO     | __main__:crawl_website:86 - [4/20] 爬取URL (深度1): https://www.stanford.edu/research/
+2025-12-27 19:00:04 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/research/ (尝试 1/3)
+2025-12-27 19:00:08 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/research/ (大小: 128229 字节)
+2025-12-27 19:00:09 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-27 19:00:09 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 966, 链接数: 68
+2025-12-27 19:00:09 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:10 | INFO     | __main__:crawl_website:107 - 页面分类: research (置信度: 1.00)
+2025-12-27 19:00:10 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:20 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: 世界领先的斯坦福大学研究生态系统支持着一个长期的合作关系，为大学和联邦政府提供大量的项目，这些项目在各个领域中驱动发现。
+2025-12-27 19:00:20 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/02/generative-ai-tool-marks-a-milestone-in-biology-and-accelerates-the-future-of-life-sciences
+2025-12-27 19:00:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/03/food-research-stanford-sustainability-agriculture-aquaculture
+2025-12-27 19:00:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/05/cellular-recycling-centers-neurodegenerative-diseases
+2025-12-27 19:00:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/06/quantum-computing-advances-in-the-age-of-big-data
+2025-12-27 19:00:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/07/machine-learning-revolution
+2025-12-27 19:00:25 | INFO     | __main__:crawl_website:86 - [5/20] 爬取URL (深度1): https://news.stanford.edu/stories/2025/12/neurodiversity-human-evolution-research
+2025-12-27 19:00:25 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/stories/2025/12/neurodiversity-human-evolution-research (尝试 1/3)
+2025-12-27 19:00:36 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/stories/2025/12/neurodiversity-human-evolution-research (大小: 182903 字节)
+2025-12-27 19:00:37 | DEBUG    | content_processor:_extract_links:233 - 提取了 85 个唯一链接
+2025-12-27 19:00:37 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 5619, 链接数: 85
+2025-12-27 19:00:37 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:39 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.90)
+2025-12-27 19:00:39 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:42 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine/neurodiversity-human-evolution-research
+2025-12-27 19:00:42 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering/biology
+2025-12-27 19:00:42 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering/neuroscience
+2025-12-27 19:00:42 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://academic.oup.com/mbe/article/42/9/msaf189/8245036
+2025-12-27 19:00:42 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/
+2025-12-27 19:00:42 | INFO     | __main__:crawl_website:86 - [6/20] 爬取URL (深度1): https://news.stanford.edu/stories/2025/12/science-medicine-engineering-innovations-space-medical-breakthroughs
+2025-12-27 19:00:42 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/stories/2025/12/science-medicine-engineering-innovations-space-medical-breakthroughs (尝试 1/3)
+2025-12-27 19:00:48 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/stories/2025/12/science-medicine-engineering-innovations-space-medical-breakthroughs (大小: 187096 字节)
+2025-12-27 19:00:50 | DEBUG    | content_processor:_extract_links:233 - 提取了 90 个唯一链接
+2025-12-27 19:00:50 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 6073, 链接数: 90
+2025-12-27 19:00:50 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:51 | INFO     | __main__:crawl_website:107 - 页面分类: news (置信度: 1.00)
+2025-12-27 19:00:51 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:00:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship
+2025-12-27 19:00:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering
+2025-12-27 19:00:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine
+2025-12-27 19:00:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/business
+2025-12-27 19:00:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/arts-and-humanities
+2025-12-27 19:00:54 | INFO     | __main__:crawl_website:86 - [7/20] 爬取URL (深度2): https://cardinalatwork.stanford.edu/
+2025-12-27 19:00:54 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://cardinalatwork.stanford.edu/ (尝试 1/3)
+2025-12-27 19:00:59 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://cardinalatwork.stanford.edu/ (大小: 193773 字节)
+2025-12-27 19:01:02 | DEBUG    | content_processor:_extract_links:233 - 提取了 458 个唯一链接
+2025-12-27 19:01:02 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1429, 链接数: 458
+2025-12-27 19:01:02 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:03 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 1.00)
+2025-12-27 19:01:03 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards/faculty-staff-benefits-overview
+2025-12-27 19:01:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/manager-toolkit
+2025-12-27 19:01:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards/saving-retirement/prepare-retire/staff-retirement-checklist
+2025-12-27 19:01:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards/compensation/staff-compensation/pay-administration
+2025-12-27 19:01:07 | INFO     | __main__:crawl_website:86 - [8/20] 爬取URL (深度2): https://cardinalatwork.stanford.edu/benefits-rewards
+2025-12-27 19:01:07 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://cardinalatwork.stanford.edu/benefits-rewards (尝试 1/3)
+2025-12-27 19:01:14 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://cardinalatwork.stanford.edu/benefits-rewards (大小: 228175 字节)
+2025-12-27 19:01:15 | DEBUG    | content_processor:_extract_links:233 - 提取了 470 个唯一链接
+2025-12-27 19:01:15 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 3956, 链接数: 470
+2025-12-27 19:01:15 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:16 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 1.00)
+2025-12-27 19:01:16 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards/faculty-staff-benefits-overview
+2025-12-27 19:01:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards/saving-retirement/prepare-retire/staff-retirement-checklist
+2025-12-27 19:01:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards/compensation/staff-compensation/pay-administration
+2025-12-27 19:01:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards/compensation/staff-compensation/salary-structure
+2025-12-27 19:01:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://cardinalatwork.stanford.edu/benefits-rewards/compensation/staff-compensation/job-descriptions
+2025-12-27 19:01:20 | INFO     | __main__:crawl_website:86 - [9/20] 爬取URL (深度2): https://stanfordcareers.stanford.edu/explore-careers
+2025-12-27 19:01:20 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://stanfordcareers.stanford.edu/explore-careers (尝试 1/3)
+2025-12-27 19:01:33 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://stanfordcareers.stanford.edu/explore-careers (大小: 230234 字节)
+2025-12-27 19:01:34 | DEBUG    | content_processor:_extract_links:233 - 提取了 50 个唯一链接
+2025-12-27 19:01:34 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 417, 链接数: 50
+2025-12-27 19:01:34 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:35 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.90)
+2025-12-27 19:01:35 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://careersearch.stanford.edu/user/settings
+2025-12-27 19:01:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://careersearch.stanford.edu/
+2025-12-27 19:01:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://careersearch.stanford.edu/page/program-project-management-63
+2025-12-27 19:01:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://careersearch.stanford.edu/page/health-services-59
+2025-12-27 19:01:38 | INFO     | __main__:crawl_website:86 - [10/20] 爬取URL (深度2): https://fingate.stanford.edu/staff/resources/training_cat.html
+2025-12-27 19:01:38 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://fingate.stanford.edu/staff/resources/training_cat.html (尝试 1/3)
+2025-12-27 19:01:43 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://fingate.stanford.edu/staff/resources/training_cat.html (大小: 132418 字节)
+2025-12-27 19:01:44 | DEBUG    | content_processor:_extract_links:233 - 提取了 228 个唯一链接
+2025-12-27 19:01:44 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 7481, 链接数: 228
+2025-12-27 19:01:44 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:46 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.90)
+2025-12-27 19:01:46 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:49 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/
+2025-12-27 19:01:49 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/authority/learning/learning-path-generator-lpg
+2025-12-27 19:01:49 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/account-structure/research-pta-details
+2025-12-27 19:01:49 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/fundamentals-0
+2025-12-27 19:01:49 | INFO     | __main__:crawl_website:86 - [11/20] 爬取URL (深度2): https://www.stanford.edu/academics/schools/
+2025-12-27 19:01:49 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/academics/schools/ (尝试 1/3)
+2025-12-27 19:01:53 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/academics/schools/ (大小: 127141 字节)
+2025-12-27 19:01:54 | DEBUG    | content_processor:_extract_links:233 - 提取了 96 个唯一链接
+2025-12-27 19:01:54 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 502, 链接数: 96
+2025-12-27 19:01:54 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:55 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.90)
+2025-12-27 19:01:55 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:01:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.gsb.stanford.edu/program
+2025-12-27 19:01:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.gsb.stanford.edu/research
+2025-12-27 19:01:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.gsb.stanford.edu/faculty-research
+2025-12-27 19:01:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.gsb.stanford.edu/research/
+2025-12-27 19:01:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.gsb.stanford.edu/research/
+2025-12-27 19:01:58 | INFO     | __main__:crawl_website:86 - [12/20] 爬取URL (深度2): https://www.stanford.edu/admission/
+2025-12-27 19:01:58 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/admission/ (尝试 1/3)
+2025-12-27 19:02:02 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/admission/ (大小: 119626 字节)
+2025-12-27 19:02:03 | DEBUG    | content_processor:_extract_links:233 - 提取了 69 个唯一链接
+2025-12-27 19:02:03 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1765, 链接数: 69
+2025-12-27 19:02:03 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:02:04 | INFO     | __main__:crawl_website:107 - 页面分类: admission (置信度: 1.00)
+2025-12-27 19:02:04 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:02:06 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://admission.stanford.edu/
+2025-12-27 19:02:06 | INFO     | __main__:crawl_website:86 - [13/20] 爬取URL (深度2): https://www.stanford.edu/about/
+2025-12-27 19:02:06 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/about/ (尝试 1/3)
+2025-12-27 19:02:11 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/about/ (大小: 129860 字节)
+2025-12-27 19:02:12 | DEBUG    | content_processor:_extract_links:233 - 提取了 64 个唯一链接
+2025-12-27 19:02:12 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 879, 链接数: 64
+2025-12-27 19:02:12 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:02:14 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.90)
+2025-12-27 19:02:14 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:02:16 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-27 19:02:16 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/about/#main-content
+2025-12-27 19:02:16 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/student-gateway/
+2025-12-27 19:02:16 | INFO     | __main__:crawl_website:86 - [14/20] 爬取URL (深度2): https://news.stanford.edu/stories/2025/02/generative-ai-tool-marks-a-milestone-in-biology-and-accelerates-the-future-of-life-sciences
+2025-12-27 19:02:16 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/stories/2025/02/generative-ai-tool-marks-a-milestone-in-biology-and-accelerates-the-future-of-life-sciences (尝试 1/3)
+2025-12-27 19:02:26 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/stories/2025/02/generative-ai-tool-marks-a-milestone-in-biology-and-accelerates-the-future-of-life-sciences (大小: 178829 字节)
+2025-12-27 19:02:28 | DEBUG    | content_processor:_extract_links:233 - 提取了 83 个唯一链接
+2025-12-27 19:02:28 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 7285, 链接数: 83
+2025-12-27 19:02:28 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:02:29 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 1.00)
+2025-12-27 19:02:29 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/arts-and-humanities
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/biology
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/business
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/economics
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/education
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/laundry
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/law
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/mathematics
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/natural-science
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/physics
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/society
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/technology
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/education
+2025-12-27 19:02:38 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/medicine
+2025-12-27 19:02:38 | INFO     | __main__:crawl_website:86 - [15/20] 爬取URL (深度2): https://news.stanford.edu/stories/2025/03/food-research-stanford-sustainability-agriculture-aquaculture
+2025-12-27 19:02:38 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/stories/2025/03/food-research-stanford-sustainability-agriculture-aquaculture (尝试 1/3)
+2025-12-27 19:02:51 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/stories/2025/03/food-research-stanford-sustainability-agriculture-aquaculture (大小: 203620 字节)
+2025-12-27 19:02:52 | DEBUG    | content_processor:_extract_links:233 - 提取了 121 个唯一链接
+2025-12-27 19:02:52 | DEBUG    | content_processor:_chunk_text:340 - 文本分为 2 块
+2025-12-27 19:02:52 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 18035, 链接数: 121
+2025-12-27 19:02:52 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:02:53 | INFO     | __main__:crawl_website:107 - 页面分类: news (置信度: 0.90)
+2025-12-27 19:02:53 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/arts-and-humanities
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/business
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/economics
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/education
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/law
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/social-sciences
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/technology
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/virtual-reality
+2025-12-27 19:02:58 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/writing-and-communication
+2025-12-27 19:02:58 | INFO     | __main__:crawl_website:86 - [16/20] 爬取URL (深度2): https://news.stanford.edu/stories/2025/05/cellular-recycling-centers-neurodegenerative-diseases
+2025-12-27 19:02:58 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/stories/2025/05/cellular-recycling-centers-neurodegenerative-diseases (尝试 1/3)
+2025-12-27 19:03:06 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/stories/2025/05/cellular-recycling-centers-neurodegenerative-diseases (大小: 185165 字节)
+2025-12-27 19:03:07 | DEBUG    | content_processor:_extract_links:233 - 提取了 92 个唯一链接
+2025-12-27 19:03:08 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 8783, 链接数: 92
+2025-12-27 19:03:08 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:09 | INFO     | __main__:crawl_website:107 - 页面分类: news (置信度: 1.00)
+2025-12-27 19:03:09 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/arts-and-humanities
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/business
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/economics
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/education
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/law
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/social-sciences
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/technology
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/weather
+2025-12-27 19:03:15 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/virtual-public-services
+2025-12-27 19:03:15 | INFO     | __main__:crawl_website:86 - [17/20] 爬取URL (深度2): https://news.stanford.edu/stories/2025/06/quantum-computing-advances-in-the-age-of-big-data
+2025-12-27 19:03:15 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/stories/2025/06/quantum-computing-advances-in-the-age-of-big-data (尝试 1/3)
+2025-12-27 19:03:18 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/stories/2025/06/quantum-computing-advances-in-the-age-of-big-data (大小: 122398 字节)
+2025-12-27 19:03:19 | DEBUG    | content_processor:_extract_links:233 - 提取了 69 个唯一链接
+2025-12-27 19:03:19 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 564, 链接数: 69
+2025-12-27 19:03:19 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:20 | INFO     | __main__:crawl_website:107 - 页面分类: admission (置信度: 0.90)
+2025-12-27 19:03:20 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/arts-and-humanities
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/business
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/economics
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/education
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/law
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering
+2025-12-27 19:03:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/social-sciences
+2025-12-27 19:03:25 | INFO     | __main__:crawl_website:86 - [18/20] 爬取URL (深度2): https://news.stanford.edu/stories/2025/07/machine-learning-revolution
+2025-12-27 19:03:25 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/stories/2025/07/machine-learning-revolution (尝试 1/3)
+2025-12-27 19:03:28 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/stories/2025/07/machine-learning-revolution (大小: 122398 字节)
+2025-12-27 19:03:29 | DEBUG    | content_processor:_extract_links:233 - 提取了 69 个唯一链接
+2025-12-27 19:03:29 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 564, 链接数: 69
+2025-12-27 19:03:29 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:31 | INFO     | __main__:crawl_website:107 - 页面分类: admission (置信度: 0.90)
+2025-12-27 19:03:31 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/arts-and-humanities
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/business
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/earth-and-climate
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/economics
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/education
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/law
+2025-12-27 19:03:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering
+2025-12-27 19:03:35 | INFO     | __main__:crawl_website:86 - [19/20] 爬取URL (深度2): https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine/neurodiversity-human-evolution-research
+2025-12-27 19:03:35 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine/neurodiversity-human-evolution-research (尝试 1/3)
+2025-12-27 19:03:38 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/research-and-scholarship/topic/health-and-medicine/neurodiversity-human-evolution-research (大小: 122484 字节)
+2025-12-27 19:03:39 | DEBUG    | content_processor:_extract_links:233 - 提取了 69 个唯一链接
+2025-12-27 19:03:39 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 564, 链接数: 69
+2025-12-27 19:03:39 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:40 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.90)
+2025-12-27 19:03:40 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:43 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/arts-and-humanities
+2025-12-27 19:03:43 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/economics
+2025-12-27 19:03:43 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/business
+2025-12-27 19:03:43 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering
+2025-12-27 19:03:43 | INFO     | __main__:crawl_website:86 - [20/20] 爬取URL (深度2): https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering/biology
+2025-12-27 19:03:43 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering/biology (尝试 1/3)
+2025-12-27 19:03:48 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/research-and-scholarship/topic/science-and-engineering/biology (大小: 159232 字节)
+2025-12-27 19:03:49 | DEBUG    | content_processor:_extract_links:233 - 提取了 77 个唯一链接
+2025-12-27 19:03:49 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 2948, 链接数: 77
+2025-12-27 19:03:49 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:50 | WARNING  | ai_analyzer:_parse_json_response:421 - 无法解析JSON响应: {
+    "category": "general_info",
+    "confidence": 0.9,
+    "reasoning": "网页标题为'Biology'，内容主要涉及生物学知识和研究进展，因此可以判断其属于"general_info"类别。"
+}
+2025-12-27 19:03:50 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.50)
+2025-12-27 19:03:50 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 19:03:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship
+2025-12-27 19:03:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/arts-and-humanities
+2025-12-27 19:03:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/business
+2025-12-27 19:03:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/research-and-scholarship/topic/economics
+2025-12-27 19:03:54 | INFO     | browser_engine:close:299 - 浏览器已关闭
+2025-12-27 19:03:54 | INFO     | __main__:crawl_website:152 - 爬取完成. 总页面数: 20, 提取数据条数: 1
+2025-12-27 19:03:54 | INFO     | browser_engine:close:299 - 浏览器已关闭
+2025-12-27 19:03:54 | INFO     | __main__:save_results:205 - 结果已保存到: /Users/mx/Desktop/intelligent-browser-tool/results.json
+2025-12-27 19:03:54 | INFO     | __main__:save_results:209 - 输出文件大小: 15.12 KB
+2025-12-27 19:03:54 | SUCCESS  | __main__:main:288 - 任务完成! 共提取 1 个页面的数据
+2025-12-27 23:56:42 | INFO     | __main__:setup_logging:46 - 日志系统初始化完成
+2025-12-27 23:56:42 | INFO     | __main__:crawl_website:66 - 开始爬取网站: https://www.stanford.edu
+2025-12-27 23:56:42 | INFO     | __main__:crawl_website:67 - 配置 - 最大深度: 2, 最大页面数: 20
+2025-12-27 23:56:44 | INFO     | browser_engine:__init__:49 - 浏览器引擎初始化完成 (类型: chrome, 无头模式: False)
+2025-12-27 23:56:44 | INFO     | content_processor:__init__:45 - 内容处理器初始化完成
+2025-12-27 23:56:44 | INFO     | ai_analyzer:__init__:43 - AI分析器初始化完成 (小模型: qwen3:1.7b, 大模型: qwen3:1.7b)
+2025-12-27 23:56:44 | INFO     | __main__:crawl_website:86 - [1/20] 爬取URL (深度0): https://www.stanford.edu
+2025-12-27 23:56:44 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu (尝试 1/3)
+2025-12-27 23:56:54 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu (大小: 174276 字节)
+2025-12-27 23:56:56 | DEBUG    | content_processor:_extract_links:233 - 提取了 96 个唯一链接
+2025-12-27 23:56:56 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1240, 链接数: 96
+2025-12-27 23:56:56 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:56:56 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:56:56 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.50)
+2025-12-27 23:56:56 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:56:56 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:56:56 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/
+2025-12-27 23:56:56 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/
+2025-12-27 23:56:56 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/features/research-at-stanford
+2025-12-27 23:56:56 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics
+2025-12-27 23:56:56 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research
+2025-12-27 23:56:56 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-27 23:56:56 | INFO     | __main__:crawl_website:86 - [2/20] 爬取URL (深度1): https://www.stanford.edu/academics/
+2025-12-27 23:56:56 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/academics/ (尝试 1/3)
+2025-12-27 23:57:00 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/academics/ (大小: 119314 字节)
+2025-12-27 23:57:01 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-27 23:57:01 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1854, 链接数: 68
+2025-12-27 23:57:01 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:57:01 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:57:01 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.50)
+2025-12-27 23:57:01 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:57:01 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:57:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/#main-content
+2025-12-27 23:57:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/
+2025-12-27 23:57:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facts.stanford.edu/academics/undergraduate
+2025-12-27 23:57:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/schools/
+2025-12-27 23:57:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facts.stanford.edu/academics/graduate-profile
+2025-12-27 23:57:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-27 23:57:01 | INFO     | __main__:crawl_website:86 - [3/20] 爬取URL (深度1): https://www.stanford.edu/research/
+2025-12-27 23:57:01 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/research/ (尝试 1/3)
+2025-12-27 23:57:05 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/research/ (大小: 128229 字节)
+2025-12-27 23:57:06 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-27 23:57:06 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 966, 链接数: 68
+2025-12-27 23:57:06 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:57:06 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:57:06 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.50)
+2025-12-27 23:57:06 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:57:06 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:57:06 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/#main-content
+2025-12-27 23:57:06 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/features/research-at-stanford
+2025-12-27 23:57:06 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-27 23:57:06 | INFO     | __main__:crawl_website:86 - [4/20] 爬取URL (深度1): https://news.stanford.edu/features/research-at-stanford
+2025-12-27 23:57:06 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://news.stanford.edu/features/research-at-stanford (尝试 1/3)
+2025-12-27 23:57:29 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://news.stanford.edu/features/research-at-stanford (大小: 102058 字节)
+2025-12-27 23:57:30 | DEBUG    | content_processor:_extract_links:233 - 提取了 18 个唯一链接
+2025-12-27 23:57:30 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 4942, 链接数: 18
+2025-12-27 23:57:30 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:57:30 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:57:30 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.50)
+2025-12-27 23:57:30 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:57:30 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:57:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/features/research-at-stanford#main-content
+2025-12-27 23:57:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/04/research-matters-renee-zhao
+2025-12-27 23:57:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://news.stanford.edu/stories/2025/05/research-matters-stanley-qi
+2025-12-27 23:57:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://bulletin.stanford.edu/academic-polices/student-conduct-rights/nondiscrimination
+2025-12-27 23:57:30 | INFO     | __main__:crawl_website:86 - [5/20] 爬取URL (深度1): https://www.stanford.edu/academics
+2025-12-27 23:57:30 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/academics (尝试 1/3)
+2025-12-27 23:57:34 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/academics (大小: 119228 字节)
+2025-12-27 23:57:35 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-27 23:57:35 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1854, 链接数: 68
+2025-12-27 23:57:35 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:57:35 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:57:35 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.50)
+2025-12-27 23:57:35 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:57:35 | ERROR    | ai_analyzer:_call_ollama:98 - Ollama API错误: 404 - {"error":"model 'qwen3:1.7b' not found"}
+2025-12-27 23:57:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics#main-content
+2025-12-27 23:57:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facts.stanford.edu/academics/undergraduate
+2025-12-27 23:57:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/schools/
+2025-12-27 23:57:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facts.stanford.edu/academics/graduate-profile
+2025-12-27 23:57:35 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-27 23:57:35 | INFO     | __main__:crawl_website:86 - [6/20] 爬取URL (深度1): https://www.stanford.edu/research
+2025-12-27 23:57:35 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/research (尝试 1/3)
+2025-12-27 23:57:37 | WARNING  | __main__:crawl_website:145 - 用户中断爬取
+2025-12-27 23:57:37 | INFO     | browser_engine:close:299 - 浏览器已关闭
+2025-12-27 23:57:37 | INFO     | __main__:crawl_website:152 - 爬取完成. 总页面数: 5, 提取数据条数: 0
+2025-12-27 23:57:37 | WARNING  | __main__:main:290 - 未提取到任何数据
+2025-12-27 23:58:46 | INFO     | __main__:setup_logging:46 - 日志系统初始化完成
+2025-12-27 23:58:46 | INFO     | __main__:crawl_website:66 - 开始爬取网站: https://www.stanford.edu
+2025-12-27 23:58:46 | INFO     | __main__:crawl_website:67 - 配置 - 最大深度: 2, 最大页面数: 20
+2025-12-27 23:58:48 | INFO     | browser_engine:__init__:49 - 浏览器引擎初始化完成 (类型: chrome, 无头模式: False)
+2025-12-27 23:58:48 | INFO     | content_processor:__init__:45 - 内容处理器初始化完成
+2025-12-27 23:58:48 | INFO     | ai_analyzer:__init__:43 - AI分析器初始化完成 (小模型: qwen3:1.7b, 大模型: qwen3:1.7b)
+2025-12-27 23:58:48 | INFO     | __main__:crawl_website:86 - [1/20] 爬取URL (深度0): https://www.stanford.edu
+2025-12-27 23:58:48 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu (尝试 1/3)
+2025-12-27 23:58:59 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu (大小: 174276 字节)
+2025-12-27 23:59:01 | DEBUG    | content_processor:_extract_links:233 - 提取了 96 个唯一链接
+2025-12-27 23:59:01 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1240, 链接数: 96
+2025-12-27 23:59:01 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:59:10 | INFO     | __main__:crawl_website:107 - 页面分类: research (置信度: 0.90)
+2025-12-27 23:59:10 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:59:28 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: Stanford University is renowned for its research, innovation, and athletic excellence, with over 6,6
+2025-12-27 23:59:28 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:59:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/faculty-staff-gateway/
+2025-12-27 23:59:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/
+2025-12-27 23:59:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/
+2025-12-27 23:59:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-27 23:59:40 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics
+2025-12-27 23:59:40 | INFO     | __main__:crawl_website:86 - [2/20] 爬取URL (深度1): https://www.stanford.edu/faculty-staff-gateway/
+2025-12-27 23:59:40 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/faculty-staff-gateway/ (尝试 1/3)
+2025-12-27 23:59:44 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/faculty-staff-gateway/ (大小: 142768 字节)
+2025-12-27 23:59:45 | DEBUG    | content_processor:_extract_links:233 - 提取了 132 个唯一链接
+2025-12-27 23:59:45 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 7198, 链接数: 132
+2025-12-27 23:59:45 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-27 23:59:59 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.95)
+2025-12-27 23:59:59 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:00:10 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facultyaffairs.stanford.edu/
+2025-12-28 00:00:10 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/
+2025-12-28 00:00:10 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://stanfordcareers.stanford.edu/explore-careers
+2025-12-28 00:00:10 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facultysenate.stanford.edu/
+2025-12-28 00:00:10 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultydevelopment.stanford.edu/
+2025-12-28 00:00:10 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultyclub.stanford.edu/
+2025-12-28 00:00:10 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/faculty/
+2025-12-28 00:00:10 | INFO     | __main__:crawl_website:86 - [3/20] 爬取URL (深度1): https://www.stanford.edu/academics/
+2025-12-28 00:00:10 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/academics/ (尝试 1/3)
+2025-12-28 00:00:14 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/academics/ (大小: 119228 字节)
+2025-12-28 00:00:15 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-28 00:00:15 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1854, 链接数: 68
+2025-12-28 00:00:15 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:00:21 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.95)
+2025-12-28 00:00:21 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:00:40 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: 斯坦福大学提供全面的学术教育，涵盖本科、研究生及终身学习，拥有66个本科专业，约7550名本科生，9915名研究生在150个学位项目中学习，同时通过七个学院提供跨学科合作机会。
+2025-12-28 00:00:40 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:01:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/research/
+2025-12-28 00:01:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors
+2025-12-28 00:01:01 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/schools/
+2025-12-28 00:01:01 | INFO     | __main__:crawl_website:86 - [4/20] 爬取URL (深度1): https://www.stanford.edu/research/
+2025-12-28 00:01:01 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/research/ (尝试 1/3)
+2025-12-28 00:01:06 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/research/ (大小: 128315 字节)
+2025-12-28 00:01:07 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-28 00:01:07 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 966, 链接数: 68
+2025-12-28 00:01:07 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:01:11 | INFO     | __main__:crawl_website:107 - 页面分类: research (置信度: 0.90)
+2025-12-28 00:01:11 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:01:28 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: 斯坦福大学研究生态系统推动全球重大突破，涵盖生物技术、计算机科学、工程等领域，标志性发明包括抗体疗法、互联网协议、人工智能基础理论等。
+2025-12-28 00:01:28 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:01:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/list/research/
+2025-12-28 00:01:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://doresearch.stanford.edu/
+2025-12-28 00:01:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/
+2025-12-28 00:01:41 | INFO     | __main__:crawl_website:86 - [5/20] 爬取URL (深度1): https://www.stanford.edu/list/research/
+2025-12-28 00:01:41 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/list/research/ (尝试 1/3)
+2025-12-28 00:01:45 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/list/research/ (大小: 127664 字节)
+2025-12-28 00:01:46 | DEBUG    | content_processor:_extract_links:233 - 提取了 179 个唯一链接
+2025-12-28 00:01:46 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 4309, 链接数: 179
+2025-12-28 00:01:46 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:01:51 | INFO     | __main__:crawl_website:107 - 页面分类: research (置信度: 0.95)
+2025-12-28 00:01:51 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:02:28 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: Stanford University lists research centers across multiple disciplines, including Engineering, Human
+2025-12-28 00:02:28 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:02:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://baxterlab.stanford.edu/
+2025-12-28 00:02:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://beckman.stanford.edu/
+2025-12-28 00:02:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://ai.stanford.edu/
+2025-12-28 00:02:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://aimi.stanford.edu
+2025-12-28 00:02:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://mse.stanford.edu/research-impact/labs-centers/stanford-nanocharacterization-laboratory
+2025-12-28 00:02:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://med.stanford.edu/svalz.html
+2025-12-28 00:02:41 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://med.stanford.edu/amyloidcenter.html
+2025-12-28 00:02:41 | INFO     | __main__:crawl_website:86 - [6/20] 爬取URL (深度1): https://www.stanford.edu/academics
+2025-12-28 00:02:41 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/academics (尝试 1/3)
+2025-12-28 00:02:46 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/academics (大小: 119228 字节)
+2025-12-28 00:02:47 | DEBUG    | content_processor:_extract_links:233 - 提取了 68 个唯一链接
+2025-12-28 00:02:47 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1854, 链接数: 68
+2025-12-28 00:02:47 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:02:52 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.90)
+2025-12-28 00:02:52 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:03:09 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: 斯坦福大学提供全面的学术教育，涵盖本科和研究生层次，七个学院提供多样化学习机会，终身学习项目覆盖从幼儿园到大学的教育需求。
+2025-12-28 00:03:09 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:03:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/schools/
+2025-12-28 00:03:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors
+2025-12-28 00:03:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/undergraduate
+2025-12-28 00:03:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/graduate-profile
+2025-12-28 00:03:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/undergrad.stanford.edu/
+2025-12-28 00:03:20 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.stanford.edu/academics/facts-undergraduate
+2025-12-28 00:03:20 | INFO     | __main__:crawl_website:86 - [7/20] 爬取URL (深度2): http://facultyaffairs.stanford.edu/
+2025-12-28 00:03:20 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: http://facultyaffairs.stanford.edu/ (尝试 1/3)
+2025-12-28 00:03:29 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: http://facultyaffairs.stanford.edu/ (大小: 37853 字节)
+2025-12-28 00:03:31 | DEBUG    | content_processor:_extract_links:233 - 提取了 29 个唯一链接
+2025-12-28 00:03:31 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1893, 链接数: 29
+2025-12-28 00:03:31 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:03:35 | INFO     | __main__:crawl_website:107 - 页面分类: faculty (置信度: 0.90)
+2025-12-28 00:03:35 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:03:51 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: 该办公室负责实施大学政策，涵盖晋升、薪酬、休假等学术事务，并提供补充补偿、反骚扰资源及支付透明度合规指导。
+2025-12-28 00:03:51 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:04:27 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facultyaffairs.stanford.edu/faculty-appointments
+2025-12-28 00:04:27 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fsat.sites.stanford.edu/
+2025-12-28 00:04:27 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facultyaffairs.stanford.edu/faculty-retirement
+2025-12-28 00:04:27 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://facultyaffairs.stanford.edu/faculty-data
+2025-12-28 00:04:27 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultyhandbook.stanford.edu/
+2025-12-28 00:04:27 | INFO     | __main__:crawl_website:86 - [8/20] 爬取URL (深度2): https://stanfordcareers.stanford.edu/explore-careers
+2025-12-28 00:04:27 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://stanfordcareers.stanford.edu/explore-careers (尝试 1/3)
+2025-12-28 00:04:45 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://stanfordcareers.stanford.edu/explore-careers (大小: 230240 字节)
+2025-12-28 00:04:46 | DEBUG    | content_processor:_extract_links:233 - 提取了 50 个唯一链接
+2025-12-28 00:04:46 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 417, 链接数: 50
+2025-12-28 00:04:46 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:04:54 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.95)
+2025-12-28 00:04:54 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:05:18 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://stanfordcareers.stanford.edu/research
+2025-12-28 00:05:18 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://stanfordcareers.stanford.edu/page/peoplehr-60
+2025-12-28 00:05:18 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://stanfordcareers.stanford.edu/culture
+2025-12-28 00:05:18 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://stanfordcareers.stanford.edu/benefits
+2025-12-28 00:05:18 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://stanfordcareers.stanford.edu/page/health-services-59
+2025-12-28 00:05:18 | INFO     | __main__:crawl_website:86 - [9/20] 爬取URL (深度2): http://facultysenate.stanford.edu/
+2025-12-28 00:05:18 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: http://facultysenate.stanford.edu/ (尝试 1/3)
+2025-12-28 00:05:24 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: http://facultysenate.stanford.edu/ (大小: 51352 字节)
+2025-12-28 00:05:25 | DEBUG    | content_processor:_extract_links:233 - 提取了 82 个唯一链接
+2025-12-28 00:05:25 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 3170, 链接数: 82
+2025-12-28 00:05:25 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:05:32 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.70)
+2025-12-28 00:05:32 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:06:32 | ERROR    | ai_analyzer:_call_ollama:102 - Ollama API超时 (模型: qwen3:1.7b)
+2025-12-28 00:06:32 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: N/A
+2025-12-28 00:06:32 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:07:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultyhandbook.stanford.edu/index/index
+2025-12-28 00:07:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://drive.google.com/file/d/1FpqzXqpQcg_4p-NYp_7SNQNcMdmaOUHT/view?usp=sharing
+2025-12-28 00:07:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://docs.google.com/document/d/1GBTIN1XzSbFHJAGlseo3lo7iECugAXpA/edit?usp=sharing&ouid=104682877837992011680&rtpof=true&sd=true
+2025-12-28 00:07:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://docs.google.com/document/d/1KvNbSoqmW2Ws406eLgYU3eYVvXiZFx8q/edit?usp=sharing&ouid=104682877837992011680&rtpof=true&sd=true
+2025-12-28 00:07:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://drive.google.com/file/d/1t9ieIn-WwMbHB64UZu2nAV9zx-FzRuTU/view?usp=sharing
+2025-12-28 00:07:07 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://itcommunity.stanford.edu/c-acis
+2025-12-28 00:07:07 | INFO     | __main__:crawl_website:86 - [10/20] 爬取URL (深度2): https://facultydevelopment.stanford.edu/
+2025-12-28 00:07:07 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://facultydevelopment.stanford.edu/ (尝试 1/3)
+2025-12-28 00:07:17 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://facultydevelopment.stanford.edu/ (大小: 63888 字节)
+2025-12-28 00:07:18 | DEBUG    | content_processor:_extract_links:233 - 提取了 41 个唯一链接
+2025-12-28 00:07:18 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1857, 链接数: 41
+2025-12-28 00:07:18 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:07:23 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.90)
+2025-12-28 00:07:23 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:07:41 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: 斯坦福大学提供Faculty Development资源，涵盖学术领导、多样性项目、数据报告及职业发展支持，旨在促进教师合作与包容性。
+2025-12-28 00:07:41 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:08:05 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultydevelopment.stanford.edu/faculty-development
+2025-12-28 00:08:05 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultydevelopment.stanford.edu/provostial-fellows
+2025-12-28 00:08:05 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultydevelopment.stanford.edu/faculty-development/mentoring-workshops-training
+2025-12-28 00:08:05 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultydevelopment.stanford.edu/faculty-development/writing-programs-and-resources
+2025-12-28 00:08:05 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultydevelopment.stanford.edu/faculty-development/equity-and-inclusion-programs-and-resources
+2025-12-28 00:08:05 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultydevelopment.stanford.edu/faculty-development/career-path-programs-and-resources
+2025-12-28 00:08:05 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultydevelopment.stanford.edu/faculty-engagement/faculty-womens-forum
+2025-12-28 00:08:05 | INFO     | __main__:crawl_website:86 - [11/20] 爬取URL (深度2): https://facultyclub.stanford.edu/
+2025-12-28 00:08:05 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://facultyclub.stanford.edu/ (尝试 1/3)
+2025-12-28 00:08:13 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://facultyclub.stanford.edu/ (大小: 63376 字节)
+2025-12-28 00:08:14 | DEBUG    | content_processor:_extract_links:233 - 提取了 23 个唯一链接
+2025-12-28 00:08:14 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 263, 链接数: 23
+2025-12-28 00:08:14 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:08:20 | INFO     | __main__:crawl_website:107 - 页面分类: faculty (置信度: 0.80)
+2025-12-28 00:08:20 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:08:33 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: Stanford Faculty Club为教职工、行政人员及会员提供社交场所，促进思想交流与合作，包含会员资格、活动空间及在线资源。
+2025-12-28 00:08:33 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:08:57 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultyclub.stanford.edu/club-mission-and-history
+2025-12-28 00:08:57 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultyclub.stanford.edu/benefits
+2025-12-28 00:08:57 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultyclub.stanford.edu/individual-membership
+2025-12-28 00:08:57 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultyclub.stanford.edu/membership-application
+2025-12-28 00:08:57 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://facultyclub.stanford.edu/room-tour
+2025-12-28 00:08:57 | INFO     | __main__:crawl_website:86 - [12/20] 爬取URL (深度2): https://fingate.stanford.edu/faculty/
+2025-12-28 00:08:57 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://fingate.stanford.edu/faculty/ (尝试 1/3)
+2025-12-28 00:09:04 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://fingate.stanford.edu/faculty/ (大小: 131982 字节)
+2025-12-28 00:09:06 | DEBUG    | content_processor:_extract_links:233 - 提取了 219 个唯一链接
+2025-12-28 00:09:06 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 453, 链接数: 219
+2025-12-28 00:09:06 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:09:12 | INFO     | __main__:crawl_website:107 - 页面分类: general_info (置信度: 0.70)
+2025-12-28 00:09:12 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:09:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/account-structure/stanfords-chart-accounts
+2025-12-28 00:09:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/accounts-ptas
+2025-12-28 00:09:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/account-structure/update-and-maintain-ptas
+2025-12-28 00:09:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/account-structure/close-ptas
+2025-12-28 00:09:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://fingate.stanford.edu/fundamentals-0
+2025-12-28 00:09:30 | INFO     | __main__:crawl_website:86 - [13/20] 爬取URL (深度2): https://majors.stanford.edu/majors
+2025-12-28 00:09:30 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://majors.stanford.edu/majors (尝试 1/3)
+2025-12-28 00:09:47 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://majors.stanford.edu/majors (大小: 481188 字节)
+2025-12-28 00:09:49 | DEBUG    | content_processor:_extract_links:233 - 提取了 120 个唯一链接
+2025-12-28 00:09:49 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 562, 链接数: 120
+2025-12-28 00:09:49 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:09:55 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.90)
+2025-12-28 00:09:55 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:10:32 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: 提供斯坦福大学学士学位项目信息，包含主要专业、联合专业、辅修、荣誉、跨学科项目等，建议咨询顾问或访问招生办公室获取最新信息。
+2025-12-28 00:10:32 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:10:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors/aeronautics-and-astronautics
+2025-12-28 00:10:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors/african-and-african-american-studies
+2025-12-28 00:10:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors/anthropology
+2025-12-28 00:10:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors/applied-physics
+2025-12-28 00:10:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors/bioengineering
+2025-12-28 00:10:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors/biology
+2025-12-28 00:10:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors/art-history
+2025-12-28 00:10:54 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://majors.stanford.edu/majors/art-practice
+2025-12-28 00:10:54 | INFO     | __main__:crawl_website:86 - [14/20] 爬取URL (深度2): https://www.stanford.edu/academics/schools/
+2025-12-28 00:10:54 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://www.stanford.edu/academics/schools/ (尝试 1/3)
+2025-12-28 00:10:58 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://www.stanford.edu/academics/schools/ (大小: 127055 字节)
+2025-12-28 00:10:59 | DEBUG    | content_processor:_extract_links:233 - 提取了 96 个唯一链接
+2025-12-28 00:10:59 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 502, 链接数: 96
+2025-12-28 00:10:59 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:11:06 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.70)
+2025-12-28 00:11:06 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:11:24 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: Stanford University's seven schools co-locate on one campus, fostering multidisciplinary collaborati
+2025-12-28 00:11:24 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:11:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/research/
+2025-12-28 00:11:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://www.gsb.stanford.edu/programs
+2025-12-28 00:11:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.gsb.stanford.edu/faculty-research
+2025-12-28 00:11:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://ed.stanford.edu/academics
+2025-12-28 00:11:53 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://www.gsb.stanford.edu/
+2025-12-28 00:11:53 | INFO     | __main__:crawl_website:86 - [15/20] 爬取URL (深度2): https://doresearch.stanford.edu/
+2025-12-28 00:11:53 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://doresearch.stanford.edu/ (尝试 1/3)
+2025-12-28 00:12:03 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://doresearch.stanford.edu/ (大小: 111698 字节)
+2025-12-28 00:12:04 | DEBUG    | content_processor:_extract_links:233 - 提取了 69 个唯一链接
+2025-12-28 00:12:04 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1921, 链接数: 69
+2025-12-28 00:12:04 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:12:11 | INFO     | __main__:crawl_website:107 - 页面分类: news (置信度: 0.70)
+2025-12-28 00:12:11 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:12:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://doresearch.stanford.edu/who-we-are/faculty-and-academic-affairs
+2025-12-28 00:12:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://doresearch.stanford.edu/who-we-are/research-administration-compliance
+2025-12-28 00:12:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://doresearch.stanford.edu/who-we-are/research-policy-and-integrity
+2025-12-28 00:12:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://doresearch.stanford.edu/policies/research-policy-handbook
+2025-12-28 00:12:25 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://doresearch.stanford.edu/policies/research-policy-handbook/non-faculty-research-appointments/visiting-scholars
+2025-12-28 00:12:25 | INFO     | __main__:crawl_website:86 - [16/20] 爬取URL (深度2): https://profiles.stanford.edu/
+2025-12-28 00:12:25 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://profiles.stanford.edu/ (尝试 1/3)
+2025-12-28 00:12:50 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://profiles.stanford.edu/ (大小: 32916 字节)
+2025-12-28 00:12:51 | DEBUG    | content_processor:_extract_links:233 - 提取了 40 个唯一链接
+2025-12-28 00:12:51 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 527, 链接数: 40
+2025-12-28 00:12:51 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:12:57 | INFO     | __main__:crawl_website:107 - 页面分类: navigation (置信度: 0.90)
+2025-12-28 00:12:57 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/vice-provost-and-dean-of-research/bio-x
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/vice-provost-and-dean-of-research/freeman-spogli-institute-for-international-studies
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/school-of-engineering/programs-centers-and-institutes/institute-for-computational-and-mathematical-engineering-icme
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/stanford-doerr-school-of-sustainability/precourt-institute-for-energy
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/vice-provost-and-dean-of-research/stanford-pulse-institute
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/vice-provost-and-dean-of-research/wu-tsai-human-performance-alliance
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/vice-provost-and-dean-of-research/stanford-institute-for-economic-policy-research-siepr
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/stanford-woods-institute-for-the-environment
+2025-12-28 00:13:30 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://profiles.stanford.edu/browse/vice-provost-and-dean-of-research/stanford-data-science
+2025-12-28 00:13:30 | INFO     | __main__:crawl_website:86 - [17/20] 爬取URL (深度2): http://baxterlab.stanford.edu/
+2025-12-28 00:13:30 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: http://baxterlab.stanford.edu/ (尝试 1/3)
+2025-12-28 00:13:57 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: http://baxterlab.stanford.edu/ (大小: 76170 字节)
+2025-12-28 00:13:58 | DEBUG    | content_processor:_extract_links:233 - 提取了 92 个唯一链接
+2025-12-28 00:13:58 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 2752, 链接数: 92
+2025-12-28 00:13:58 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:14:05 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.95)
+2025-12-28 00:14:05 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:14:26 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: Baxter实验室是斯坦福医学院的干细胞生物学研究机构，由Donald E.和Delia B. Baxter基金会资助，主任为Helen M. Blau博士，专注于利用生物系统治疗疾病的研究。
+2025-12-28 00:14:26 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:15:00 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://med.stanford.edu/baxterlab/publications.html
+2025-12-28 00:15:00 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/school/directory/research-centers-and-programs.html
+2025-12-28 00:15:00 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://med.stanford.edu/baxterlab/lecture.html
+2025-12-28 00:15:00 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/school/directory/academic-resources.html
+2025-12-28 00:15:00 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://med.stanford.edu/baxterlab/administrative-staff.html
+2025-12-28 00:15:00 | INFO     | __main__:crawl_website:86 - [18/20] 爬取URL (深度2): http://beckman.stanford.edu/
+2025-12-28 00:15:00 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: http://beckman.stanford.edu/ (尝试 1/3)
+2025-12-28 00:15:09 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: http://beckman.stanford.edu/ (大小: 167909 字节)
+2025-12-28 00:15:10 | DEBUG    | content_processor:_extract_links:233 - 提取了 109 个唯一链接
+2025-12-28 00:15:10 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1645, 链接数: 109
+2025-12-28 00:15:10 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:15:16 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.95)
+2025-12-28 00:15:16 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:15:51 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: Beckman Center致力于生命科学的创新、发现和领导，提供多学科科研平台和共享技术资源，推动基础科学与临床医学的结合，近期发布2025年度报告并更新细胞成像、PAN平台等科研设施。
+2025-12-28 00:15:51 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:16:14 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/beckman/programs.html
+2025-12-28 00:16:14 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/school/directory/research-centers-and-programs.html
+2025-12-28 00:16:14 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/beckman/programs/technology-development-seed-grants.html
+2025-12-28 00:16:14 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/beckman/programs/seminars.html
+2025-12-28 00:16:14 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/beckman/beckman.html
+2025-12-28 00:16:14 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/beckman/about-us/annual-report.html
+2025-12-28 00:16:14 | DEBUG    | __main__:crawl_website:140 - 添加到队列: http://med.stanford.edu/beckman/programs/medical-scholars.html
+2025-12-28 00:16:14 | INFO     | __main__:crawl_website:86 - [19/20] 爬取URL (深度2): http://ai.stanford.edu/
+2025-12-28 00:16:14 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: http://ai.stanford.edu/ (尝试 1/3)
+2025-12-28 00:16:22 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: http://ai.stanford.edu/ (大小: 93637 字节)
+2025-12-28 00:16:23 | DEBUG    | content_processor:_extract_links:233 - 提取了 76 个唯一链接
+2025-12-28 00:16:23 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 4497, 链接数: 76
+2025-12-28 00:16:23 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:16:30 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.95)
+2025-12-28 00:16:30 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:17:18 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: 斯坦福AI实验室自1963年以来一直是AI研究的核心，最近任命了新主任，并获得了多项奖项。
+2025-12-28 00:17:18 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:17:39 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://ai.stanford.edu/faculty/
+2025-12-28 00:17:39 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://ai.stanford.edu/research-groups/
+2025-12-28 00:17:39 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://guestrin.su.domains/
+2025-12-28 00:17:39 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://aaai.org/about-aaai/aaai-awards/the-aaai-fellows-program/elected-aaai-fellows/
+2025-12-28 00:17:39 | INFO     | __main__:crawl_website:86 - [20/20] 爬取URL (深度2): https://aimi.stanford.edu
+2025-12-28 00:17:39 | DEBUG    | browser_engine:fetch_page:131 - 正在获取页面: https://aimi.stanford.edu (尝试 1/3)
+2025-12-28 00:17:47 | SUCCESS  | browser_engine:fetch_page:156 - 成功获取页面: https://aimi.stanford.edu (大小: 80597 字节)
+2025-12-28 00:17:48 | DEBUG    | content_processor:_extract_links:233 - 提取了 92 个唯一链接
+2025-12-28 00:17:48 | SUCCESS  | content_processor:extract_content:168 - 内容提取成功 - 文本长度: 1042, 链接数: 92
+2025-12-28 00:17:48 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:17:54 | INFO     | __main__:crawl_website:107 - 页面分类: academic_program (置信度: 0.70)
+2025-12-28 00:17:54 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:18:36 | SUCCESS  | __main__:crawl_website:127 - 成功提取核心信息: Center for Artificial Intelligence in Medicine & Imaging (AIMI) 2025年12月举办AI+HEALTH虚拟会议，主任Curtis Lan
+2025-12-28 00:18:36 | DEBUG    | ai_analyzer:_call_ollama:86 - 调用Ollama模型: qwen3:1.7b
+2025-12-28 00:19:12 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://aimi.stanford.edu/research/ai-healthcare-bootcamp
+2025-12-28 00:19:12 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://aimi.stanford.edu/research/grant-programs/aimi-funded-projects
+2025-12-28 00:19:12 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://aimi.stanford.edu/research/trainee-travel-grants
+2025-12-28 00:19:12 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://aimi.stanford.edu/research/aimi-hai-partnership-grant-recipients
+2025-12-28 00:19:12 | DEBUG    | __main__:crawl_website:140 - 添加到队列: https://aimi.stanford.edu/research/grant-programs/aimi-funded-projects/aimi-seed-grant-projects
+2025-12-28 00:19:12 | INFO     | browser_engine:close:299 - 浏览器已关闭
+2025-12-28 00:19:12 | INFO     | __main__:crawl_website:152 - 爬取完成. 总页面数: 20, 提取数据条数: 15
+2025-12-28 00:19:12 | INFO     | browser_engine:close:299 - 浏览器已关闭
+2025-12-28 00:19:12 | INFO     | __main__:save_results:205 - 结果已保存到: /Users/mx/Desktop/intelligent-browser-tool/intelligent-browser-tool-v1/results.json
+2025-12-28 00:19:12 | INFO     | __main__:save_results:209 - 输出文件大小: 284.32 KB
+2025-12-28 00:19:12 | SUCCESS  | __main__:main:288 - 任务完成! 共提取 15 个页面的数据
