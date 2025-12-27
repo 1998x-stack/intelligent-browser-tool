@@ -1,0 +1,1 @@
+python crawler.py -u https://www.fudan.edu.cn/ -i "各个学院的博士生导师信息收集" --max-pages 100 --no-selenium
