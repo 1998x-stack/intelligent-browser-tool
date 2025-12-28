@@ -49,6 +49,10 @@ from report_generator import (
     ReportGenerator, CrawlSummary, PageReport,
     create_summary_from_results, create_page_report_from_result
 )
+from search_engine import (
+    SeedURLGenerator, SearchConfig, SeedURL,
+    generate_seed_urls
+)
 
 
 # ============================================================================
@@ -81,6 +85,10 @@ class CrawlConfig:
         output_dir: 输出目录
         save_raw_html: 是否保存原始HTML
         generate_report: 是否生成报告
+        use_search_seeds: 是否使用搜索引擎生成种子URL
+        search_engines: 搜索引擎列表
+        max_seed_urls: 最大种子URL数量
+        language: 搜索语言
     """
     start_url: str = "https://www.stanford.edu/"
     intent: str = "招生"
@@ -90,6 +98,11 @@ class CrawlConfig:
     output_dir: str = "./outputs"
     save_raw_html: bool = True
     generate_report: bool = True
+    # 搜索种子相关配置
+    use_search_seeds: bool = True           # 是否使用搜索引擎生成种子URL
+    search_engines: List[str] = field(default_factory=lambda: ["google", "bing"])
+    max_seed_urls: int = 10                  # 最大种子URL数量
+    language: str = "zh"                     # 搜索语言 (zh/en)
 
 
 @dataclass
@@ -222,6 +235,38 @@ class WebCrawler:
             # 报告生成器
             self.report_generator = ReportGenerator()
             
+            # 种子URL生成器 (搜索引擎模块)
+            if self.crawl_config.use_search_seeds:
+                # 确定搜索引擎提供商
+                from search_engine import SearchProvider
+                provider_map = {
+                    "google": SearchProvider.GOOGLE,
+                    "bing": SearchProvider.BING,
+                    "duckduckgo": SearchProvider.DUCKDUCKGO_API,  # 使用API版本(最稳定)
+                    "duckduckgo_api": SearchProvider.DUCKDUCKGO_API,
+                    "duckduckgo_html": SearchProvider.DUCKDUCKGO,
+                }
+                # 默认使用DuckDuckGo API (最稳定)
+                primary_engine = self.crawl_config.search_engines[0] if self.crawl_config.search_engines else "duckduckgo"
+                provider = provider_map.get(primary_engine.lower(), SearchProvider.DUCKDUCKGO_API)
+                
+                search_config = SearchConfig(
+                    provider=provider,
+                    max_results=self.crawl_config.max_seed_urls,
+                    timeout=20,
+                    use_selenium=self.crawl_config.use_selenium,
+                    language=self.crawl_config.language[:2] if self.crawl_config.language else "en",
+                    debug_mode=False,  # 生产环境关闭调试
+                )
+                self.seed_generator = SeedURLGenerator(
+                    llm_client=self.llm_client,
+                    search_config=search_config,
+                    browser_engine=self.browser if self.crawl_config.use_selenium else None
+                )
+                logger.info("种子URL生成器已初始化 (搜索引擎: {})".format(provider.value))
+            else:
+                self.seed_generator = None
+            
             # 进度追踪
             self.progress = ProgressLogger(
                 total=self.crawl_config.max_pages,
@@ -254,8 +299,12 @@ class WebCrawler:
             # 步骤1: 分析用户意图
             self._analyze_intent()
             
-            # 步骤2: 添加起始URL
-            self._add_start_url()
+            # 步骤2: 生成种子URL (通过搜索引擎)
+            if self.crawl_config.use_search_seeds and self.seed_generator:
+                self._generate_seed_urls()
+            else:
+                # 仅添加原始起始URL
+                self._add_start_url()
             
             # 步骤3: 爬取循环
             self._crawl_loop()
@@ -324,7 +373,7 @@ class WebCrawler:
             )
     
     def _add_start_url(self) -> None:
-        """添加起始URL到队列"""
+        """添加起始URL到队列 (不使用搜索引擎时)"""
         self.url_queue.add(
             url=self.crawl_config.start_url,
             priority=URLPriority.HIGH,
@@ -332,6 +381,82 @@ class WebCrawler:
             context={"reason": "Start URL"}
         )
         logger.info(f"Start URL added: {self.crawl_config.start_url}")
+    
+    def _generate_seed_urls(self) -> None:
+        """
+        通过搜索引擎生成种子URL
+        
+        流程:
+        1. 使用LLM根据意图生成搜索查询词
+        2. 通过Google/Bing执行搜索
+        3. 获取top N结果作为种子URL
+        4. 与原始URL合并，按优先级排序
+        """
+        logger.info("="*40)
+        logger.info("生成种子URL (通过搜索引擎)")
+        logger.info("="*40)
+        
+        try:
+            # 生成种子URL (使用search_engine.py的generate方法)
+            seeds: List[SeedURL] = self.seed_generator.generate(
+                intent=self.crawl_config.intent,
+                original_url=self.crawl_config.start_url,
+                include_original=True,
+                use_site_filter=True,
+                fallback_providers=True
+            )
+            
+            if not seeds:
+                logger.warning("搜索引擎未返回结果，使用原始URL")
+                self._add_start_url()
+                return
+            
+            # 添加种子URL到队列
+            for i, seed in enumerate(seeds):
+                # 根据来源设置优先级
+                if seed.source == "original":
+                    priority = URLPriority.HIGH
+                else:
+                    # 搜索结果优先级稍低于原始URL
+                    priority = URLPriority.HIGH if i < 3 else URLPriority.MEDIUM
+                
+                self.url_queue.add(
+                    url=seed.url,
+                    priority=priority,
+                    depth=0,
+                    context={
+                        "reason": f"Seed URL ({seed.source})",
+                        "title": seed.title or "",
+                        "snippet": seed.snippet or "",
+                        "relevance_score": seed.relevance_score,
+                        "search_rank": seed.rank
+                    }
+                )
+                
+                logger.info(f"  添加种子[{i+1}]: {seed.url[:60]}... (来源: {seed.source})")
+            
+            # 保存种子URL信息
+            seed_data = {
+                "intent": self.crawl_config.intent,
+                "original_url": self.crawl_config.start_url,
+                "search_engines": self.crawl_config.search_engines,
+                "seeds": [seed.to_dict() for seed in seeds]
+            }
+            
+            self.storage.save_json(
+                data=seed_data,
+                filename="seed_urls.json",
+                subdir="metadata"
+            )
+            
+            logger.success(f"成功添加 {len(seeds)} 个种子URL")
+            
+        except Exception as e:
+            logger.error(f"种子URL生成失败: {e}")
+            logger.debug(get_err_message())
+            # 回退到原始URL
+            logger.info("回退到原始URL")
+            self._add_start_url()
     
     def _crawl_loop(self) -> None:
         """主爬取循环"""

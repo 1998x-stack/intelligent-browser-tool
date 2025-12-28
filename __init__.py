@@ -17,7 +17,7 @@ Modules:
     - logger_config: Logging configuration  
     - utils: Utility functions
     - llm_client: Ollama API wrapper
-    - browser_engine: Selenium/Requests browser
+    - browser_engine: Selenium/Requests browser (optimized with PageLoadStrategy)
     - content_extractor: Trafilatura extraction
     - intent_analyzer: Intent to prompt components
     - content_analyzer: LLM content analysis
@@ -25,23 +25,25 @@ Modules:
     - url_queue: Priority queue management
     - storage_manager: Data persistence
     - report_generator: Markdown/JSON reports
+    - search_engine: Search query generation and web search
     - crawler: Main orchestrator
 
 Example:
     >>> from web_automation import WebCrawler, CrawlConfig
     >>> config = CrawlConfig(
     ...     start_url="https://www.stanford.edu/",
-    ...     intent="招生信息"
+    ...     intent="招生信息",
+    ...     use_search_seeds=True  # 启用搜索引擎种子生成
     ... )
     >>> crawler = WebCrawler(config)
     >>> summary = crawler.run()
 
 Author: AI Assistant
 Date: 2024
-Version: 1.0.0
+Version: 1.1.0
 """
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __author__ = "AI Assistant"
 
 # Core components
@@ -62,11 +64,12 @@ from .utils import (
 # LLM
 from .llm_client import LLMClient, LLMResponse
 
-# Browser
+# Browser (Optimized with PageLoadStrategy, undetected-chromedriver support)
 from .browser_engine import (
     create_browser_engine, 
     SeleniumEngine, 
     RequestsEngine,
+    HybridEngine,
     FetchResult
 )
 
@@ -90,6 +93,21 @@ from .storage_manager import StorageManager
 
 # Report Generation
 from .report_generator import ReportGenerator, CrawlSummary, PageReport
+
+# Search Engine (NEW: intelligent seed URL generation)
+from .search_engine import (
+    SeedURLGenerator,
+    SearchQueryBuilder,
+    SearchConfig,
+    SearchQuery,
+    SearchProvider,
+    SeedURL,
+    GoogleSearchEngine,
+    BingSearchEngine,
+    DuckDuckGoSearchEngine,
+    DuckDuckGoAPIEngine,
+    generate_seed_urls
+)
 
 # Main Crawler
 from .crawler import WebCrawler, CrawlConfig, PageResult
@@ -139,6 +157,7 @@ __all__ = [
     "create_browser_engine",
     "SeleniumEngine",
     "RequestsEngine",
+    "HybridEngine",
     "FetchResult",
     
     # Content Extraction
@@ -171,6 +190,19 @@ __all__ = [
     "ReportGenerator",
     "CrawlSummary",
     "PageReport",
+    
+    # Search Engine
+    "SeedURLGenerator",
+    "SearchQueryBuilder",
+    "SearchConfig",
+    "SearchQuery",
+    "SearchProvider",
+    "SeedURL",
+    "GoogleSearchEngine",
+    "BingSearchEngine",
+    "DuckDuckGoSearchEngine",
+    "DuckDuckGoAPIEngine",
+    "generate_seed_urls",
     
     # Crawler
     "WebCrawler",
