@@ -9,6 +9,10 @@ webdriver-manager>=4.0.0
 requests>=2.31.0
 urllib3>=2.0.0
 
+# Anti-Detection (Recommended) / 反检测 (推荐)
+# Bypasses bot detection systems like Cloudflare, DataDome
+undetected-chromedriver>=3.5.0
+
 # Content Extraction / 内容提取
 trafilatura>=1.6.0
 beautifulsoup4>=4.12.0
