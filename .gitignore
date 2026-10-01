@@ -1,3 +1,6 @@
 __pycache__
 */__pycache__
 outputs*
+
+# Local proxy configuration may contain credentials.
+config.yaml
