@@ -185,3 +185,82 @@ def test_frontier_benchmark_agrees_for_small_fixture():
     assert output["durable"]["completed"] == 20
     assert output["legacy"]["duplicates_rejected"] == 10
     assert output["durable"]["duplicates_rejected"] == 10
+
+
+def test_strict_engine_proxy_configuration_fails_closed():
+    from browser_engine import RequestsEngine, SeleniumEngine
+    with pytest.raises(NetworkBoundaryError):
+        RequestsEngine(BrowserConfig(allowed_domains=["example.com"],
+                                     strict_browser_network=True))
+    config = BrowserConfig(allowed_domains=["example.com"],
+                           strict_browser_network=True,
+                           egress_proxy_url="http://egress-proxy:3128")
+    engine = RequestsEngine(config)
+    assert not engine.session.trust_env
+    assert engine.session.proxies["https"] == "http://egress-proxy:3128"
+    engine.close()
+    # Lazy initialization verifies configuration without starting Chrome.
+    browser = SeleniumEngine(config, use_undetected=False, lazy_init=True)
+    class FakeOptions:
+        def __init__(self):
+            self.arguments = []
+        def add_argument(self, value):
+            self.arguments.append(value)
+    options = FakeOptions()
+    browser._add_performance_options(options)
+    browser.network_policy.install_chrome_proxy(options)
+    assert "--proxy-server=http://egress-proxy:3128" in options.arguments
+    assert "--no-sandbox" not in options.arguments
+    assert "--ignore-certificate-errors" not in options.arguments
+    assert "--ignore-ssl-errors" not in options.arguments
+
+
+def test_resume_report_contains_previous_and_new_page(tmp_path):
+    import json
+    from datetime import datetime
+    from pathlib import Path
+    import crawler
+    from durable_queue import DurableURLQueue
+    from report_generator import ReportGenerator
+
+    cfg = crawler.Config()
+    cfg.storage.base_dir = tmp_path
+    cfg.browser.allowed_domains = ["example.com"]
+    start = "https://example.com/"
+    first_url = start + "old"
+    second_url = start + "new"
+    first = DurableURLQueue(cfg, start_url=start, intent="report")
+    assert first.add(first_url)
+    first.get_next()
+    first.mark_processed(first_url, result={
+        "url": first_url, "title": "Older finding", "summary": "previous session"
+    })
+    first.close()
+    second = DurableURLQueue(cfg, start_url=start, intent="report")
+    assert second.add(second_url)
+    second.get_next()
+    second.mark_processed(second_url, result={
+        "url": second_url, "title": "Newer finding", "summary": "current session"
+    })
+    c = crawler.WebCrawler.__new__(crawler.WebCrawler)
+    c.url_queue = second
+    c.crawl_config = crawler.CrawlConfig(
+        start_url=start, intent="report", durable_frontier=True,
+        output_dir=str(tmp_path))
+    c.start_time = datetime.now()
+    c.end_time = datetime.now()
+    c.results = []
+    c.report_generator = ReportGenerator()
+    class FakeStorage:
+        reports_dir = tmp_path / "reports"
+    c.storage = FakeStorage()
+    c._load_durable_results()
+    assert [page.url for page in c.results] == [first_url, second_url]
+    c._generate_report()
+    reports = list((tmp_path / "reports").glob("crawl_report_*.json"))
+    assert len(reports) == 1
+    saved = json.loads(reports[0].read_text(encoding="utf-8"))
+    serialized = json.dumps(saved, ensure_ascii=False)
+    assert "Older finding" in serialized and "Newer finding" in serialized
+    assert len(list((tmp_path / "reports").glob("crawl_report_*.md"))) == 1
+    second.close()
