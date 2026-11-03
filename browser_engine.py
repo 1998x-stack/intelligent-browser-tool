@@ -569,7 +569,7 @@ class SeleniumEngine(BaseBrowserEngine):
         except Exception as e:
             logger.debug(f"页面滚动失败: {e}")
     
-    def click_element(self, selector: str, by: By = By.CSS_SELECTOR) -> bool:
+    def click_element(self, selector: str, by: str = "css selector") -> bool:
         """点击元素"""
         self._ensure_initialized()
         try:
