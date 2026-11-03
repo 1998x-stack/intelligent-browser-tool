@@ -27,13 +27,15 @@ intelligent-browser = "crawler:main"
 evidence-radar-local = "research_workspace.__main__:main"
 
 [tool.setuptools]
-packages = ["research_workspace"]
 py-modules = [
   "browser_engine", "config", "content_analyzer", "content_extractor",
   "crawler", "file_namer", "intent_analyzer", "llm_client", "logger_config",
   "durable_queue", "frontier_state", "main", "network_policy", "openai_client", "proxy_manager", "report_generator", "run",
   "search_engine", "storage_manager", "url_policy", "url_queue", "utils",
 ]
+
+[tool.setuptools.packages.find]
+include = ["research_workspace*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

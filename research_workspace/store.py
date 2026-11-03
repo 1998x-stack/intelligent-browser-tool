@@ -29,6 +29,10 @@ class ResearchStore:
     def __init__(self, path: str | Path):
         self.path = str(path)
         Path(path).parent.mkdir(parents=True, exist_ok=True)
+        # Back up all legacy data, including committed WAL pages, before any
+        # schema-changing statement. Fail closed if backup cannot complete.
+        from .identity.migrations import snapshot_before_v3
+        self.migration_backup = snapshot_before_v3(self.path)
         with self.db() as db:
             db.executescript("""
                 CREATE TABLE IF NOT EXISTS projects(
@@ -73,11 +77,14 @@ class ResearchStore:
             if "leased_until" not in columns:
                 db.execute("ALTER TABLE runs ADD COLUMN leased_until REAL")
             version=db.execute("PRAGMA user_version").fetchone()[0]
-            if version>2:
+            if version>3:
                 raise RuntimeError("Unknown newer research database schema")
-            # V0.3 is a create-only migration; existing V0.2-B runs remain intact.
+            # Preserve existing V0.3 events and runs, then atomically backfill
+            # identity and workspace columns without discarding any evidence.
             from .monitoring import ensure_schema
+            from .identity.migrations import migrate_v3
             ensure_schema(db)
+            migrate_v3(db)
 
     @contextmanager
     def db(self):
@@ -104,10 +111,16 @@ class ResearchStore:
                 raise
 
     def create_project(self, owner: str, question: str, sources: list[dict], fields: list[dict]) -> str:
+        if not isinstance(owner, str) or not owner.strip() or len(owner) > 200:
+            raise ValueError("Invalid legacy local owner alias")
         pid = uid()
+        from .identity.migrations import ensure_legacy_binding
         with self.tx() as db:
-            db.execute("INSERT INTO projects VALUES(?,?,?,?,?,?)",
-                       (pid, owner, question, pack(sources), pack(fields), now()))
+            created_by, workspace_id = ensure_legacy_binding(db, owner)
+            db.execute("""INSERT INTO projects
+                (id,owner,question,sources_json,fields_json,created_at,workspace_id,created_by)
+                VALUES(?,?,?,?,?,?,?,?)""",
+                (pid,owner,question,pack(sources),pack(fields),now(),workspace_id,created_by))
         return pid
 
     def project(self, owner: str, pid: str) -> dict | None:
