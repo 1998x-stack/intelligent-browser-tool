@@ -34,7 +34,8 @@ async function loadProjects(){
     button.addEventListener('click',async()=>{
       try{clearError();state.project=await api(`/api/v1/projects/${p.id}`);
         const runs=await api(`/api/v1/projects/${p.id}/runs`);
-        if(!runs.runs.length){reportError('This project has no saved run yet. Create another run from the form.');return;}
+        await refreshMonitor();
+        if(!runs.runs.length){byId('monitoring-panel').hidden=false;byId('status-line').textContent='Saved project has no runs yet. Start a run to collect a baseline.';return;}
         state.run=runs.runs[0];await renderRun();
       }catch(e){reportError(e.message);}
     });entry.append(button);
@@ -43,7 +44,7 @@ async function loadProjects(){
     remove.addEventListener('click',async()=>{
       if(!confirm('Permanently delete this project and its saved source snapshots?'))return;
       try{await api(`/api/v1/projects/${p.id}`,{method:'DELETE'});
-        if(state.project?.id===p.id){state.project=null;state.run=null;state.dossier=null;byId('dossier').hidden=true;byId('run-progress').hidden=true;byId('run-state').textContent='Not started';}
+        if(state.project?.id===p.id){state.project=null;state.run=null;state.dossier=null;byId('dossier').hidden=true;byId('run-progress').hidden=true;byId('monitoring-panel').hidden=true;byId('run-state').textContent='Not started';}
         await loadProjects();}
       catch(e){reportError(e.message);}
     });entry.append(remove);list.append(entry);
@@ -72,7 +73,7 @@ async function start(evt){
       body:JSON.stringify({question:byId('question').value,sources:parseSources(byId('sources').value),fields})});
     state.run=await api(`/api/v1/projects/${state.project.id}/runs`,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({max_pages:Number(byId('pages').value),max_bytes:Number(byId('bytes').value)})});
-    await loadProjects();await renderRun();
+    await loadProjects();await renderRun();await refreshMonitor();
   }catch(e){reportError(e.message);}finally{byId('start').disabled=false;}
 }
 function metric(title,value){const e=el('div',undefined,'metric');e.append(el('strong',value),el('span',title));return e;}
@@ -101,6 +102,7 @@ async function renderRun(){
     catch(err){reportError(err.message);}
   }
   if(!terminal){state.poll=setTimeout(()=>renderRun().catch(e=>reportError(e.message)),850);}
+  else await refreshMonitor();
 }
 function renderDossier(){
   const target=byId('comparison');target.replaceChildren(); byId('dossier').hidden=false;
@@ -162,11 +164,107 @@ byId('new-run').addEventListener('click',async()=>{
   try{clearError();state.run=await api(`/api/v1/projects/${state.project.id}/runs`,{
     method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
       max_pages:Number(byId('pages').value),max_bytes:Number(byId('bytes').value)})});
-    state.dossier=null;byId('dossier').hidden=true;await renderRun();
+    state.dossier=null;byId('dossier').hidden=true;await renderRun();await refreshMonitor();
   }catch(e){reportError(e.message);}
 });
 byId('export-json').addEventListener('click',saveJson);
 byId('export-md').addEventListener('click',saveMd);
+
+// V0.3 local change inbox. Never claim email/RSS was delivered.
+function printable(value) {
+  if(value===null||value===undefined)return 'Unverified / unavailable';
+  if(typeof value==='object' && 'amount' in value)
+    return `${value.currency||''} ${value.amount}/${value.period||'period'} (${value.billing_condition||'terms unspecified'})`;
+  return typeof value==='string'?value:JSON.stringify(value);
+}
+function evidenceDetails(change){
+  const section=el('details');section.append(el('summary','Inspect old and new source evidence'));
+  for(const [label,items] of [['Previous evidence',change.old_evidence],['Current evidence',change.new_evidence]]){
+    section.append(el('strong',label));
+    if(!items.length)section.append(el('p','No supported source quote is available.'));
+    for(const source of items){
+      const box=el('div',undefined,'source-quote');
+      box.append(el('p',`${source.source_url} · ${source.captured_at} · snapshot ${source.snapshot_id}`),
+                 el('p',source.quote));
+      section.append(box);
+    }
+  }
+  return section;
+}
+async function refreshMonitor(){
+  if(!state.project || !state.token)return;
+  const pid=state.project.id;
+  const [schedule,changeResults,history]=await Promise.all([
+    api(`/api/v1/projects/${pid}/schedule`),
+    api(`/api/v1/projects/${pid}/changes`),
+    api(`/api/v1/projects/${pid}/history`)
+  ]);
+  // A previously selected project may have been deleted during this request.
+  if(state.project?.id!==pid)return;
+  byId('monitoring-panel').hidden=false;
+  byId('schedule-enabled').checked=schedule.enabled;
+  if([3600,86400,604800].includes(schedule.interval_seconds))
+    byId('schedule-interval').value=String(schedule.interval_seconds);
+  const next=schedule.enabled?`Next due: ${new Date(schedule.next_due_epoch*1000).toLocaleString()}. Requires a local scheduler tick.`:
+    'Monitoring disabled. No background service is running.';
+  byId('schedule-state').textContent=next;
+  const list=byId('monitor-changes');list.replaceChildren();
+  const changes=changeResults.changes;
+  if(!changes.length)list.append(el('p','No confirmed source-text changes between completed runs. This does not prove the websites stayed unchanged.','muted'));
+  for(const change of changes){
+    const box=el('article',undefined,'change-event');
+    box.append(el('strong',`${change.subject} · ${change.field_key}: ${change.kind.replaceAll('_',' ')}`),
+               el('p',`${printable(change.old_value)} → ${printable(change.new_value)}`),
+               el('p',`Severity: ${change.severity} · Inbox: ${change.read_state}`));
+    box.append(evidenceDetails(change));
+    const actions=el('div',undefined,'change-actions');
+    for(const [label,read_state] of [['Acknowledge','ACKNOWLEDGED'],['Not relevant','IGNORED']]){
+      const b=el('button',label,'small');b.type='button';b.disabled=change.read_state===read_state;
+      b.addEventListener('click',async()=>{
+        try{await api(`/api/v1/projects/${pid}/changes/${change.id}/ack`,{
+          method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({read_state})});
+          await refreshMonitor();}
+        catch(err){reportError(err.message);}
+      });actions.append(b);
+    }
+    box.append(actions);list.append(box);
+  }
+  const target=byId('monitor-history');target.replaceChildren();
+  for(const run of history.runs.slice(0,12))
+    target.append(el('p',`${new Date(run.created_at).toLocaleString()} · ${run.status} · ${run.pages_used} pages · run ${run.id.slice(0,10)}`));
+  for(const failed of history.source_health.filter(x=>x.state==='FAILED').slice(0,8))
+    target.append(el('p',`Fetch failed: ${failed.url} · ${failed.last_error||'Unknown failure'}`,'monitor-health'));
+  if(!history.runs.length)target.append(el('p','Start a first run to establish baseline evidence.','muted'));
+}
+byId('schedule-form').addEventListener('submit',async event=>{
+  event.preventDefault();if(!state.project)return;
+  try{clearError();await api(`/api/v1/projects/${state.project.id}/schedule`,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({enabled:byId('schedule-enabled').checked,
+      interval_seconds:Number(byId('schedule-interval').value),
+      max_pages:Number(byId('pages').value),max_bytes:Number(byId('bytes').value)})});
+    await refreshMonitor();}
+  catch(error){reportError(error.message);}
+});
+byId('run-due').addEventListener('click',async()=>{
+  try{clearError();const result=await api('/api/v1/monitor/tick',{
+    method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    byId('schedule-state').textContent=result.run_ids.length?
+      `${result.run_ids.length} due run(s) queued locally. No external notification was sent.`:
+      'No schedules are due. Future ticks require cron/systemd or manual operator action.';
+    if(result.run_ids.length && state.project){
+      const latest=await api(`/api/v1/runs/${result.run_ids[0]}`);
+      if(latest.project_id===state.project.id){state.run=latest;await renderRun();}
+    }
+  }catch(e){reportError(e.message);}
+});
+byId('refresh-monitor').addEventListener('click',()=>refreshMonitor().catch(e=>reportError(e.message)));
+byId('export-digest').addEventListener('click',async()=>{
+  if(!state.project)return;
+  try{const text=await api(`/api/v1/projects/${state.project.id}/digest.md`);
+    download(text,`research-digest-${state.project.id}.md`,'text/markdown');}
+  catch(e){reportError(e.message);}
+});
 
 // This page must never solicit a token on a public static host.
 if(!['localhost','127.0.0.1'].includes(location.hostname)){

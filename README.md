@@ -1,5 +1,21 @@
 # Web Automation Tool / 网页自动化工具
 
+## Evidence Radar V0.3 — Continuous Research (local operator)
+
+The V0.2-A offline evidence demo and V0.2-B live, **locally authenticated** research workspace are extended in V0.3 with a **fact-level change inbox**, immutable previous/current source evidence, source-health diagnostics, bounded opt-in schedules and an exportable local change digest. **Nothing sends external notifications or runs in the background unless the operator configures a separate cron/systemd tick.**
+
+```bash
+python -m pip install -e ".[test,browser]"
+python -m research_workspace serve --allow-host example.com --db ./outputs/research_workspace.sqlite3
+# Enable a project schedule in the local browser UI; then invoke explicitly:
+python -m research_workspace tick --allow-host example.com --db ./outputs/research_workspace.sqlite3
+```
+
+Only literal, sourced price changes are automatically reported as supported source-text changes. Uncertain feature keywords, missing prices and conflicting data require review, and failed sources never become false "removed" alerts. This is **not** general semantic-change certification. Public arbitrary-URL SaaS deployment still needs independent network isolation, abuse controls and privacy review.
+
+See [V0.3 implementation, correctness guarantees and open gates](docs/V0.3_CONTINUOUS_RESEARCH.md). The original CLI and anonymous fixture-based demo remain compatible.
+
+
 ## Evidence Radar V0.2-A — interactive product demo
 
 A new zero-dependency, accessible product prototype is available in [`apps/evidence-demo/`](apps/evidence-demo/README.md). It demonstrates research briefs, source-backed claims, conflicting/missing evidence, three research templates, and Markdown/JSON export — **using synthetic fictional snapshots only**. It does **not** crawl live sites or expose arbitrary URL research.
