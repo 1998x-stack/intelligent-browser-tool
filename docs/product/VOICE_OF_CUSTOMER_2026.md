@@ -53,6 +53,20 @@ Research caveats: PH review counts are small and mostly self-selected; PH founde
 - [Firecrawl Research Index / Alexandria](https://www.producthunt.com/products/extract-by-firecrawl) expands web-data availability beyond pages, so a generic research index or basic enrichment alone is not a safe moat.
 - Negative reviews may be older; no claim that their complaints remain unresolved in the present product versions.
 
+## 1.5. Competitor functionality: observed, advertised, or unverified?
+
+| Product | Capability already offered or advertised by Nov 2026 | Primary reference | Opportunity or constraint |
+|---|---|---|---|
+| **Firecrawl** | Developer-friendly crawl/search/agent APIs; vendor announced **/monitor** change webhooks in 2026; offers search indexes and source enrichment | [PH Firecrawl forum](https://www.producthunt.com/p/extract-by-firecrawl) | Raw scrape, cross-source search and change events are no longer standalone differentiators; avoid repeating vendor accuracy/performance claims as independent facts |
+| **Browse AI** | No-code robots, monitored data, spreadsheet/API/webhook integration | [PH Browse AI](https://www.producthunt.com/products/browse-ai) | Reliability of long sequences and self-service recovery matter more than adding another drag-and-drop recorder |
+| **Visualping** | Content/visual website change monitoring and alerting | [PH Visualping](https://www.producthunt.com/products/visualping) | Better organization and decision-ready dossiers are plausible needs, but alert functionality is established |
+| **Skyvern** | Browser workflow automation for complex forms and operational tasks | [PH Skyvern](https://www.producthunt.com/products/skyvern/reviews) | Focus on research deliverables; competing on arbitrary action automation creates safety and scope costs |
+| **Browser Use** | Browser-agent library and cloud execution, with the associated session/rerun challenges | [HN Browser Use](https://news.ycombinator.com/item?id=43173378) | Do not equate general browser control with a verifiable research outcome |
+| **changedetection.io / urlwatch** | Long-standing open-source/self-hosted website change tracking | [HN Site Spy comparison](https://news.ycombinator.com/item?id=47339326) | Self-hosting is necessary for some technical users but is not automatically a novel proposition |
+| **Site Spy** | Element-level tracking, snapshot history, diff, RSS and notifications (maker description) | [HN Site Spy](https://news.ycombinator.com/item?id=47337607) | Element picker + RSS are already covered. Evidence traceability across **research claims** is the stronger hypothesis |
+
+**Reading rule:** An official product description shows that the feature is advertised; it does not prove reliability, pricing superiority, vendor scale or customer satisfaction. PH review is a user's opinion. HN technical comments need reproduction for performance/security claims. This matrix is a competitive **scope filter**, not a verified benchmark.
+
 ## 2. Synthesis: user problems versus assumptions
 
 | Job | Observed pain and evidence | Our interpretation | Confidence | Required fresh validation |

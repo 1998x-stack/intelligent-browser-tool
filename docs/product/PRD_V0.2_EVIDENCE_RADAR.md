@@ -378,6 +378,8 @@ Stable codes include SOURCE_OUTSIDE_POLICY, FETCH_TIMEOUT, ROBOTS_RESTRICTED, CO
 
 **Non-negotiable for public hosted URL execution:**
 
+This is explicitly a **server-side request forgery (SSRF)** threat boundary: application-layer URL/DNS preflight alone cannot prevent internal-network access if the real browser, proxy, redirect, subresource, alternate scheme or DNS resolution path can bypass the policy. Treat all extracted web content as untrusted input.
+
 - Service-side authorization (not merely a hashed namespace); tenant-specific storage and quotas.
 - Browser workers with no direct public egress; production proxy ACL tested for IPv4/IPv6, redirects, DNS rebinding, metadata IP and WebSockets.
 - Separate, ephemeral browser profiles; no user's existing Chrome profile or stored passwords.
