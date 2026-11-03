@@ -1,0 +1,37 @@
+# REFERENCE ONLY: worker image and domain ACLs must be reviewed before deployment.
+# The worker must have no second network attachment or host networking.
+services:
+  browser-worker:
+    image: ${BROWSER_WORKER_IMAGE:?Set a pinned browser image}
+    networks:
+      - browser_internal
+    environment:
+      - BROWSER_STRICT_NETWORK=1
+      - BROWSER_EGRESS_PROXY=http://egress-proxy:3128
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp
+    depends_on:
+      - egress-proxy
+
+  egress-proxy:
+    image: ${EGRESS_PROXY_IMAGE:?Set a pinned, reviewed Squid image}
+    networks:
+      - browser_internal
+      - public_egress
+    volumes:
+      - ./squid.conf:/etc/squid/squid.conf:ro
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+
+networks:
+  browser_internal:
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.30.90.0/24
+  public_egress: {}

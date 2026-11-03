@@ -451,3 +451,28 @@ MIT License
 ---
 
 *Built with ❤️ using CleanRL design philosophy*
+
+## V0.1 experimental: secure configuration, durable crawling, offline evaluation
+
+The legacy CLI remains the default. Opt into the persistent SQLite frontier:
+
+```bash
+python run.py -u https://example.com/ -i "research" --durable-frontier --no-search-seeds --no-selenium
+```
+
+For a browser worker in an **externally isolated** network, configure
+`BROWSER_STRICT_NETWORK=1` and `BROWSER_EGRESS_PROXY=http://egress-proxy:3128`.
+Strict mode fails closed if the allowlist or proxy settings are missing, but
+requires a hardened, tested egress proxy and container/network firewall.
+Application-only URL checks do **not** prevent DNS rebinding or all browser
+subresource requests. Do not expose it to arbitrary URLs without real isolation.
+
+Test and measure the independent evaluation suite:
+
+```bash
+cd tests && PYTHONPATH=.. python -m pytest -q test_v01_foundation.py test_v01_batch2.py test_v01_batch3.py
+cd ..
+python -m benchmarks.frontier_compare --pages 200 --output /tmp/frontier-compare.json
+```
+
+Read [Batch 3 notes](docs/V0.1_BATCH3.md) and [Browser network policy](docs/V0.1_NETWORK.md).
