@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f6">
+  <meta name="description" content="Evidence Radar is an offline interactive demo of source-linked research. Explore fictional pricing evidence, conflicts, and a research brief you can export.">
+  <title>Evidence Radar — Research with proof, not just answers</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231c4d43'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23ddedb1' stroke-width='5'/%3E%3Cpath d='m22 32 7 7 14-17' fill='none' stroke='%23ddedb1' stroke-width='5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site-shell">
+    <header class="topbar" role="banner">
+      <a href="#top" class="brand" aria-label="Evidence Radar, go to home"><span class="brand-mark" aria-hidden="true">◎</span><span>evidence<span class="brand-light">radar</span></span></a>
+      <nav class="topnav" aria-label="Primary navigation">
+        <a href="#workspace">Interactive demo</a><a href="#how">How it works</a><a href="https://github.com/1998x-stack/intelligent-browser-tool" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      </nav>
+      <button type="button" class="small-cta" id="top-demo">Explore demo <span aria-hidden="true">↗</span></button>
+    </header>
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="spark" aria-hidden="true"></span> INTRODUCING EVIDENCE RADAR <span class="eyebrow-muted">/ V0.2 PROTOTYPE</span></div>
+          <h1 id="hero-title">Research the web.<br><em>Know what holds up.</em></h1>
+          <p class="hero-desc">Turn scattered pages into clear answers backed by exact source evidence. Compare, challenge, and export a research brief you can actually check.</p>
+          <div class="hero-actions">
+            <button class="primary-btn" id="hero-demo" type="button">Try the interactive demo <span aria-hidden="true">↗</span></button>
+            <a class="text-link" href="#how">See how it works <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="hero-proof"><span class="proof-dot" aria-hidden="true"></span><strong>No signup. No secrets. No live browsing.</strong><span>Just a transparent demo with fictional sources.</span></div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orbit-ring orbit-one"></div><div class="orbit-ring orbit-two"></div><div class="orbit-ring orbit-three"></div>
+          <div class="orbit-label label-top"><span class="tiny-bullet"></span> CLAIM / $29 PER MONTH <span>✓</span></div>
+          <div class="orbit-label label-left">SOURCES <strong>04</strong></div>
+          <div class="orbit-label label-bottom"><span class="tiny-bullet"></span> PROVENANCE ATTACHED</div>
+          <div class="radar-center"><span>ER</span><small>RESEARCH<br>WITH PROOF</small></div>
+        </div>
+      </section>
+      <div class="ticker" aria-hidden="true"><span>INSPECTABLE SOURCES</span><span>✳</span><span>CONFIDENCE WITH CONTEXT</span><span>✳</span><span>RESEARCH THAT HOLDS UP</span><span>✳</span><span>INSPECTABLE SOURCES</span></div>
+      <section class="intro-block" id="how" aria-labelledby="how-title">
+        <div><span class="section-kicker">01 / WHY IT EXISTS</span><h2 id="how-title">An answer isn't enough.<br><span>Show the evidence.</span></h2></div>
+        <p>Most tools stop at the summary. Evidence Radar makes missing details and disagreements visible, then lets you inspect the exact text behind every sourced claim.</p>
+      </section>
+      <section class="three-features" aria-label="Research benefits">
+        <article class="feature"><span class="feature-num">01</span><div class="feature-glyph" aria-hidden="true">≡<span>→</span>≡</div><h3>Compare, don't guess.</h3><p>Bring claims from multiple sources into one structured view with billing conditions and caveats intact.</p></article>
+        <article class="feature"><span class="feature-num">02</span><div class="feature-glyph" aria-hidden="true">⌖</div><h3>Click into the proof.</h3><p>Every sourced result opens the original fixture excerpt, timestamp, and traceable snapshot identifier.</p></article>
+        <article class="feature"><span class="feature-num">03</span><div class="feature-glyph" aria-hidden="true">⚑</div><h3>Make uncertainty visible.</h3><p>Missing values and conflicting sources are first-class states, not blanks filled by a plausible AI guess.</p></article>
+      </section>
+      <section class="workspace-section" id="workspace" aria-labelledby="workspace-heading">
+        <div class="workspace-header">
+          <div><span class="section-kicker">02 / EXPLORE THE WORKSPACE</span><h2 id="workspace-heading">A research brief<br><span>you can interrogate.</span></h2></div>
+          <p>This demo replays <strong>synthetic, fictional source snapshots</strong> stored inside the app. Nothing is scraped live, and no custom URL is fetched.</p>
+        </div>
+        <div class="demo-shell" id="demo-app">
+          <div class="demo-top"><div class="demo-logo"><span class="demo-icon" aria-hidden="true">◎</span><strong>Research Workspace</strong><span class="demo-version">DEMO / OFFLINE</span></div><div class="demo-top-right"><span class="signal" aria-hidden="true"></span> Source fixtures only</div></div>
+          <div class="template-bar"><div><span class="control-label">CHOOSE A RESEARCH QUESTION</span><div class="template-buttons" id="template-buttons" aria-label="Research templates"></div></div><div class="research-action"><button class="secondary-btn" id="reset-demo" type="button">↻ Replay sample</button></div></div>
+          <div class="notice-banner" role="note"><span aria-hidden="true">ⓘ</span><div><strong>Transparent sample:</strong> All products, prices, URLs and source texts below are invented for this demo. Values are supported by fictional fixture excerpts—not real verified market data.</div></div>
+          <div id="loading-state" role="status" aria-live="polite">Loading offline example…</div>
+          <div id="error-state" class="error-state" role="alert" hidden><strong>Unable to load the demo fixtures.</strong><p>Check that this app is served over HTTP rather than opened directly as a file.</p><button type="button" id="retry-demo">Retry loading</button></div>
+          <div id="research-app" hidden>
+            <div class="research-title-row"><div><div class="micro-label">RESEARCH BRIEF <span aria-hidden="true">/</span> EXAMPLE PROJECT</div><h3 id="active-question"></h3><p id="active-description"></p></div><div class="readout"><span class="readout-dot" aria-hidden="true"></span> Completed fixture replay</div></div>
+            <div class="metrics" id="metrics" aria-label="Demo research totals"></div>
+            <div class="toolbar"><div class="view-tabs" role="tablist" aria-label="Research result views"><button role="tab" type="button" id="tab-brief" aria-controls="research-content" aria-selected="true" data-view="brief">Brief</button><button role="tab" type="button" id="tab-compare" aria-controls="research-content" aria-selected="false" data-view="compare">Compare</button><button role="tab" type="button" id="tab-sources" aria-controls="research-content" aria-selected="false" data-view="sources">Sources</button><button role="tab" type="button" id="tab-runs" aria-controls="research-content" aria-selected="false" data-view="runs">Run details</button></div><div class="export-actions"><button type="button" id="download-md" aria-label="Export research brief as Markdown">↓ Markdown</button><button type="button" id="download-json" aria-label="Export research brief as JSON">↓ JSON</button></div></div>
+            <div class="research-layout"><section class="research-content" id="research-content" role="tabpanel" aria-labelledby="tab-brief" tabindex="0"></section><aside class="evidence-pane" aria-labelledby="evidence-title" id="evidence-pane"><div class="pane-head"><span class="micro-label">SOURCE INSPECTOR</span><span class="pane-spark" aria-hidden="true">✳</span></div><h4 id="evidence-title" tabindex="-1">Select a claim</h4><div id="evidence-details"><p class="empty-hint">Choose a value in the brief or comparison to inspect its exact supporting text.</p></div></aside></div>
+            <div class="demo-footer"><span><span aria-hidden="true">◎</span> Evidence-first, deterministic fixture preview</span><span>Public product prototype · Not live research</span></div>
+          </div>
+        </div>
+      </section>
+      <section class="last-cta" aria-labelledby="cta-heading"><div><span class="section-kicker">03 / BUILT IN THE OPEN</span><h2 id="cta-heading">Less magic.<br><em>More proof.</em></h2><p>The browser and crawler engine is open source. This is the first product experience built on top of it—not a hosted research service yet.</p><a href="https://github.com/1998x-stack/intelligent-browser-tool" class="primary-btn anchor-btn" target="_blank" rel="noopener noreferrer">Explore the open-source project <span aria-hidden="true">↗</span></a></div><div class="cta-graphic" aria-hidden="true"><span>FACT</span><i>↘</i><span>SOURCE</span><i>↙</i><span>PROOF</span></div></section>
+    </main>
+    <footer class="footer"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">◎</span>evidence<span class="brand-light">radar</span></a><span>Offline demo · Fictional data · No analytics</span><a href="https://github.com/1998x-stack/intelligent-browser-tool" target="_blank" rel="noopener noreferrer">GitHub ↗</a></footer>
+  </div>
+  <div id="live-message" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

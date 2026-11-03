@@ -1,5 +1,18 @@
 # Web Automation Tool / 网页自动化工具
 
+## Evidence Radar V0.2-A — interactive product demo
+
+A new zero-dependency, accessible product prototype is available in [`apps/evidence-demo/`](apps/evidence-demo/README.md). It demonstrates research briefs, source-backed claims, conflicting/missing evidence, three research templates, and Markdown/JSON export — **using synthetic fictional snapshots only**. It does **not** crawl live sites or expose arbitrary URL research.
+
+```bash
+python3 -m http.server 8765 --directory apps/evidence-demo
+# Visit http://localhost:8765
+npm --prefix apps/evidence-demo test
+```
+
+See [V0.2-A implementation and review](docs/V0.2_A_IMPLEMENTATION.md). The next stage of real research requires independently verified user demand, security/egress controls, evidence quality goldens and privacy protections.
+
+
 ## V0.1 Git integration and CLI
 
 The compatibility CLI is installable with `pip install -e ".[test]"`.
