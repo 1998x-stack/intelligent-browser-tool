@@ -19,5 +19,34 @@ jobs:
       - run: python -m pip install pytest requests loguru selenium trafilatura beautifulsoup4 lxml python-dateutil
       - run: python -m compileall -q url_policy.py frontier_state.py durable_queue.py url_queue.py browser_engine.py crawler.py
       # Root __init__.py is a historical non-package module; keep test collection inside tests/.
-      - run: cd tests && PYTHONPATH=.. python -m pytest -q test_v01_foundation.py test_v01_batch2.py test_v01_batch3.py
+      - run: cd tests && PYTHONPATH=.. python -m pytest -q test_v01_foundation.py test_v01_batch2.py test_v01_batch3.py test_v014_hardening.py
       - run: python -m benchmarks.frontier_compare --pages 50 --output /tmp/frontier-compare.json
+      - run: python -m benchmarks.frontier_scale --sizes 20 200 1000 --repeat 3 --output /tmp/frontier-scale.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frontier-v014-perf
+          path: /tmp/frontier-scale.json
+  browser-e2e:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: google-chrome --version && chromedriver --version
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install pytest requests loguru selenium
+      - name: Real Chrome proxy navigation and subresource E2E
+        run: cd tests && PYTHONPATH=.. python -m pytest -q test_v014_chrome_e2e.py
+  isolated-container-e2e:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install selenium
+      - name: Real Chrome inside an internal-only Docker network
+        run: bash scripts/run_isolated_browser_e2e.sh
