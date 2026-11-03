@@ -32,6 +32,7 @@ from enum import IntEnum
 from loguru import logger
 
 from config import Config, URLPriority
+from url_policy import URLPolicy, URLPolicyError
 
 
 # ============================================================================
@@ -300,13 +301,20 @@ class URLFilter:
             if parsed.scheme not in ("http", "https"):
                 return False, f"不支持的协议: {parsed.scheme}"
             
+            # Reject invalid URL schemes, non-public literal IPs, and localhost.
+            try:
+                URLPolicy(tuple(self.allowed_domains)).validate(url, resolve_dns=False)
+            except URLPolicyError as exc:
+                return False, str(exc)
+
             # 检查域名白名单
             if self.allowed_domains:
                 domain = parsed.netloc.lower()
-                domain_match = any(
-                    allowed in domain 
-                    for allowed in self.allowed_domains
-                )
+                try:
+                    URLPolicy(tuple(self.allowed_domains)).validate(url, resolve_dns=False)
+                    domain_match = True
+                except URLPolicyError:
+                    domain_match = False
                 if not domain_match:
                     return False, f"域名不在白名单: {domain}"
             

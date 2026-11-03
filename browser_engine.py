@@ -33,6 +33,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from loguru import logger
 
+from url_policy import URLPolicy, URLPolicyError
 from config import BrowserConfig, get_err_message
 
 
@@ -145,53 +146,10 @@ class BaseBrowserEngine(ABC):
         pass
     
     def is_valid_url(self, url: str, config: BrowserConfig) -> bool:
-        """
-        验证URL是否有效
-        
-        Args:
-            url: 待验证的URL
-            config: 浏览器配置
-            
-        Returns:
-            是否有效
-        """
-        if not url:
-            return False
-        
         try:
-            parsed = urlparse(url)
-            
-            # 协议检查
-            if parsed.scheme not in ['http', 'https']:
-                return False
-            
-            # 域名检查
-            if not parsed.netloc:
-                return False
-            
-            # 排除模式检查
-            for pattern in config.exclude_patterns:
-                if pattern in url.lower():
-                    logger.debug(f"URL匹配排除模式 ({pattern}): {url}")
-                    return False
-            
-            # 白名单检查 (如果配置了)
-            if config.allowed_domains:
-                domain = parsed.netloc.lower()
-                # 去掉www前缀进行比较
-                domain_clean = domain.replace('www.', '')
-                allowed = any(
-                    d.replace('www.', '') in domain_clean or domain_clean in d.replace('www.', '')
-                    for d in config.allowed_domains
-                )
-                if not allowed:
-                    logger.debug(f"URL不在白名单中: {url}")
-                    return False
-            
-            return True
-            
-        except Exception as e:
-            logger.debug(f"URL验证失败 ({url}): {e}")
+            URLPolicy(tuple(config.allowed_domains)).validate(url, resolve_dns=False)
+            return not any(pattern in url.lower() for pattern in config.exclude_patterns)
+        except URLPolicyError:
             return False
 
 
@@ -728,6 +686,23 @@ class RequestsEngine(BaseBrowserEngine):
         """轮换User-Agent"""
         self.session.headers['User-Agent'] = get_random_user_agent()
     
+    def _get_checked(self, url: str, **kwargs):
+        """Check every redirect before following it (no automatic redirects)."""
+        policy = URLPolicy(tuple(self.config.allowed_domains))
+        current = url
+        for _ in range(6):
+            policy.validate(current, resolve_dns=True)
+            response = self.session.get(current, allow_redirects=False, **kwargs)
+            if response.status_code not in (301, 302, 303, 307, 308):
+                return response
+            location = response.headers.get("Location")
+            if not location:
+                return response
+            next_url = urljoin(current, location)
+            response.close()
+            current = next_url
+        raise requests.exceptions.TooManyRedirects("Exceeded 5 redirects")
+
     def fetch_page(self, url: str, **kwargs) -> FetchResult:
         """
         获取页面HTML内容
@@ -763,10 +738,9 @@ class RequestsEngine(BaseBrowserEngine):
         try:
             logger.debug(f"Requests获取: {url}")
             
-            response = self.session.get(
+            response = self._get_checked(
                 url,
                 timeout=self.config.page_load_timeout,
-                allow_redirects=True,
                 **kwargs
             )
             

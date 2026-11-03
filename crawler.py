@@ -475,6 +475,8 @@ class WebCrawler:
             # 处理页面
             result = self._process_page(item)
             self.results.append(result)
+            # Keep legacy queue lifecycle counters consistent with actual page attempts.
+            self.url_queue.mark_processed(item.url, success=result.success)
             
             # 添加发现的URL到队列
             if result.success and result.priority_urls:
@@ -737,8 +739,7 @@ class WebCrawler:
         """清理资源"""
         try:
             if hasattr(self, 'browser') and self.browser:
-                if isinstance(self.browser, SeleniumEngine):
-                    self.browser.close()
+                self.browser.close()
             
             logger.info("Resources cleaned up")
             
