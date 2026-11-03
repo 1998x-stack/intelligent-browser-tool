@@ -56,7 +56,10 @@ def ensure_schema(db):
           reconciled_at TEXT NOT NULL
         );
     """)
-    db.execute("PRAGMA user_version=2")
+    # V0.3 is a compatibility prerequisite, not a schema downgrade: when a
+    # V04-01 store (v3) reopens, keep the version and identity tables intact.
+    if db.execute("PRAGMA user_version").fetchone()[0] < 2:
+        db.execute("PRAGMA user_version=2")
 
 
 def _fact_state(rows):

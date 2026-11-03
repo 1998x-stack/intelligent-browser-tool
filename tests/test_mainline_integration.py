@@ -51,7 +51,7 @@ class MainlineIntegrationContract(unittest.TestCase):
     def test_package_declares_cli_and_research_package(self):
         config = (ROOT / "pyproject.toml").read_text("utf-8")
         self.assertIn('evidence-radar-local = "research_workspace.__main__:main"', config)
-        self.assertIn('packages = ["research_workspace"]', config)
+        self.assertIn('include = ["research_workspace*"]', config)
         proc = subprocess.run(
             [sys.executable, "-m", "research_workspace", "--help"],
             cwd=ROOT, capture_output=True, text=True, timeout=15, check=False,
@@ -68,10 +68,12 @@ class MainlineIntegrationContract(unittest.TestCase):
                 version = db.execute("PRAGMA user_version").fetchone()[0]
                 tables = {row["name"] for row in db.execute(
                     "SELECT name FROM sqlite_master WHERE type='table'")}
-            self.assertEqual(version, 2)
+            self.assertEqual(version, 3)
             self.assertTrue({"projects", "runs", "run_sources", "snapshots",
                              "claims", "research_schedules", "research_changes",
-                             "research_reconciliations"}.issubset(tables))
+                             "research_reconciliations", "users", "workspaces",
+                             "workspace_memberships", "legacy_owner_bindings",
+                             "membership_audit"}.issubset(tables))
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-name: Evidence Radar V0.3 continuous research verification
+name: Evidence Radar V0.4 identity and continuous research verification
 on:
   push:
     paths:
@@ -6,11 +6,13 @@ on:
       - 'apps/evidence-demo/**'
       - 'tests/test_research_workspace*.py'
       - 'tests/test_continuous_research*.py'
+      - 'tests/test_workspace_migration.py'
       - 'tests/test_mainline_integration.py'
       - 'pyproject.toml'
       - '.github/workflows/research-workspace.yml'
       - 'docs/V0.2_B_IMPLEMENTATION.md'
       - 'docs/V0.3_CONTINUOUS_RESEARCH.md'
+      - 'docs/V0.4_A_WORKSPACE_MIGRATION.md'
       - 'tests/fixtures/monitoring_goldens.json'
   pull_request:
     paths:
@@ -18,10 +20,13 @@ on:
       - 'apps/evidence-demo/**'
       - 'tests/test_research_workspace*.py'
       - 'tests/test_continuous_research*.py'
+      - 'tests/test_workspace_migration.py'
+      - 'tests/test_mainline_integration.py'
       - 'pyproject.toml'
       - '.github/workflows/research-workspace.yml'
       - 'docs/V0.2_B_IMPLEMENTATION.md'
       - 'docs/V0.3_CONTINUOUS_RESEARCH.md'
+      - 'docs/V0.4_A_WORKSPACE_MIGRATION.md'
       - 'tests/fixtures/monitoring_goldens.json'
   workflow_dispatch:
 permissions:
@@ -47,8 +52,12 @@ jobs:
         run: |
           evidence-radar-local --help
           intelligent-browser --help
-      - name: Deterministic extractor, lease, recovery, API and security tests
-        run: python -m pytest -q tests/test_research_workspace.py tests/test_continuous_research.py tests/test_mainline_integration.py
+      - name: Durable research, migration, scope and member invariants
+        run: python -m pytest -q tests/test_research_workspace.py tests/test_continuous_research.py tests/test_mainline_integration.py tests/test_workspace_migration.py
+      - name: Built wheel contains identity subpackage
+        run: |
+          python -m pip wheel --no-deps --no-build-isolation . -w /tmp/er-dist
+          python -c "import glob,zipfile; z=zipfile.ZipFile(glob.glob('/tmp/er-dist/*.whl')[0]); assert 'research_workspace/identity/migrations.py' in z.namelist()"
       - name: Offline demo remains unchanged
         run: python -m unittest discover -s tests -p 'test_evidence_demo_static.py' -v
   browser-e2e:

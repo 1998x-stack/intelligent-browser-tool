@@ -314,7 +314,7 @@ def test_v02b_database_migrates_without_replacing_earlier_runs(tmp_path):
         db.execute('PRAGMA user_version=1')
     s=ResearchService(path,policy,fetcher=FakeFetcher())
     with s.store.db() as db:
-        assert db.execute('PRAGMA user_version').fetchone()[0]==2
+        assert db.execute('PRAGMA user_version').fetchone()[0]==3
     p=s.create_project({'question':'Price continuity in persisted local database',
        'sources':[{'url':A,'label':'Alpha'}],
        'fields':[{'key':'price','kind':'price','label':'Price'}]})
