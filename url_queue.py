@@ -95,7 +95,6 @@ class QueueStats:
     """队列统计信息"""
     total_added: int = 0
     total_processed: int = 0
-    total_failed: int = 0
     duplicates_skipped: int = 0
     filtered_out: int = 0
     current_size: int = 0
@@ -107,7 +106,6 @@ class QueueStats:
         return {
             "total_added": self.total_added,
             "total_processed": self.total_processed,
-            "total_failed": self.total_failed,
             "duplicates_skipped": self.duplicates_skipped,
             "filtered_out": self.filtered_out,
             "current_size": self.current_size,
@@ -303,12 +301,23 @@ class URLFilter:
             if parsed.scheme not in ("http", "https"):
                 return False, f"不支持的协议: {parsed.scheme}"
             
-            # 单一域名边界策略：禁止子串匹配和非公网地址
+            # Reject invalid URL schemes, non-public literal IPs, and localhost.
             try:
-                URLPolicy(tuple(self.allowed_domains)).check(url)
+                URLPolicy(tuple(self.allowed_domains)).validate(url, resolve_dns=False)
             except URLPolicyError as exc:
                 return False, str(exc)
 
+            # 检查域名白名单
+            if self.allowed_domains:
+                domain = parsed.netloc.lower()
+                try:
+                    URLPolicy(tuple(self.allowed_domains)).validate(url, resolve_dns=False)
+                    domain_match = True
+                except URLPolicyError:
+                    domain_match = False
+                if not domain_match:
+                    return False, f"域名不在白名单: {domain}"
+            
             # 检查排除模式
             for pattern in self.exclude_patterns:
                 if pattern in url:
@@ -374,7 +383,6 @@ class URLQueue:
         self._seen_urls: Set[str] = set()  # 已见过的URL (规范化后的哈希)
         self._processed_urls: Set[str] = set()  # 已处理的URL
         self._failed_urls: Dict[str, int] = {}  # 失败的URL及重试次数
-        self._inflight: Dict[str, QueueItem] = {}  # 已出队但尚未标记结果
         
         # 过滤器和规范化器
         self._normalizer = URLNormalizer()
@@ -518,7 +526,6 @@ class URLQueue:
             return None
         
         item = heapq.heappop(self._heap)
-        self._inflight[self._normalizer.get_url_hash(item.url)] = item
         self._stats.current_size = len(self._heap)
         
         logger.debug(f"URL出队 [P{item.priority}|D{item.depth}]: {item.url}")
@@ -548,19 +555,27 @@ class URLQueue:
     # 状态管理
     # ========================================================================
     
-    def mark_processed(self, url: str, success: bool = True) -> None:
-        """Complete a leased URL. Both successes and failures count as attempts."""
+    def mark_processed(self, url: str, success: bool = True):
+        """
+        标记URL已处理
+        
+        Args:
+            url: 已处理的URL
+            success: 是否成功处理
+        """
         normalized = self._normalizer.normalize(url)
         url_hash = self._normalizer.get_url_hash(normalized)
-        if self._inflight.pop(url_hash, None) is None:
-            raise ValueError(f"URL not leased from frontier: {normalized}")
-        self._stats.total_processed += 1
+        
         if success:
             self._processed_urls.add(url_hash)
+            self._stats.total_processed += 1
+            logger.debug(f"URL处理完成: {normalized}")
         else:
-            self._stats.total_failed += 1
-            self._failed_urls[normalized] = self._failed_urls.get(normalized, 0) + 1
-
+            # 记录失败，可能需要重试
+            retry_count = self._failed_urls.get(url_hash, 0)
+            self._failed_urls[url_hash] = retry_count + 1
+            logger.debug(f"URL处理失败 (重试次数: {retry_count + 1}): {normalized}")
+    
     def is_processed(self, url: str) -> bool:
         """检查URL是否已处理"""
         normalized = self._normalizer.normalize(url)
@@ -583,7 +598,6 @@ class URLQueue:
         self._seen_urls.clear()
         self._processed_urls.clear()
         self._failed_urls.clear()
-        self._inflight.clear()
         self._stats = QueueStats()
         logger.info("队列已清空")
     
@@ -612,77 +626,84 @@ class URLQueue:
     # 持久化
     # ========================================================================
     
-    def snapshot(self) -> Dict[str, Any]:
-        """Return a JSON-safe snapshot; in-flight items are restored as pending."""
-        return {
-            "schema_version": 1,
-            "heap": [item.to_dict() for item in self._heap],
-            "inflight": [item.to_dict() for item in self._inflight.values()],
-            "seen_urls": sorted(self._seen_urls),
-            "processed_urls": sorted(self._processed_urls),
-            "failed_urls": dict(self._failed_urls),
-            "stats": self._stats.to_dict(),
-            "saved_at": datetime.now().isoformat()
-        }
-
-    def restore(self, state: Dict[str, Any]) -> None:
-        """Restore frontier from a checkpoint, revalidating every queued URL."""
-        if state.get("schema_version", 1) != 1:
-            raise ValueError("Unsupported frontier checkpoint schema")
-        pending = [
-            QueueItem.from_dict(item)
-            for item in state.get("heap", []) + state.get("inflight", [])
-        ]
-        for item in pending:
-            allowed, reason = self._filter.is_allowed(item.url)
-            if not allowed or item.depth > self.max_depth:
-                raise ValueError(f"Rejected checkpoint URL {item.url}: {reason}")
-        self._heap = pending
-        heapq.heapify(self._heap)
-        self._inflight = {}
-        self._seen_urls = set(state.get("seen_urls", []))
-        self._seen_urls.update(self._normalizer.get_url_hash(i.url) for i in pending)
-        self._processed_urls = set(state.get("processed_urls", []))
-        self._failed_urls = dict(state.get("failed_urls", {}))
-        stats = state.get("stats", {})
-        self._stats = QueueStats(
-            total_added=stats.get("total_added", len(pending)),
-            total_processed=stats.get("total_processed", 0),
-            total_failed=stats.get("total_failed", 0),
-            duplicates_skipped=stats.get("duplicates_skipped", 0),
-            filtered_out=stats.get("filtered_out", 0),
-            current_size=len(pending),
-            priority_counts={int(k): v for k, v in stats.get("priority_counts", {}).items()},
-            depth_counts={int(k): v for k, v in stats.get("depth_counts", {}).items()}
-        )
-
     def save_state(self, filepath: Path) -> bool:
-        """Atomically persist state to avoid a partially written checkpoint."""
-        import os
-        filepath = Path(filepath)
-        tmp = filepath.with_name(filepath.name + ".tmp")
+        """
+        保存队列状态到文件
+        
+        Args:
+            filepath: 保存路径
+            
+        Returns:
+            是否成功
+        """
         try:
+            state = {
+                "heap": [item.to_dict() for item in self._heap],
+                "seen_urls": list(self._seen_urls),
+                "processed_urls": list(self._processed_urls),
+                "failed_urls": self._failed_urls,
+                "stats": self._stats.to_dict(),
+                "saved_at": datetime.now().isoformat()
+            }
+            
+            filepath = Path(filepath)
             filepath.parent.mkdir(parents=True, exist_ok=True)
-            with tmp.open("w", encoding="utf-8") as handle:
-                json.dump(self.snapshot(), handle, ensure_ascii=False, indent=2)
-                handle.flush()
-                os.fsync(handle.fileno())
-            os.replace(tmp, filepath)
+            
+            with open(filepath, "w", encoding="utf-8") as f:
+                json.dump(state, f, ensure_ascii=False, indent=2)
+            
+            logger.info(f"队列状态已保存: {filepath}")
             return True
-        except Exception as exc:
-            logger.error(f"保存队列状态失败: {exc}")
+            
+        except Exception as e:
+            logger.error(f"保存队列状态失败: {e}")
+            logger.debug(get_err_message())
             return False
-
+    
     def load_state(self, filepath: Path) -> bool:
+        """
+        从文件恢复队列状态
+        
+        Args:
+            filepath: 文件路径
+            
+        Returns:
+            是否成功
+        """
         try:
-            with Path(filepath).open("r", encoding="utf-8") as handle:
-                state = json.load(handle)
-            self.restore(state)
+            filepath = Path(filepath)
+            if not filepath.exists():
+                logger.warning(f"队列状态文件不存在: {filepath}")
+                return False
+            
+            with open(filepath, "r", encoding="utf-8") as f:
+                state = json.load(f)
+            
+            # 恢复堆
+            self._heap = [QueueItem.from_dict(item) for item in state.get("heap", [])]
+            heapq.heapify(self._heap)
+            
+            # 恢复集合
+            self._seen_urls = set(state.get("seen_urls", []))
+            self._processed_urls = set(state.get("processed_urls", []))
+            self._failed_urls = state.get("failed_urls", {})
+            
+            # 恢复统计
+            stats_data = state.get("stats", {})
+            self._stats.total_added = stats_data.get("total_added", 0)
+            self._stats.total_processed = stats_data.get("total_processed", 0)
+            self._stats.duplicates_skipped = stats_data.get("duplicates_skipped", 0)
+            self._stats.filtered_out = stats_data.get("filtered_out", 0)
+            self._stats.current_size = len(self._heap)
+            
+            logger.info(f"队列状态已恢复: {filepath} (队列大小: {len(self._heap)})")
             return True
-        except Exception as exc:
-            logger.error(f"恢复队列状态失败: {exc}")
+            
+        except Exception as e:
+            logger.error(f"恢复队列状态失败: {e}")
+            logger.debug(get_err_message())
             return False
-
+    
     # ========================================================================
     # 调试和显示
     # ========================================================================

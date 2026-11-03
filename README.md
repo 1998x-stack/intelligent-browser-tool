@@ -1,16 +1,19 @@
 # Web Automation Tool / 网页自动化工具
 
-> **V0.1 Foundation (current development branch):** URL safety preflight, explicit frontier acknowledgements, atomic task checkpoints, and a unified CLI are being validated. See [V0.1 design and acceptance](docs/v0.1-foundation.md). The new URL policy is not a full network sandbox; untrusted browser traffic still needs egress isolation.
+## V0.1 Git integration and CLI
 
-### V0.1 CLI / 回归测试
+The compatibility CLI is installable with `pip install -e ".[test]"`.
+The foundation uses a strict HTTP(S) URL allowlist and the SQLite Frontier.
+Persisted tasks are **not** a network security sandbox.
 
 ```bash
 python -m pip install -e ".[test]"
-python -m pytest -q tests/
-intelligent-browser --url https://example.com/ --intent "documentation" --max-pages 5 --no-selenium
-intelligent-browser --url https://example.com/ --intent "documentation" --max-pages 10 --no-selenium --resume
+intelligent-browser --help
+python main.py --help
 ```
 
+See [foundation merge decisions](docs/v0.1-conflict-resolution.md) and
+[original design notes](docs/v0.1-foundation.md).
 
 基于Ollama LLM、Selenium/Requests和Trafilatura的智能网页爬取与分析工具。
 

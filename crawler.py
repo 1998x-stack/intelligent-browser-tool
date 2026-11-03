@@ -26,9 +26,7 @@ Date: 2024
 import sys
 import argparse
 import time
-import json
-import os
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from pathlib import Path
@@ -105,7 +103,6 @@ class CrawlConfig:
     search_engines: List[str] = field(default_factory=lambda: ["google", "bing"])
     max_seed_urls: int = 10                  # 最大种子URL数量
     language: str = "zh"                     # 搜索语言 (zh/en)
-    resume: bool = False                       # 显式恢复已经保存的任务
 
 
 @dataclass
@@ -130,7 +127,6 @@ class PageResult:
     url: str
     title: str = ""
     success: bool = True
-    analyzed: bool = False
     error: Optional[str] = None
     fetch_time: float = 0.0
     analysis_time: float = 0.0
@@ -197,7 +193,6 @@ class WebCrawler:
         
         # 状态追踪
         self.results: List[PageResult] = []
-        self.run_error: Optional[str] = None
         self.start_time: Optional[datetime] = None
         self.end_time: Optional[datetime] = None
         self.intent_components: Optional[IntentComponents] = None
@@ -288,78 +283,54 @@ class WebCrawler:
     # 核心爬取流程 (Core Crawling Process)
     # ========================================================================
     
-    def _checkpoint_path(self) -> Path:
-        return Path(self.crawl_config.output_dir) / "state" / "run_checkpoint.json"
-
-    def _save_checkpoint(self) -> None:
-        """Atomic snapshot of frontier and results at a common task boundary."""
-        path = self._checkpoint_path()
-        path.parent.mkdir(parents=True, exist_ok=True)
-        payload = {
-            "schema_version": 1,
-            "start_url": self.crawl_config.start_url,
-            "intent": self.crawl_config.intent,
-            "start_time": self.start_time.isoformat() if self.start_time else None,
-            "frontier": self.url_queue.snapshot(),
-            "results": [asdict(result) for result in self.results],
-        }
-        temp = path.with_name(path.name + ".tmp")
-        with temp.open("w", encoding="utf-8") as handle:
-            json.dump(payload, handle, ensure_ascii=False, indent=2)
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.replace(temp, path)
-
-    def _load_checkpoint(self) -> None:
-        """Restore a matching task or fail loudly; never silently reset progress."""
-        path = self._checkpoint_path()
-        with path.open("r", encoding="utf-8") as handle:
-            data = json.load(handle)
-        if data.get("schema_version") != 1:
-            raise ValueError("Unsupported crawl checkpoint version")
-        if (data.get("start_url"), data.get("intent")) != (
-            self.crawl_config.start_url, self.crawl_config.intent
-        ):
-            raise ValueError("Checkpoint does not match the requested URL and intent")
-        self.url_queue.restore(data["frontier"])
-        self.results = [PageResult(**result) for result in data.get("results", [])]
-        if data.get("start_time"):
-            self.start_time = datetime.fromisoformat(data["start_time"])
-        logger.info(f"Restored checkpoint: {len(self.results)} completed pages")
-
     def run(self) -> Dict[str, Any]:
-        """Execute with atomic checkpoints and an optional explicit resume mode."""
+        """
+        运行爬虫
+        
+        Returns:
+            爬取结果摘要字典
+        """
         self.start_time = datetime.now()
-        self.run_error = None
+        logger.info("=" * 60)
+        logger.info("Starting Web Crawler")
+        logger.info("=" * 60)
+        
         try:
+            # 步骤1: 分析用户意图
             self._analyze_intent()
-            if self.crawl_config.resume:
-                self._load_checkpoint()
+            
+            # 步骤2: 生成种子URL (通过搜索引擎)
+            if self.crawl_config.use_search_seeds and self.seed_generator:
+                self._generate_seed_urls()
             else:
-                if self.crawl_config.use_search_seeds and self.seed_generator:
-                    self._generate_seed_urls()
-                else:
-                    self._add_start_url()
-                self._save_checkpoint()
-
+                # 仅添加原始起始URL
+                self._add_start_url()
+            
+            # 步骤3: 爬取循环
             self._crawl_loop()
-            self.end_time = datetime.now()
-            self._save_checkpoint()
+            
+            # 步骤4: 生成报告
             if self.crawl_config.generate_report:
                 self._generate_report()
+            
+            self.end_time = datetime.now()
+            
+            # 返回摘要
+            return self._create_summary()
+            
         except KeyboardInterrupt:
-            self.run_error = "interrupted"
             logger.warning("Crawling interrupted by user")
             self.end_time = datetime.now()
-            # Preserve the previous atomic checkpoint: leased URL can be retried.
+            return self._create_summary()
+            
         except Exception:
-            self.run_error = get_err_message()
-            logger.error(f"Crawling failed: {self.run_error}")
+            logger.error(f"Crawling failed: {get_err_message()}")
             self.end_time = datetime.now()
+            return self._create_summary()
+            
         finally:
             self._cleanup()
-        return self._create_summary()
-
+    
     def _analyze_intent(self) -> None:
         """分析用户意图,生成prompt组件"""
         logger.info(f"Analyzing intent: {self.crawl_config.intent}")
@@ -489,7 +460,7 @@ class WebCrawler:
     
     def _crawl_loop(self) -> None:
         """主爬取循环"""
-        pages_processed = len(self.results)
+        pages_processed = 0
         
         while self.url_queue.has_next() and pages_processed < self.crawl_config.max_pages:
             # 获取下一个URL
@@ -504,6 +475,7 @@ class WebCrawler:
             # 处理页面
             result = self._process_page(item)
             self.results.append(result)
+            # Keep legacy queue lifecycle counters consistent with actual page attempts.
             self.url_queue.mark_processed(item.url, success=result.success)
             
             # 添加发现的URL到队列
@@ -513,7 +485,6 @@ class WebCrawler:
             # 更新进度
             pages_processed += 1
             self.progress.update(1, f"Processed: {item.url[:50]}...")
-            self._save_checkpoint()
             
             # 短暂延迟,避免过快请求
             time.sleep(0.5)
@@ -595,7 +566,6 @@ class WebCrawler:
                 base_url=item.url
             )
             result.analysis_time = time.time() - analysis_start
-            result.analyzed = analysis.success
             
             # 填充结果
             result.relevance_score = analysis.relevance_score
@@ -759,9 +729,6 @@ class WebCrawler:
             'total_pages': len(self.results),
             'successful_pages': successful,
             'failed_pages': failed,
-            'analyzed_pages': sum(1 for r in self.results if r.analyzed),
-            'status': 'failed' if self.run_error else 'completed',
-            'error': self.run_error,
             'duration_seconds': duration,
             'start_time': self.start_time.isoformat() if self.start_time else None,
             'end_time': self.end_time.isoformat() if self.end_time else None,
@@ -836,12 +803,6 @@ Examples:
     )
     
     parser.add_argument(
-        '--resume',
-        action='store_true',
-        help='Resume a matching task from the output directory checkpoint'
-    )
-    
-    parser.add_argument(
         '--no-report',
         action='store_true',
         help="Skip report generation"
@@ -875,8 +836,7 @@ def main():
         max_depth=args.max_depth,
         use_selenium=not args.no_selenium,
         output_dir=args.output_dir,
-        generate_report=not args.no_report,
-        resume=args.resume
+        generate_report=not args.no_report
     )
     
     # 打印配置
@@ -906,7 +866,7 @@ def main():
     print(f"  Output: {summary['output_dir']}")
     print("=" * 60 + "\n")
     
-    return 1 if summary['status'] == 'failed' else 0
+    return 0
 
 
 # ============================================================================

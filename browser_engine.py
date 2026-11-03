@@ -33,8 +33,8 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from loguru import logger
 
-from config import BrowserConfig, get_err_message
 from url_policy import URLPolicy, URLPolicyError
+from config import BrowserConfig, get_err_message
 
 
 # ============================================================================
@@ -146,13 +146,11 @@ class BaseBrowserEngine(ABC):
         pass
     
     def is_valid_url(self, url: str, config: BrowserConfig) -> bool:
-        """Validate URLs using the same domain boundary policy as the frontier."""
         try:
-            URLPolicy(tuple(config.allowed_domains)).check(url)
-        except URLPolicyError as exc:
-            logger.debug(f"URL rejected by policy: {exc}")
+            URLPolicy(tuple(config.allowed_domains)).validate(url, resolve_dns=False)
+            return not any(pattern in url.lower() for pattern in config.exclude_patterns)
+        except URLPolicyError:
             return False
-        return not any(pattern in url.lower() for pattern in config.exclude_patterns)
 
 
 # ============================================================================
@@ -422,7 +420,6 @@ class SeleniumEngine(BaseBrowserEngine):
                 
                 # 【优化】使用较短超时，允许timeout后继续
                 try:
-                    URLPolicy(tuple(self.config.allowed_domains)).check(url, resolve_dns=True)
                     self.driver.get(url)
                 except TimeoutException:
                     # 超时但可能已经加载了部分内容
@@ -455,7 +452,6 @@ class SeleniumEngine(BaseBrowserEngine):
                 # 获取HTML
                 html_content = self.driver.page_source
                 final_url = self.driver.current_url
-                URLPolicy(tuple(self.config.allowed_domains)).check(final_url, resolve_dns=True)
                 
                 # 验证内容有效性
                 if not html_content or len(html_content) < 100:
@@ -569,7 +565,7 @@ class SeleniumEngine(BaseBrowserEngine):
         except Exception as e:
             logger.debug(f"页面滚动失败: {e}")
     
-    def click_element(self, selector: str, by: str = "css selector") -> bool:
+    def click_element(self, selector: str, by: By = By.CSS_SELECTOR) -> bool:
         """点击元素"""
         self._ensure_initialized()
         try:
@@ -650,7 +646,6 @@ class RequestsEngine(BaseBrowserEngine):
     def _create_session(self) -> requests.Session:
         """创建带重试和连接池的Session"""
         session = requests.Session()
-        session.trust_env = False  # do not implicitly inherit machine-wide proxy settings
         
         # 重试策略
         retry_strategy = Retry(
@@ -691,31 +686,22 @@ class RequestsEngine(BaseBrowserEngine):
         """轮换User-Agent"""
         self.session.headers['User-Agent'] = get_random_user_agent()
     
-    def _get_with_validated_redirects(self, url: str, **kwargs) -> requests.Response:
-        """Validate every HTTP redirect target before following it."""
-        if "allow_redirects" in kwargs:
-            raise URLPolicyError("redirect policy cannot be overridden")
+    def _get_checked(self, url: str, **kwargs):
+        """Check every redirect before following it (no automatic redirects)."""
         policy = URLPolicy(tuple(self.config.allowed_domains))
         current = url
-        for redirect_count in range(6):
-            policy.check(current, resolve_dns=True)
-            response = self.session.get(
-                current,
-                timeout=self.config.page_load_timeout,
-                allow_redirects=False,
-                **kwargs
-            )
+        for _ in range(6):
+            policy.validate(current, resolve_dns=True)
+            response = self.session.get(current, allow_redirects=False, **kwargs)
+            if response.status_code not in (301, 302, 303, 307, 308):
+                return response
             location = response.headers.get("Location")
-            if response.status_code in (301, 302, 303, 307, 308) and location:
-                target = urljoin(response.url, location)
-                response.close()
-                if redirect_count >= 5:
-                    raise URLPolicyError("maximum redirect count exceeded")
-                policy.check(target, resolve_dns=True)
-                current = target
-                continue
-            return response
-        raise URLPolicyError("maximum redirect count exceeded")
+            if not location:
+                return response
+            next_url = urljoin(current, location)
+            response.close()
+            current = next_url
+        raise requests.exceptions.TooManyRedirects("Exceeded 5 redirects")
 
     def fetch_page(self, url: str, **kwargs) -> FetchResult:
         """
@@ -752,7 +738,11 @@ class RequestsEngine(BaseBrowserEngine):
         try:
             logger.debug(f"Requests获取: {url}")
             
-            response = self._get_with_validated_redirects(url, **kwargs)
+            response = self._get_checked(
+                url,
+                timeout=self.config.page_load_timeout,
+                **kwargs
+            )
             
             response.raise_for_status()
             
