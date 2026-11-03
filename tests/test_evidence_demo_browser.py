@@ -2,6 +2,8 @@
 Requires real Chrome + Selenium. No live third-party URLs are visited.
 """
 import os
+import tempfile
+import json
 import unittest
 from pathlib import Path
 from urllib.request import urlopen
@@ -16,7 +18,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 class EvidenceDemoE2E(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls.download_temp = tempfile.TemporaryDirectory(prefix="evidence-demo-")
+        cls.download_dir = Path(cls.download_temp.name)
         options = Options()
+        options.add_experimental_option("prefs", {"download.default_directory": str(cls.download_dir), "download.prompt_for_download": False})
         options.add_argument('--headless=new')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
@@ -28,10 +33,12 @@ class EvidenceDemoE2E(unittest.TestCase):
             options.binary_location = binary
         cls.driver = webdriver.Chrome(options=options)
         cls.driver.set_page_load_timeout(25)
+        cls.driver.execute_cdp_cmd("Page.setDownloadBehavior", {"behavior":"allow", "downloadPath":str(cls.download_dir)})
 
     @classmethod
     def tearDownClass(cls):
         cls.driver.quit()
+        cls.download_temp.cleanup()
 
     def test_first_120_seconds_path_and_evidence(self):
         driver = self.driver
@@ -59,6 +66,18 @@ class EvidenceDemoE2E(unittest.TestCase):
         driver.find_element(By.ID, 'reset-demo').click()
         self.assertEqual(driver.find_element(By.CSS_SELECTOR, 'button[data-template="pricing"]').get_attribute('aria-pressed'), 'true')
         self.assertFalse(driver.find_element(By.ID, 'research-app').get_attribute('hidden'))
+        driver.find_element(By.ID, 'download-md').click()
+        md_path = self.download_dir / 'evidence-radar-synthetic-demo.md'
+        WebDriverWait(driver, 12).until(lambda _: md_path.is_file())
+        md = md_path.read_text(encoding='utf-8')
+        self.assertIn('synthetic offline fixtures', md)
+        self.assertIn('Conflicting sources', md)
+        driver.find_element(By.ID, 'download-json').click()
+        json_path = self.download_dir / 'evidence-radar-synthetic-demo.json'
+        WebDriverWait(driver, 12).until(lambda _: json_path.is_file())
+        payload = json.loads(json_path.read_text(encoding='utf-8'))
+        self.assertEqual(payload['mode'], 'offline_fixture')
+        self.assertEqual(payload['fields'][2]['entries'][2]['state'], 'conflicted')
 
     def test_accessibility_tabs_mobile_and_no_horizontal_overflow(self):
         driver = self.driver

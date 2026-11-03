@@ -42,7 +42,7 @@ GitHub CI performs these validations on Node 20/22 and actual Chrome, including 
 - Source integrity uses saved SHA-256 hashes. Unit tests and the runtime verify all snapshot bytes before rendering.
 - Evidence highlights use `textContent`/DOM nodes; raw text is never inserted as HTML. No third-party code, web fonts or remote assets are fetched.
 - No claim about real-world pricing, performance, or market conditions is made. **Source-backed** means supported by the synthetic fixture text, not independently verified in reality.
-- This static demo does not expose arbitrary URL crawling or user browser profiles. A production service requires auth, source permission, egress/SRRf review, quotas and additional privacy controls.
+- This static demo does not expose arbitrary URL crawling or user browser profiles. A production service requires auth, source permission, egress/SSRF review, quotas and additional privacy controls.
 
 ## Explicitly out of scope in V0.2-A
 
