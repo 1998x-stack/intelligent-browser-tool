@@ -1,5 +1,17 @@
 # Web Automation Tool / 网页自动化工具
 
+> **V0.1 Foundation (current development branch):** URL safety preflight, explicit frontier acknowledgements, atomic task checkpoints, and a unified CLI are being validated. See [V0.1 design and acceptance](docs/v0.1-foundation.md). The new URL policy is not a full network sandbox; untrusted browser traffic still needs egress isolation.
+
+### V0.1 CLI / 回归测试
+
+```bash
+python -m pip install -e ".[test]"
+python -m pytest -q tests/
+intelligent-browser --url https://example.com/ --intent "documentation" --max-pages 5 --no-selenium
+intelligent-browser --url https://example.com/ --intent "documentation" --max-pages 10 --no-selenium --resume
+```
+
+
 基于Ollama LLM、Selenium/Requests和Trafilatura的智能网页爬取与分析工具。
 
 A smart web crawling and analysis tool powered by Ollama LLM, Selenium/Requests, and Trafilatura.
