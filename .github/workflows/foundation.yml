@@ -25,5 +25,9 @@ jobs:
         run: python -m pip install -e ".[test]"
       - name: Syntax check
         run: python -m compileall -q browser_engine.py crawler.py url_queue.py content_extractor.py url_policy.py main.py
+      - name: Installed CLI and legacy entry smoke
+        run: |
+          intelligent-browser --help
+          python main.py --help
       - name: Unit and offline integration tests
         run: python -m pytest -q tests/
