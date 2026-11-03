@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "intelligent-browser-tool"
-version = "0.1.4"
-description = "Intent-driven web crawler with resumable frontier and browser adapters"
+version = "0.2.0"
+description = "Intent-driven web crawler and evidence-backed local research workspace"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -24,8 +24,10 @@ test = ["pytest>=8.0", "pytest-cov>=5.0"]
 
 [project.scripts]
 intelligent-browser = "crawler:main"
+evidence-radar-local = "research_workspace.__main__:main"
 
 [tool.setuptools]
+packages = ["research_workspace"]
 py-modules = [
   "browser_engine", "config", "content_analyzer", "content_extractor",
   "crawler", "file_namer", "intent_analyzer", "llm_client", "logger_config",

@@ -54,3 +54,15 @@ GitHub CI performs these validations on Node 20/22 and actual Chrome, including 
 ## Product reference
 
 See `docs/V0.2_A_IMPLEMENTATION.md` for requirement traceability and deployment gates; the full research-led V0.2 PRD is proposed in [PR #7](https://github.com/1998x-stack/intelligent-browser-tool/pull/7).
+
+## V0.2-B — Local real research workspace
+
+The V0.2-A offline demo remains unchanged in purpose and never fetches fictional vendor URLs. A separate **local-only** live research UI is available by starting the Python operator service:
+
+```bash
+python -m pip install -e '.[test]'
+python -m research_workspace serve --allow-host www.python.org --port 8765
+# Open http://127.0.0.1:8765/live.html and enter the printed local token.
+```
+
+This runs conservative real HTTP/HTML extraction and stores source snapshots, literal claims and exact evidence anchors in SQLite. It is not a hosted arbitrary URL browser service, and it is not a semantic LLM fact-checker. Source host allowlisting and robots checks are enforced; full cloud egress/SSRF compliance is not certified. For the implementation, API routes, tests and remaining release blockers see `docs/V0.2_B_IMPLEMENTATION.md`.
