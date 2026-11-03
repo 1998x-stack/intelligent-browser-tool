@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "mode": "offline_fixture",
+  "fixture_notice": "Fictional products and synthetic snapshots. No live websites are accessed; this is not real market research.",
+  "project": {
+    "id": "demo-competitive-intelligence",
+    "title": "SaaS Competitor Intelligence",
+    "products": [
+      "AsterFlow",
+      "BirchDesk",
+      "CedarStack"
+    ],
+    "fields": [
+      {
+        "id": "price",
+        "label": "Monthly pricing"
+      },
+      {
+        "id": "free",
+        "label": "Free plan"
+      },
+      {
+        "id": "api",
+        "label": "Developer API"
+      }
+    ]
+  },
+  "templates": [
+    {
+      "id": "pricing",
+      "label": "Pricing & plans",
+      "subtitle": "Compare published prices, billing conditions, and plan access.",
+      "question": "How do these SaaS products compare on pricing, free plans, and API access?",
+      "fields": [
+        "price",
+        "free",
+        "api"
+      ]
+    },
+    {
+      "id": "api",
+      "label": "API availability",
+      "subtitle": "Find API access restrictions and conflicting documentation.",
+      "question": "Which products include developer API access?",
+      "fields": [
+        "api",
+        "price",
+        "free"
+      ]
+    },
+    {
+      "id": "free",
+      "label": "Free plan survey",
+      "subtitle": "Understand true free-tier availability versus trials.",
+      "question": "Which products actually offer a free plan?",
+      "fields": [
+        "free",
+        "price",
+        "api"
+      ]
+    }
+  ],
+  "snapshots": [
+    {
+      "id": "snap-aster",
+      "label": "AsterFlow",
+      "url": "https://asterflow.example/pricing",
+      "captured_at": "2026-10-15T12:00:00Z",
+      "text": "AsterFlow — Plans\nFree tier: available for individual projects.\nPro plan: USD $29 per month when billed annually. Monthly billing is USD $35.\nDeveloper API: included in the Pro plan.\nSupport: email for Pro customers.",
+      "sha256": "9571ffe8ed825d6c10c836c494db1305d56c67be3a9b5c2261f016f797c70f5c",
+      "fixture": true
+    },
+    {
+      "id": "snap-birch",
+      "label": "BirchDesk",
+      "url": "https://birchdesk.example/plans",
+      "captured_at": "2026-10-15T12:00:00Z",
+      "text": "BirchDesk — Pricing\nGrowth plan: USD $39 per month when billed annually.\nFree tier: not offered. A 14-day trial is available.\nPublic API access: included for Growth customers.\nNew pricing applies to new subscriptions only.",
+      "sha256": "03da64e0dfa5a6f7487be29b3a46aaf09096e4570aec186957c04eae358f931c",
+      "fixture": true
+    },
+    {
+      "id": "snap-cedar-pricing",
+      "label": "CedarStack",
+      "url": "https://cedarstack.example/pricing",
+      "captured_at": "2026-10-15T12:00:00Z",
+      "text": "CedarStack — Plans\nFree plan: available with a project limit.\nPaid plans: contact sales for tailored pricing. No public monthly price is listed.\nAPI access: available on Enterprise contracts only.",
+      "sha256": "e5afeee4ca4c51353494be447aceb4fab8d5d5ffa936a348e7552311ad602766",
+      "fixture": true
+    },
+    {
+      "id": "snap-cedar-docs",
+      "label": "CedarStack Docs",
+      "url": "https://docs.cedarstack.example/api",
+      "captured_at": "2026-10-15T12:00:00Z",
+      "text": "CedarStack — API Guide\nThe REST API is available on Starter and Enterprise plans.\nSome endpoints require an Enterprise entitlement.\nThis document describes the REST API as of October 2026.",
+      "sha256": "ca9c00cc2af657b852679f2e60144526ca9e25aeb347282b7390c47adb6921a7",
+      "fixture": true
+    }
+  ],
+  "facts": [
+    {
+      "id": "aster-price",
+      "product": "AsterFlow",
+      "field": "price",
+      "value": "$29 / mo",
+      "qualifier": "USD · billed annually",
+      "state": "supported",
+      "evidence": [
+        {
+          "snapshot_id": "snap-aster",
+          "start": 64,
+          "end": 113,
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "birch-price",
+      "product": "BirchDesk",
+      "field": "price",
+      "value": "$39 / mo",
+      "qualifier": "USD · billed annually",
+      "state": "supported",
+      "evidence": [
+        {
+          "snapshot_id": "snap-birch",
+          "start": 20,
+          "end": 72,
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "cedar-price",
+      "product": "CedarStack",
+      "field": "price",
+      "value": "Not published",
+      "qualifier": "Contact sales · no public monthly price",
+      "state": "insufficient",
+      "evidence": [
+        {
+          "snapshot_id": "snap-cedar-pricing",
+          "start": 62,
+          "end": 144,
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "aster-free",
+      "product": "AsterFlow",
+      "field": "free",
+      "value": "Available",
+      "qualifier": "Individual projects",
+      "state": "supported",
+      "evidence": [
+        {
+          "snapshot_id": "snap-aster",
+          "start": 18,
+          "end": 63,
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "birch-free",
+      "product": "BirchDesk",
+      "field": "free",
+      "value": "Not offered",
+      "qualifier": "14-day trial ≠ free plan",
+      "state": "supported",
+      "evidence": [
+        {
+          "snapshot_id": "snap-birch",
+          "start": 73,
+          "end": 125,
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "cedar-free",
+      "product": "CedarStack",
+      "field": "free",
+      "value": "Available",
+      "qualifier": "Project limit",
+      "state": "supported",
+      "evidence": [
+        {
+          "snapshot_id": "snap-cedar-pricing",
+          "start": 19,
+          "end": 61,
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "aster-api",
+      "product": "AsterFlow",
+      "field": "api",
+      "value": "Included",
+      "qualifier": "Pro plan",
+      "state": "supported",
+      "evidence": [
+        {
+          "snapshot_id": "snap-aster",
+          "start": 142,
+          "end": 182,
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "birch-api",
+      "product": "BirchDesk",
+      "field": "api",
+      "value": "Included",
+      "qualifier": "Growth plan",
+      "state": "supported",
+      "evidence": [
+        {
+          "snapshot_id": "snap-birch",
+          "start": 126,
+          "end": 175,
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "cedar-api",
+      "product": "CedarStack",
+      "field": "api",
+      "value": "Conflicting sources",
+      "qualifier": "Enterprise-only vs Starter + Enterprise",
+      "state": "conflicted",
+      "evidence": [
+        {
+          "snapshot_id": "snap-cedar-pricing",
+          "start": 145,
+          "end": 196,
+          "stance": "conflicts"
+        },
+        {
+          "snapshot_id": "snap-cedar-docs",
+          "start": 23,
+          "end": 81,
+          "stance": "conflicts"
+        }
+      ]
+    }
+  ]
+}

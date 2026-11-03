@@ -1,0 +1,63 @@
+name: Evidence Radar V0.2-A demo verification
+on:
+  push:
+    paths:
+      - 'apps/evidence-demo/**'
+      - 'tests/test_evidence_demo_browser.py'
+      - 'tests/test_evidence_demo_static.py'
+      - '.github/workflows/evidence-demo.yml'
+      - 'docs/V0.2_A_IMPLEMENTATION.md'
+  pull_request:
+    paths:
+      - 'apps/evidence-demo/**'
+      - 'tests/test_evidence_demo_browser.py'
+      - 'tests/test_evidence_demo_static.py'
+      - '.github/workflows/evidence-demo.yml'
+      - 'docs/V0.2_A_IMPLEMENTATION.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  model-and-static:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20', '22']
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Validate JavaScript module syntax
+        run: |
+          node --check apps/evidence-demo/src/model.js
+          node --check apps/evidence-demo/src/app.js
+      - name: Verify evidence contracts, integrity and export
+        run: npm --prefix apps/evidence-demo test
+      - name: Static HTML safety and accessibility assertions
+        run: python3 -m unittest discover -s tests -p 'test_evidence_demo_static.py' -v
+  real-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Selenium
+        run: python -m pip install 'selenium>=4.25,<5'
+      - name: Chrome functional and mobile keyboard smoke
+        env:
+          EVIDENCE_DEMO_URL: http://127.0.0.1:8765/
+        run: |
+          python -m http.server 8765 --directory apps/evidence-demo --bind 127.0.0.1 >/tmp/evidence-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:8765/data/demo.json >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:8765/ >/dev/null
+          python -m unittest discover -s tests -p 'test_evidence_demo_browser.py' -v
