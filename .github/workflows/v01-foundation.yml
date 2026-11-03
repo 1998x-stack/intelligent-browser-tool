@@ -1,9 +1,10 @@
-name: v01-foundation
+name: unified-core-validation
 on:
   push:
     branches:
       - "feat/v0.1-*"
       - "feat/v0.1*"
+      - "feat/v0.2-*"
   pull_request:
   workflow_dispatch:
 jobs:
