@@ -8,6 +8,7 @@ import time
 from .fetcher import SourcePolicy, BoundedFetcher, FetchError
 from .store import ResearchStore, uid
 from .extraction import claims_for, validate_anchors, digest
+from .monitoring import Monitoring
 
 
 class ResearchError(ValueError):
@@ -24,6 +25,7 @@ class ResearchService:
     def __init__(self, db_path: str | Path, policy: SourcePolicy, *, fetcher=None,
                  owner: str = "local"):
         self.store=ResearchStore(db_path)
+        self.monitor=Monitoring(self.store)
         self.policy=policy
         self.fetcher=fetcher if fetcher is not None else BoundedFetcher(policy)
         self.owner=owner
@@ -111,7 +113,9 @@ class ResearchService:
             raise ResearchError("ALREADY_RUNNING","This run is already executing")
         token=None
         try:
-            if run["status"]=="COMPLETED":return run
+            if run["status"]=="COMPLETED":
+                self.monitor.reconcile(self.owner, project["id"], rid)
+                return run
             try:token=self.store.claim_run(rid)
             except ValueError as e:raise ResearchError("ALREADY_RUNNING",str(e)) from e
             started=time.monotonic()
@@ -122,15 +126,18 @@ class ResearchService:
                 if current["pages_used"]>=current["pages_limit"]:
                     self.store.finish_run(rid,token,"BUDGET_EXHAUSTED",detail="Page budget exhausted")
                     token=None
+                    self.monitor.reconcile(self.owner, project["id"], rid)
                     return self.run_info(rid)
                 remaining=current["bytes_limit"]-current["bytes_used"]
                 if remaining<=0:
                     self.store.finish_run(rid,token,"BUDGET_EXHAUSTED",detail="Byte budget exhausted")
                     token=None
+                    self.monitor.reconcile(self.owner, project["id"], rid)
                     return self.run_info(rid)
                 if time.monotonic()-started>=60:
                     self.store.finish_run(rid,token,"PARTIAL",detail="Execution time cap reached")
                     token=None
+                    self.monitor.reconcile(self.owner, project["id"], rid)
                     return self.run_info(rid)
                 try:
                     fetched=self.fetcher.fetch(source["url"],byte_limit=min(self.policy.max_bytes,remaining))
@@ -152,12 +159,68 @@ class ResearchService:
                 status,detail="FAILED","No approved source completed"
             self.store.finish_run(rid,token,status,detail=detail)
             token=None
+            self.monitor.reconcile(self.owner, project["id"], rid)
             return self.run_info(rid)
         finally:
             if token:
                 try:self.store.release_on_error(rid,token)
                 except Exception:pass  # DB may itself be unavailable
             lock.release()
+
+    def schedule(self,pid:str)->dict:
+        self.project(pid)
+        return self.monitor.schedule(self.owner,pid)
+
+    def configure_schedule(self,pid:str,*,enabled:bool,interval_seconds:int=86400,
+                           max_pages:int=5,max_bytes:int=1_000_000)->dict:
+        self.project(pid)
+        try:
+            return self.monitor.configure(self.owner,pid,enabled=enabled,
+                                          interval_seconds=interval_seconds,
+                                          pages_limit=max_pages,bytes_limit=max_bytes)
+        except ValueError as e:
+            raise ResearchError("INVALID_SCHEDULE",str(e)) from e
+
+    def due_runs(self,*,maximum:int=3)->list[str]:
+        try:return self.monitor.claim_due(self.owner,maximum=maximum)
+        except ValueError as e:raise ResearchError("INVALID_SCHEDULE",str(e)) from e
+
+    def run_due(self,*,maximum:int=3)->list[dict]:
+        """Explicit one-shot local scheduler. Invoke from cron or systemd timer.
+
+        Does not install a daemon or send outbound notifications. A failed
+        worker is left at a durable checkpoint for a subsequent tick.
+        """
+        results=[]
+        for rid in self.due_runs(maximum=maximum):
+            results.append(self.execute(rid))
+        return results
+
+    def changes(self,pid:str,*,unread_only:bool=False)->list[dict]:
+        self.project(pid)
+        return self.monitor.changes(self.owner,pid,unread_only=unread_only)
+
+    def history(self,pid:str)->dict:
+        self.project(pid)
+        return self.monitor.history(self.owner,pid)
+
+    def digest(self,pid:str)->dict:
+        self.project(pid)
+        return self.monitor.digest(self.owner,pid)
+
+    def digest_markdown(self,pid:str)->str:
+        self.project(pid)
+        return self.monitor.digest_markdown(self.owner,pid)
+
+    def acknowledge_change(self,pid:str,event_id:str,read_state:str)->dict:
+        self.project(pid)
+        try:return self.monitor.acknowledge(self.owner,pid,event_id,read_state)
+        except ValueError as e:raise ResearchError("NOT_FOUND",str(e)) from e
+
+    def reconcile_run(self,rid:str)->list[dict]:
+        run=self.run_info(rid)
+        try:return self.monitor.reconcile(self.owner,run['project_id'],rid)
+        except ValueError as e:raise ResearchError("INVALID_STATE",str(e)) from e
 
     def delete_project(self,pid:str)->None:
         self.project(pid)

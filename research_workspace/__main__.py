@@ -10,7 +10,8 @@ from .server import serve
 
 def main():
     parser=argparse.ArgumentParser(description="Evidence Radar: operator-authorized loopback research workspace")
-    parser.add_argument("serve",nargs="?",default="serve",choices=["serve"])
+    parser.add_argument("command",nargs="?",default="serve",choices=["serve","tick"],
+                        help="serve local UI or run one scheduler tick (use cron/systemd for recurrence)")
     parser.add_argument("--allow-host",action="append",required=True,
                         help="Explicit approved public hostname (repeat for each host)")
     parser.add_argument("--db",default="./outputs/research_workspace.sqlite3")
@@ -24,7 +25,13 @@ def main():
         parser.error("--no-robots is limited to .example integration fixtures")
     policy=SourcePolicy(tuple(args.allow_host),respect_robots=not args.no_robots)
     research=ResearchService(args.db,policy)
-    serve(research,port=args.port,token=args.token or os.environ.get("EVIDENCE_RADAR_TOKEN"))
+    if args.command=="tick":
+        import json
+        summary=research.run_due(maximum=3)
+        print(json.dumps({"executed_runs":[{"id":r["id"],"status":r["status"]}
+                                           for r in summary],"mode":"local_one_shot"}))
+    else:
+        serve(research,port=args.port,token=args.token or os.environ.get("EVIDENCE_RADAR_TOKEN"))
 
 
 if __name__=="__main__":

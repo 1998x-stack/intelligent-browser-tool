@@ -13,7 +13,7 @@
   <a class="skip" href="#main">Skip to workspace</a>
   <header class="site-header"><a href="./index.html" class="brand" aria-label="Evidence Radar demo home">◎ evidence<span>radar</span></a><nav aria-label="Workspace navigation"><a href="./index.html">Offline demo</a><a href="#setup">Local research</a><a href="https://github.com/1998x-stack/intelligent-browser-tool" rel="noopener noreferrer" target="_blank">Source code</a></nav></header>
   <main id="main">
-    <section class="hero"><div class="eyebrow">EVIDENCE RADAR / V0.2-B / LOCAL ONLY</div><h1>Research live sources.<br><em>Keep the evidence.</em></h1><p>Collect a small, operator-approved set of public pages; inspect literal evidence for structured fields and keep immutable source snapshots. No LLM-generated facts, no unrestricted cloud browsing.</p><p class="safety" role="note">Run this workspace on <strong>127.0.0.1</strong> only. A local access token and server-configured domain allowlist are required. No accounts, public sharing or hosted arbitrary URL collection.</p></section>
+    <section class="hero"><div class="eyebrow">EVIDENCE RADAR / V0.3 / CONTINUOUS RESEARCH / LOCAL ONLY</div><h1>Research live sources.<br><em>Keep the evidence.</em></h1><p>Collect a small, operator-approved set of public pages; inspect literal evidence for structured fields and keep immutable source snapshots. No LLM-generated facts, no unrestricted cloud browsing.</p><p class="safety" role="note">Run this workspace on <strong>127.0.0.1</strong> only. A local access token and server-configured domain allowlist are required. No accounts, public sharing or hosted arbitrary URL collection.</p></section>
     <section class="layout" id="setup" aria-labelledby="setup-title">
       <div class="panel" aria-label="Set up research">
         <h2 id="setup-title">New research</h2>
@@ -43,9 +43,27 @@
           <div id="comparison" class="comparison" aria-label="Research comparison"></div>
           <section class="evidence-section" aria-labelledby="evidence-heading"><h3 id="evidence-heading">Source inspector</h3><p class="muted">Choose a claim to inspect its recorded source and exact excerpt.</p><div id="evidence" tabindex="-1" class="evidence-box">No claim selected.</div></section>
         </div>
+        <section id="monitoring-panel" class="monitor-panel" aria-labelledby="monitor-title" hidden>
+          <h2 id="monitor-title">Continuous research</h2>
+          <p class="muted">Opt in per research project. A schedule runs only when the local operator invokes an explicit scheduler tick (for example, from cron); no email or webhook is sent.</p>
+          <form id="schedule-form" class="schedule-form">
+            <label class="inline-control" for="schedule-enabled"><input type="checkbox" id="schedule-enabled"> Enable periodic research</label>
+            <label for="schedule-interval">Check every</label>
+            <select id="schedule-interval"><option value="86400">24 hours</option><option value="604800">7 days</option><option value="3600">1 hour</option></select>
+            <button type="submit" class="small">Save monitoring preferences</button>
+          </form>
+          <p id="schedule-state" class="muted" role="status" aria-live="polite">Monitoring disabled until enabled by the user.</p>
+          <button id="run-due" type="button" class="small">Check due schedules locally</button>
+          <button id="refresh-monitor" type="button" class="small">Refresh changes</button>
+          <button id="export-digest" type="button" class="small">Export local digest</button>
+          <div class="monitor-grid">
+            <section aria-labelledby="changes-title"><h3 id="changes-title">Important changes and review inbox</h3><div id="monitor-changes" class="change-list" aria-live="polite"><p class="muted">No changes available yet.</p></div></section>
+            <section aria-labelledby="run-history-title"><h3 id="run-history-title">Run history and source health</h3><div id="monitor-history" class="monitor-history"><p class="muted">Rerun this project to compare versions.</p></div></section>
+          </div>
+        </section>
       </div>
     </section>
   </main>
-  <footer>Evidence Radar V0.2-B · Operator-approved public pages · Deterministic extraction · No cloud authorization claims.</footer>
+  <footer>Evidence Radar V0.3 · Operator-approved public pages · Deterministic extraction · No cloud authorization claims.</footer>
 </body>
 </html>

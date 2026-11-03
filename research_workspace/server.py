@@ -83,6 +83,18 @@ def handler_factory(service: ResearchService, token: str, *, static_root: Path =
                                               "respect_robots":service.policy.respect_robots,
                                               "max_source_bytes":service.policy.max_bytes,
                                               "mode":"local_operator_only"})
+                if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/schedule",self.path):
+                    return self._respond(200,service.schedule(match[1]))
+                if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/changes",self.path):
+                    return self._respond(200,{"changes":service.changes(match[1])})
+                if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/history",self.path):
+                    return self._respond(200,service.history(match[1]))
+                if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/digest",self.path):
+                    return self._respond(200,service.digest(match[1]))
+                if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/digest.md",self.path):
+                    rendered=service.digest_markdown(match[1]).encode('utf-8')
+                    self._headers(200,"text/markdown; charset=utf-8",len(rendered))
+                    return self.wfile.write(rendered)
                 if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/runs",self.path):
                     return self._respond(200,{"runs":service.runs(match[1])})
                 if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})",self.path):
@@ -114,6 +126,22 @@ def handler_factory(service: ResearchService, token: str, *, static_root: Path =
                 data=self._body()
                 if self.path=="/api/v1/projects":
                     return self._respond(201,service.create_project(data))
+                if self.path=="/api/v1/monitor/tick":
+                    ids=service.due_runs(maximum=data.get('maximum',3))
+                    for rid in ids: pool.submit(service.execute,rid)
+                    return self._respond(202,{"run_ids":ids,"delivery":"local_inbox_only"})
+                if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/schedule",self.path):
+                    result=service.configure_schedule(
+                        match[1],enabled=data.get('enabled'),
+                        interval_seconds=data.get('interval_seconds',86400),
+                        max_pages=data.get('max_pages',5),
+                        max_bytes=data.get('max_bytes',1_000_000))
+                    return self._respond(200,result)
+                if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/changes/([a-f0-9]{32})/ack",self.path):
+                    return self._respond(200,service.acknowledge_change(
+                        match[1],match[2],data.get('read_state'))) 
+                if match:=re.fullmatch(r"/api/v1/runs/([a-f0-9]{32})/reconcile",self.path):
+                    return self._respond(200,{"changes":service.reconcile_run(match[1])})
                 if match:=re.fullmatch(r"/api/v1/projects/([a-f0-9]{32})/runs",self.path):
                     run=service.new_run(match[1],max_pages=data.get("max_pages",5),
                                         max_bytes=data.get("max_bytes",1_000_000))

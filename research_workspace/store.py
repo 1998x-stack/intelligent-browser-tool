@@ -73,9 +73,11 @@ class ResearchStore:
             if "leased_until" not in columns:
                 db.execute("ALTER TABLE runs ADD COLUMN leased_until REAL")
             version=db.execute("PRAGMA user_version").fetchone()[0]
-            if version>1:
+            if version>2:
                 raise RuntimeError("Unknown newer research database schema")
-            db.execute("PRAGMA user_version=1")
+            # V0.3 is a create-only migration; existing V0.2-B runs remain intact.
+            from .monitoring import ensure_schema
+            ensure_schema(db)
 
     @contextmanager
     def db(self):
@@ -234,6 +236,11 @@ class ResearchStore:
             if not row or row["owner"]!=owner:raise ValueError("Project missing or not owned")
             running=db.execute("SELECT 1 FROM runs WHERE project_id=? AND status='RUNNING' LIMIT 1",(pid,)).fetchone()
             if running:raise ValueError("Cannot delete while a run is executing")
+            # New monitoring records refer to runs and projects, so remove
+            # them first in the same transaction as the source data.
+            db.execute("DELETE FROM research_changes WHERE project_id=?",(pid,))
+            db.execute("DELETE FROM research_reconciliations WHERE run_id IN (SELECT id FROM runs WHERE project_id=?)",(pid,))
+            db.execute("DELETE FROM research_schedules WHERE project_id=?",(pid,))
             db.execute("DELETE FROM claims WHERE snapshot_id IN (SELECT s.id FROM snapshots s JOIN runs r ON s.run_id=r.id WHERE r.project_id=?)",(pid,))
             db.execute("DELETE FROM snapshots WHERE run_id IN (SELECT id FROM runs WHERE project_id=?)",(pid,))
             db.execute("DELETE FROM run_sources WHERE run_id IN (SELECT id FROM runs WHERE project_id=?)",(pid,))
