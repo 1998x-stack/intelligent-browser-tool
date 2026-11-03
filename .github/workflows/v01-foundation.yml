@@ -1,0 +1,21 @@
+name: v01-foundation
+on:
+  push:
+    branches:
+      - "feat/v0.1-*"
+      - "feat/v0.1*"
+  pull_request:
+  workflow_dispatch:
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install pytest requests loguru selenium trafilatura beautifulsoup4 lxml python-dateutil
+      - run: python -m compileall -q url_policy.py frontier_state.py durable_queue.py url_queue.py browser_engine.py crawler.py
+      - run: python -m pytest -q tests/test_v01_foundation.py tests/test_v01_batch2.py
