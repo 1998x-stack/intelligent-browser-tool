@@ -34,7 +34,7 @@ class Handler(BaseHTTPRequestHandler):
         path = urlsplit(self.path)
         host = (path.hostname or self.headers.get("Host") or "").lower()
         request_path = path.path or "/"
-        if request_path == "/__stats__" and host.startswith(("127.0.0.1", "localhost")):
+        if request_path == "/__stats__" and host.startswith(("127.0.0.1", "localhost", "local-proxy")):
             with lock:
                 content = json.dumps(seen).encode("utf-8")
             return self.respond(200, content, (("Content-Type", "application/json"),))

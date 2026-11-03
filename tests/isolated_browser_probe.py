@@ -1,5 +1,6 @@
 """Drive real Chrome running inside a Docker --internal network."""
 import json
+import os
 import time
 import urllib.request
 from selenium import webdriver
@@ -7,12 +8,25 @@ from selenium.webdriver.chrome.options import Options
 
 
 def proxy_hits():
-    with urllib.request.urlopen("http://127.0.0.1:3128/__stats__", timeout=4) as r:
+    endpoint = os.environ.get("E2E_PROXY_URL", "http://local-proxy:3128")
+    with urllib.request.urlopen(endpoint + "/__stats__", timeout=4) as r:
         return json.load(r)
 
 
 def main():
-    endpoint = "http://127.0.0.1:4444"
+    endpoint = os.environ.get("E2E_SELENIUM_URL", "http://isolated-browser:4444")
+    deadline = time.monotonic() + 150
+    while True:
+        try:
+            with urllib.request.urlopen(endpoint + "/status", timeout=3) as reply:
+                status = json.load(reply)
+            if status.get("value", {}).get("ready"):
+                break
+        except Exception:
+            pass
+        if time.monotonic() > deadline:
+            raise RuntimeError("Isolated Selenium container did not become ready")
+        time.sleep(2)
     options = Options()
     options.add_argument("--headless=new")
     options.add_argument("--proxy-server=http://local-proxy:3128")
