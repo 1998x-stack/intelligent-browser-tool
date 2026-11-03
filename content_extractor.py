@@ -304,7 +304,7 @@ class ContentExtractor:
         
         try:
             soup = BeautifulSoup(html, 'html.parser')
-            base_domain = urlparse(base_url).netloc
+            base_domain = (urlparse(base_url).hostname or '').lower()
             
             for a_tag in soup.find_all('a', href=True):
                 href = a_tag['href'].strip()
@@ -332,8 +332,10 @@ class ContentExtractor:
                 context = parent.get_text(strip=True)[:100] if parent else ""
                 
                 # 判断是否内部链接
-                link_domain = urlparse(href).netloc
-                is_internal = base_domain in link_domain
+                link_domain = (urlparse(href).hostname or '').lower()
+                is_internal = bool(base_domain) and (
+                    link_domain == base_domain or link_domain.endswith('.' + base_domain)
+                )
                 
                 links.append(ExtractedLink(
                     url=href,
