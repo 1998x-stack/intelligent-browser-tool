@@ -26,7 +26,7 @@ Date: 2024
 import sys
 import argparse
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from pathlib import Path
@@ -44,6 +44,7 @@ from intent_analyzer import IntentAnalyzer, IntentComponents
 from content_analyzer import ContentAnalyzer, AnalysisResult
 from file_namer import FileNamer
 from url_queue import URLQueue, QueueItem
+from durable_queue import DurableURLQueue
 from storage_manager import StorageManager
 from report_generator import (
     ReportGenerator, CrawlSummary, PageReport,
@@ -103,6 +104,9 @@ class CrawlConfig:
     search_engines: List[str] = field(default_factory=lambda: ["google", "bing"])
     max_seed_urls: int = 10                  # 最大种子URL数量
     language: str = "zh"                     # 搜索语言 (zh/en)
+    durable_frontier: bool = False            # Opt-in SQLite queue (legacy mode remains available)
+    task_namespace: str = "local"              # Logical partition; not authentication
+    task_id: Optional[str] = None              # Caller-controlled task identity
 
 
 @dataclass
@@ -187,7 +191,7 @@ class WebCrawler:
         self.config.storage.create_dirs()
         
         # 设置允许的域名
-        start_domain = extract_domain(self.crawl_config.start_url)
+        start_domain = urlparse(self.crawl_config.start_url).hostname
         if start_domain:
             self.config.browser.allowed_domains = [start_domain]
         
@@ -227,7 +231,13 @@ class WebCrawler:
             self.file_namer = FileNamer(self.llm_client)
             
             # URL队列 (需要完整Config对象)
-            self.url_queue = URLQueue(self.config)
+            self.url_queue = (
+                DurableURLQueue(self.config, start_url=self.crawl_config.start_url,
+                                intent=self.crawl_config.intent,
+                                task_namespace=self.crawl_config.task_namespace,
+                                task_id=self.crawl_config.task_id)
+                if self.crawl_config.durable_frontier else URLQueue(self.config)
+            )
             
             # 存储管理器 (需要Config对象, 可选file_namer)
             self.storage = StorageManager(self.config, self.file_namer)
@@ -299,8 +309,12 @@ class WebCrawler:
             # 步骤1: 分析用户意图
             self._analyze_intent()
             
+            # On resume, existing durable frontier entries are authoritative.
+            resumed = (self.crawl_config.durable_frontier and self.url_queue.has_entries())
+            if resumed:
+                logger.info('Resuming existing SQLite frontier; skipping seed generation')
             # 步骤2: 生成种子URL (通过搜索引擎)
-            if self.crawl_config.use_search_seeds and self.seed_generator:
+            elif self.crawl_config.use_search_seeds and self.seed_generator:
                 self._generate_seed_urls()
             else:
                 # 仅添加原始起始URL
@@ -309,11 +323,14 @@ class WebCrawler:
             # 步骤3: 爬取循环
             self._crawl_loop()
             
+            # Aggregate all previously committed pages on each resumed invocation.
+            if self.crawl_config.durable_frontier:
+                self._load_durable_results()
+
+            self.end_time = datetime.now()
             # 步骤4: 生成报告
             if self.crawl_config.generate_report:
                 self._generate_report()
-            
-            self.end_time = datetime.now()
             
             # 返回摘要
             return self._create_summary()
@@ -474,13 +491,26 @@ class WebCrawler:
             
             # 处理页面
             result = self._process_page(item)
+            # Durable mode atomically commits page result *and* child links.
+            # A crash after committing a page must not lose its discovered URLs.
+            if self.crawl_config.durable_frontier:
+                children = [
+                    {"url": link.get("url", ""),
+                     "priority": link.get("priority", 2),
+                     "depth": item.depth + 1,
+                     "parent_url": item.url,
+                     "context": {"link_text": link.get("link_text"),
+                                 "reason": link.get("reason")}}
+                    for link in result.priority_urls
+                ] if result.success else []
+                self.url_queue.mark_processed(
+                    item.url, success=result.success, error=result.error,
+                    result=asdict(result), discovered=children)
+            else:
+                self.url_queue.mark_processed(item.url, success=result.success)
+                if result.success and result.priority_urls:
+                    self._add_discovered_urls(result.priority_urls, item)
             self.results.append(result)
-            # Keep legacy queue lifecycle counters consistent with actual page attempts.
-            self.url_queue.mark_processed(item.url, success=result.success)
-            
-            # 添加发现的URL到队列
-            if result.success and result.priority_urls:
-                self._add_discovered_urls(result.priority_urls, item)
             
             # 更新进度
             pages_processed += 1
@@ -659,6 +689,11 @@ class WebCrawler:
     # 报告生成 (Report Generation)
     # ========================================================================
     
+    def _load_durable_results(self) -> None:
+        """Restore completed/terminal pages across process restarts."""
+        saved = self.url_queue.list_results()
+        self.results = [PageResult(**page) for page in saved]
+
     def _generate_report(self) -> None:
         """生成爬取报告"""
         logger.info("Generating report...")
@@ -732,7 +767,8 @@ class WebCrawler:
             'duration_seconds': duration,
             'start_time': self.start_time.isoformat() if self.start_time else None,
             'end_time': self.end_time.isoformat() if self.end_time else None,
-            'output_dir': self.crawl_config.output_dir
+            'output_dir': self.crawl_config.output_dir,
+            'frontier_counts': self.url_queue.counts() if self.crawl_config.durable_frontier else None
         }
     
     def _cleanup(self) -> None:
@@ -740,6 +776,8 @@ class WebCrawler:
         try:
             if hasattr(self, 'browser') and self.browser:
                 self.browser.close()
+            if hasattr(self, 'url_queue') and self.crawl_config.durable_frontier:
+                self.url_queue.close()
             
             logger.info("Resources cleaned up")
             
@@ -802,6 +840,20 @@ Examples:
         help="Use requests instead of selenium"
     )
     
+    parser.add_argument('--task-namespace', default='local',
+                        help='Logical task partition (not an auth boundary)')
+    parser.add_argument('--task-id', default=None,
+                        help='Stable task ID (identity mismatch fails closed)')
+    parser.add_argument(
+        '--durable-frontier',
+        action='store_true',
+        help='Use persistent SQLite Frontier (experimental, opt-in)'
+    )
+    parser.add_argument(
+        '--no-search-seeds',
+        action='store_true',
+        help='Use only the specified start URL, no external search engine'
+    )
     parser.add_argument(
         '--no-report',
         action='store_true',
@@ -836,7 +888,11 @@ def main():
         max_depth=args.max_depth,
         use_selenium=not args.no_selenium,
         output_dir=args.output_dir,
-        generate_report=not args.no_report
+        generate_report=not args.no_report,
+        durable_frontier=args.durable_frontier,
+        task_namespace=args.task_namespace,
+        task_id=args.task_id,
+        use_search_seeds=not args.no_search_seeds
     )
     
     # 打印配置

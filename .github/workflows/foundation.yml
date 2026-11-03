@@ -30,4 +30,4 @@ jobs:
           intelligent-browser --help
           python main.py --help
       - name: Unit and offline integration tests
-        run: cd tests && PYTHONPATH=.. python -m pytest -q test_v01_foundation.py test_pr2_conflict_regression.py
+        run: cd tests && PYTHONPATH=.. python -m pytest -q test_v01_foundation.py test_pr2_conflict_regression.py test_v01_batch2.py test_v01_batch3.py test_v014_hardening.py test_unified_core.py

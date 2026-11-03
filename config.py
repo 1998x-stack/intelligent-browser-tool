@@ -43,6 +43,12 @@ class BrowserConfig:
     request_delay: float = 1.0
     max_retries: int = 2
     retry_delay: float = 1.0
+    # Strict mode is only a configuration gate; network namespace + proxy ACL
+    # enforcement must be provided outside the application.
+    strict_browser_network: bool = field(
+        default_factory=lambda: os.getenv("BROWSER_STRICT_NETWORK") == "1")
+    egress_proxy_url: Optional[str] = field(
+        default_factory=lambda: os.getenv("BROWSER_EGRESS_PROXY") or None)
     
     # Chrome选项
     chrome_options: List[str] = field(default_factory=lambda: [
