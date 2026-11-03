@@ -41,8 +41,10 @@ def test_frontier_dedup_lease_resume(tmp_path):
         assert first["url"] == "https://example.com/a"
         assert queue.lease(now=100)["url"] == "https://example.com/b"
         assert queue.recover_expired(now=111) == 2
-        assert queue.lease(now=111)["url"] == "https://example.com/a"
-        queue.finish("https://example.com/a", state="completed")
+        assert queue.has_ready(now=111)
+        assert queue.counts()["queued"] == 2
+        third = queue.lease(now=111)
+        queue.finish("https://example.com/a", lease_token=third["lease_token"], state="completed")
         assert queue.counts()["completed"] == 1
 
 
@@ -50,4 +52,4 @@ def test_finishing_unleased_raises(tmp_path):
     with FrontierState(tmp_path / "frontier.db", URLPolicy(("example.com",))) as q:
         q.enqueue("https://example.com/")
         with pytest.raises(ValueError):
-            q.finish("https://example.com/", state="completed")
+            q.finish("https://example.com/", lease_token="not-a-current-lease", state="completed")
