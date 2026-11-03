@@ -26,7 +26,7 @@ Date: 2024
 import sys
 import argparse
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from pathlib import Path
@@ -319,11 +319,14 @@ class WebCrawler:
             # 步骤3: 爬取循环
             self._crawl_loop()
             
+            # Aggregate all previously committed pages on each resumed invocation.
+            if self.crawl_config.durable_frontier:
+                self._load_durable_results()
+
+            self.end_time = datetime.now()
             # 步骤4: 生成报告
             if self.crawl_config.generate_report:
                 self._generate_report()
-            
-            self.end_time = datetime.now()
             
             # 返回摘要
             return self._create_summary()
@@ -487,7 +490,8 @@ class WebCrawler:
             self.results.append(result)
             # Keep legacy queue lifecycle counters consistent with actual page attempts.
             if self.crawl_config.durable_frontier:
-                self.url_queue.mark_processed(item.url, success=result.success, error=result.error)
+                self.url_queue.mark_processed(item.url, success=result.success,
+                                              error=result.error, result=asdict(result))
             else:
                 self.url_queue.mark_processed(item.url, success=result.success)
             
@@ -672,6 +676,11 @@ class WebCrawler:
     # 报告生成 (Report Generation)
     # ========================================================================
     
+    def _load_durable_results(self) -> None:
+        """Restore completed/terminal pages across process restarts."""
+        saved = self.url_queue.list_results()
+        self.results = [PageResult(**page) for page in saved]
+
     def _generate_report(self) -> None:
         """生成爬取报告"""
         logger.info("Generating report...")

@@ -19,4 +19,5 @@ jobs:
       - run: python -m pip install pytest requests loguru selenium trafilatura beautifulsoup4 lxml python-dateutil
       - run: python -m compileall -q url_policy.py frontier_state.py durable_queue.py url_queue.py browser_engine.py crawler.py
       # Root __init__.py is a historical non-package module; keep test collection inside tests/.
-      - run: cd tests && PYTHONPATH=.. python -m pytest -q test_v01_foundation.py test_v01_batch2.py
+      - run: cd tests && PYTHONPATH=.. python -m pytest -q test_v01_foundation.py test_v01_batch2.py test_v01_batch3.py
+      - run: python -m benchmarks.frontier_compare --pages 50 --output /tmp/frontier-compare.json

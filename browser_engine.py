@@ -34,6 +34,7 @@ from urllib3.util.retry import Retry
 from loguru import logger
 
 from url_policy import URLPolicy, URLPolicyError
+from network_policy import BrowserNetworkPolicy, NetworkBoundaryError
 from config import BrowserConfig, get_err_message
 
 
@@ -187,6 +188,10 @@ class SeleniumEngine(BaseBrowserEngine):
             raise ImportError("Selenium未安装，请运行: pip install selenium")
         
         self.config = config
+        self.network_policy = BrowserNetworkPolicy(
+            tuple(config.allowed_domains), strict=config.strict_browser_network,
+            proxy_url=config.egress_proxy_url)
+        self.network_policy.check_chrome_arguments(config.chrome_options)
         self.use_undetected = use_undetected and UNDETECTED_AVAILABLE
         self.driver: Optional[Union[webdriver.Chrome, 'uc.Chrome']] = None
         self._initialized = False
@@ -230,6 +235,7 @@ class SeleniumEngine(BaseBrowserEngine):
         
         # 性能优化选项
         self._add_performance_options(options)
+        self.network_policy.install_chrome_proxy(options)
         
         # 创建驱动
         self.driver = uc.Chrome(
@@ -247,6 +253,10 @@ class SeleniumEngine(BaseBrowserEngine):
         
         # 添加配置选项
         for option in self.config.chrome_options:
+            if self.config.strict_browser_network and option in (
+                "--no-sandbox", "--ignore-certificate-errors",
+                "--ignore-ssl-errors"):
+                continue
             options.add_argument(option)
         
         # 无头模式
@@ -255,6 +265,7 @@ class SeleniumEngine(BaseBrowserEngine):
         
         # 性能优化选项
         self._add_performance_options(options)
+        self.network_policy.install_chrome_proxy(options)
         
         # 反检测配置
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -327,6 +338,10 @@ class SeleniumEngine(BaseBrowserEngine):
         ]
         
         for arg in performance_args:
+            if self.config.strict_browser_network and arg in (
+                "--no-sandbox", "--ignore-certificate-errors",
+                "--ignore-ssl-errors"):
+                continue
             try:
                 options.add_argument(arg)
             except Exception:
@@ -395,8 +410,6 @@ class SeleniumEngine(BaseBrowserEngine):
         Returns:
             FetchResult对象
         """
-        self._ensure_initialized()
-        
         if not self.is_valid_url(url, self.config):
             return FetchResult(
                 url=url,
@@ -410,6 +423,14 @@ class SeleniumEngine(BaseBrowserEngine):
                 engine="selenium"
             )
         
+        if self.config.strict_browser_network:
+            try:
+                self.network_policy.check_navigation(url, resolve_dns=True)
+            except URLPolicyError as exc:
+                return FetchResult(url=url, final_url=url, html="", status_code=0,
+                                   content_type="", fetch_time=0, success=False,
+                                   error=f"Network policy denied: {exc}", engine="selenium")
+        self._ensure_initialized()
         start_time = time.time()
         timeout = timeout or self.config.page_load_timeout
         last_error = ""
@@ -452,6 +473,13 @@ class SeleniumEngine(BaseBrowserEngine):
                 # 获取HTML
                 html_content = self.driver.page_source
                 final_url = self.driver.current_url
+                try:
+                    self.network_policy.check_navigation(final_url, resolve_dns=False)
+                except URLPolicyError as exc:
+                    return FetchResult(url=url, final_url=final_url, html="",
+                                       status_code=0, content_type="", fetch_time=time.time()-start_time,
+                                       success=False, error=f"Unexpected navigation target: {exc}",
+                                       engine="selenium")
                 
                 # 验证内容有效性
                 if not html_content or len(html_content) < 100:
@@ -638,6 +666,9 @@ class RequestsEngine(BaseBrowserEngine):
             config: 浏览器配置
         """
         self.config = config
+        self.network_policy = BrowserNetworkPolicy(
+            tuple(config.allowed_domains), strict=config.strict_browser_network,
+            proxy_url=config.egress_proxy_url)
         self.session = self._create_session()
         self._request_count = 0
         
@@ -646,6 +677,11 @@ class RequestsEngine(BaseBrowserEngine):
     def _create_session(self) -> requests.Session:
         """创建带重试和连接池的Session"""
         session = requests.Session()
+        # Never silently inherit an untrusted HTTP(S)_PROXY / NO_PROXY policy.
+        session.trust_env = False
+        if self.config.strict_browser_network:
+            proxy = self.network_policy.proxy_url
+            session.proxies.update({"http": proxy, "https": proxy})
         
         # 重试策略
         retry_strategy = Retry(

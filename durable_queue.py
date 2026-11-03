@@ -66,7 +66,7 @@ class DurableURLQueue:
                          parent_url=record["parent_url"], context=record["context"])
 
     def mark_processed(self, url: str, success: bool = True,
-                       error: str | None = None) -> None:
+                       error: str | None = None, result: dict | None = None) -> None:
         token = self._active.pop(url)
         attempts = self._attempts.pop(url)
         if success:
@@ -76,10 +76,13 @@ class DurableURLQueue:
         else:
             state, delay = "failed", 0
         self.state.finish(url, lease_token=token, state=state,
-                          error=error, retry_delay=delay)
+                          error=error, retry_delay=delay, result=result)
 
     def close(self):
         self.state.close()
 
     def counts(self) -> dict[str, int]:
         return self.state.counts()
+
+    def list_results(self) -> list[dict]:
+        return self.state.list_results()

@@ -51,6 +51,11 @@ class FrontierState:
                 self.db.execute(f"ALTER TABLE frontier ADD COLUMN {name} {spec}")
         self.db.execute("""CREATE INDEX IF NOT EXISTS frontier_schedule
                            ON frontier(state, available_at, priority, depth)""")
+        self.db.execute("""CREATE TABLE IF NOT EXISTS page_results (
+            url TEXT PRIMARY KEY REFERENCES frontier(url),
+            result_json TEXT NOT NULL,
+            updated_at REAL NOT NULL
+        )""")
 
     def enqueue(self, url: str, priority: int = 2, depth: int = 0,
                 *, parent_url: str = "", context: dict | None = None) -> bool:
@@ -121,20 +126,50 @@ class FrontierState:
             raise
 
     def finish(self, url: str, *, lease_token: str, state: str,
-               error: str | None = None, retry_delay: float = 0) -> None:
+               error: str | None = None, retry_delay: float = 0,
+               result: dict | None = None) -> None:
+        """Atomically finalize the current lease and upsert its page result.
+
+        The lease token prevents a stale worker from overwriting a newer
+        attempt's result after expiry. Pending retries do not emit reports.
+        """
         if state not in ("completed", "failed", "blocked", "queued"):
             raise ValueError("Unsupported final state")
         if not lease_token:
             raise ValueError("Lease token required")
         if retry_delay < 0:
             raise ValueError("retry_delay must be nonnegative")
-        result = self.db.execute(
-            """UPDATE frontier SET state=?, leased_until=NULL, lease_token=NULL,
-               last_error=?, available_at=? 
-               WHERE url=? AND state='leased' AND lease_token=?""",
-            (state, error, time.time() + retry_delay, urldefrag(url)[0], lease_token))
-        if result.rowcount != 1:
-            raise ValueError("URL is not leased by this attempt")
+        url = urldefrag(url)[0]
+        payload = json.dumps(result, ensure_ascii=False, default=str) if result is not None else None
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            changed = self.db.execute(
+                """UPDATE frontier SET state=?, leased_until=NULL, lease_token=NULL,
+                   last_error=?, available_at=?
+                   WHERE url=? AND state='leased' AND lease_token=?""",
+                (state, error, time.time() + retry_delay, url, lease_token))
+            if changed.rowcount != 1:
+                raise ValueError("URL is not leased by this attempt")
+            if payload is not None and state != "queued":
+                self.db.execute(
+                    """INSERT INTO page_results(url,result_json,updated_at) VALUES(?,?,?)
+                       ON CONFLICT(url) DO UPDATE SET
+                         result_json=excluded.result_json,
+                         updated_at=excluded.updated_at""",
+                    (url, payload, time.time()))
+            self.db.execute("COMMIT")
+        except BaseException:
+            if self.db.in_transaction:
+                self.db.execute("ROLLBACK")
+            raise
+
+    def list_results(self) -> list[dict]:
+        """Stable report order; one current result per URL over all runs."""
+        rows = self.db.execute(
+            """SELECT r.result_json FROM page_results r
+               JOIN frontier f ON f.url=r.url
+               ORDER BY f.created_at, f.url""")
+        return [json.loads(row["result_json"]) for row in rows]
 
     def counts(self) -> dict[str, int]:
         return {row["state"]: row["n"] for row in self.db.execute(
