@@ -1,0 +1,122 @@
+[
+  {
+    "name": "price-rise-10",
+    "before": "Plan $29/month.",
+    "after": "Plan $39/month.",
+    "expected": "CHANGED"
+  },
+  {
+    "name": "currency-changed",
+    "before": "Plan $29/month.",
+    "after": "Plan €29/month.",
+    "expected": "CHANGED"
+  },
+  {
+    "name": "billing-period",
+    "before": "Plan $29/month.",
+    "after": "Plan $29/year.",
+    "expected": "CHANGED"
+  },
+  {
+    "name": "annual-terms",
+    "before": "Plan $29/month billed annually.",
+    "after": "Plan $29/month billed monthly.",
+    "expected": "CHANGED"
+  },
+  {
+    "name": "small-increase",
+    "before": "Plan $29/month.",
+    "after": "Plan $30/month.",
+    "expected": "CHANGED"
+  },
+  {
+    "name": "decimal-increase",
+    "before": "Plan $29.99/month.",
+    "after": "Plan $39.99/month.",
+    "expected": "CHANGED"
+  },
+  {
+    "name": "large-increase",
+    "before": "Enterprise $100/month.",
+    "after": "Enterprise $120/month.",
+    "expected": "CHANGED"
+  },
+  {
+    "name": "missing-to-price",
+    "before": "Contact sales for a quote.",
+    "after": "Plan $29/month.",
+    "expected": "ADDED"
+  },
+  {
+    "name": "missing-to-yearly",
+    "before": "Ask for quote.",
+    "after": "Plan €49/year.",
+    "expected": "ADDED"
+  },
+  {
+    "name": "timestamp-noise",
+    "before": "Plan $29/month. Updated yesterday.",
+    "after": "Updated today. Plan $29/month.",
+    "expected": "NONE"
+  },
+  {
+    "name": "whitespace-noise",
+    "before": "Plan $29/month.",
+    "after": "Plan    $29/month.",
+    "expected": "NONE"
+  },
+  {
+    "name": "legal-note-noise",
+    "before": "Plan $29/month.",
+    "after": "Plan $29/month. Subject to legal terms.",
+    "expected": "NONE"
+  },
+  {
+    "name": "same-content",
+    "before": "Plan $29/month.",
+    "after": "Plan $29/month.",
+    "expected": "NONE"
+  },
+  {
+    "name": "layout-noise",
+    "before": "Welcome Plan $29/month.",
+    "after": "New site navigation. Plan $29/month.",
+    "expected": "NONE"
+  },
+  {
+    "name": "price-no-longer-listed",
+    "before": "Plan $29/month.",
+    "after": "Contact sales for pricing.",
+    "expected": "REVIEW_REQUIRED"
+  },
+  {
+    "name": "price-conflicted",
+    "before": "Plan $29/month.",
+    "after": "Pro $29/month and Team $49/month.",
+    "expected": "REVIEW_REQUIRED"
+  },
+  {
+    "name": "conflict-resolved",
+    "before": "Pro $29/month and Team $49/month.",
+    "after": "Plan $29/month.",
+    "expected": "REVIEW_REQUIRED"
+  },
+  {
+    "name": "conflict-no-longer-priced",
+    "before": "Pro $29/month and Team $49/month.",
+    "after": "Contact sales.",
+    "expected": "NONE"
+  },
+  {
+    "name": "source-unavailable",
+    "before": "Plan $29/month.",
+    "after": null,
+    "expected": "NONE"
+  },
+  {
+    "name": "unavailable-after-annual",
+    "before": "Plan $39/month billed annually.",
+    "after": null,
+    "expected": "NONE"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {"name":"clear_usd_monthly","text":"Pro costs $29/month with API access.","kind":"price","hint":"","expected_status":"SUPPORTED","expected_amount":"29","expected_currency":"USD","expected_period":"month","expected_billing":"not_stated"},
+  {"name":"annual_condition","text":"Pro is $29 per month billed annually.","kind":"price","hint":"","expected_status":"SUPPORTED","expected_amount":"29","expected_currency":"USD","expected_period":"month","expected_billing":"billed_annually"},
+  {"name":"euro_annual","text":"Paid tier is €129/year.","kind":"price","hint":"","expected_status":"SUPPORTED","expected_amount":"129","expected_currency":"EUR","expected_period":"year"},
+  {"name":"pound_monthly","text":"UK plan costs £12/mo billed monthly.","kind":"price","hint":"","expected_status":"SUPPORTED","expected_amount":"12","expected_currency":"GBP","expected_period":"month","expected_billing":"billed_monthly"},
+  {"name":"old_new","text":"Was $29/month. Now $39/month.","kind":"price","hint":"","expected_status":"CONFLICTED"},
+  {"name":"multiple_plans","text":"Starter $29/month, team $59/month.","kind":"price","hint":"","expected_status":"CONFLICTED"},
+  {"name":"no_period","text":"Pro costs $29, billing terms are unavailable.","kind":"price","hint":"","expected_status":"INSUFFICIENT"},
+  {"name":"no_price","text":"Contact sales for current pricing.","kind":"price","hint":"","expected_status":"INSUFFICIENT"},
+  {"name":"keyword_mention","text":"An API integration is currently being considered.","kind":"keyword","hint":"API","expected_status":"NEEDS_REVIEW"},
+  {"name":"keyword_negation","text":"API access is not supported for the free plan.","kind":"keyword","hint":"API","expected_status":"NEEDS_REVIEW"},
+  {"name":"keyword_missing","text":"Documentation discusses a browser and a crawler.","kind":"keyword","hint":"API","expected_status":"INSUFFICIENT"},
+  {"name":"same_price_repeated","text":"Pro $19/month; highlighted again: Pro $19/month.","kind":"price","hint":"","expected_status":"SUPPORTED","expected_amount":"19","expected_currency":"USD","expected_period":"month"}
+]
