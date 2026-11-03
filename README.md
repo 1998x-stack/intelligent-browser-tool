@@ -1,5 +1,20 @@
 # Web Automation Tool / 网页自动化工具
 
+## V0.1 Git integration and CLI
+
+The compatibility CLI is installable with `pip install -e ".[test]"`.
+The foundation uses a strict HTTP(S) URL allowlist and the SQLite Frontier.
+Persisted tasks are **not** a network security sandbox.
+
+```bash
+python -m pip install -e ".[test]"
+intelligent-browser --help
+python main.py --help
+```
+
+See [foundation merge decisions](docs/v0.1-conflict-resolution.md) and
+[original design notes](docs/v0.1-foundation.md).
+
 基于Ollama LLM、Selenium/Requests和Trafilatura的智能网页爬取与分析工具。
 
 A smart web crawling and analysis tool powered by Ollama LLM, Selenium/Requests, and Trafilatura.
