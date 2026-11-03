@@ -52,4 +52,4 @@ def test_finishing_unleased_raises(tmp_path):
     with FrontierState(tmp_path / "frontier.db", URLPolicy(("example.com",))) as q:
         q.enqueue("https://example.com/")
         with pytest.raises(ValueError):
-            q.finish("https://example.com/", state="completed")
+            q.finish("https://example.com/", lease_token="not-a-current-lease", state="completed")

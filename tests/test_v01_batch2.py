@@ -109,6 +109,7 @@ def test_crawler_loop_uses_durable_queue(tmp_path, monkeypatch):
         def update(self, *args):
             pass
     c.progress = Progress()
+    c.results = []
     def process(item):
         if item.depth == 0:
             return crawler.PageResult(url=item.url, depth=item.depth,
