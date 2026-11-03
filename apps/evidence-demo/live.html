@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Local-only Evidence Radar Research Workspace. Inspect sourced claims from bounded public web pages.">
+  <meta name="color-scheme" content="light">
+  <title>Evidence Radar — Local Research Workspace</title>
+  <link rel="stylesheet" href="./live.css">
+  <script type="module" src="./src/live.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to workspace</a>
+  <header class="site-header"><a href="./index.html" class="brand" aria-label="Evidence Radar demo home">◎ evidence<span>radar</span></a><nav aria-label="Workspace navigation"><a href="./index.html">Offline demo</a><a href="#setup">Local research</a><a href="https://github.com/1998x-stack/intelligent-browser-tool" rel="noopener noreferrer" target="_blank">Source code</a></nav></header>
+  <main id="main">
+    <section class="hero"><div class="eyebrow">EVIDENCE RADAR / V0.2-B / LOCAL ONLY</div><h1>Research live sources.<br><em>Keep the evidence.</em></h1><p>Collect a small, operator-approved set of public pages; inspect literal evidence for structured fields and keep immutable source snapshots. No LLM-generated facts, no unrestricted cloud browsing.</p><p class="safety" role="note">Run this workspace on <strong>127.0.0.1</strong> only. A local access token and server-configured domain allowlist are required. No accounts, public sharing or hosted arbitrary URL collection.</p></section>
+    <section class="layout" id="setup" aria-labelledby="setup-title">
+      <div class="panel" aria-label="Set up research">
+        <h2 id="setup-title">New research</h2>
+        <p class="muted">Use the access token printed when you started the local server. The token stays in this tab's memory and is not saved to local storage.</p>
+        <form id="research-form">
+          <label for="token">Local access token</label><input id="token" name="token" type="password" required autocomplete="off" placeholder="Paste local server token">
+          <button type="button" class="small" id="connect">Connect and show approved hosts</button>
+          <p class="muted" id="approved-hosts">Approved hosts will appear after connecting.</p>
+          <label for="question">Research question</label><textarea id="question" name="question" required rows="3" maxlength="500">Compare published prices and statements about API access.</textarea>
+          <label for="sources">Public source pages <span class="muted">(1–5, one per line)</span></label>
+          <textarea id="sources" name="sources" required rows="4" placeholder="Product A | https://approved.example/pricing"></textarea>
+          <label for="keyword">Additional evidence keyword <span class="muted">(optional, never marked independently verified)</span></label>
+          <input id="keyword" name="keyword" type="text" maxlength="80" value="API" placeholder="API">
+          <div class="budget"><div><label for="pages">Maximum page attempts</label><input type="number" id="pages" min="1" max="5" value="5"></div><div><label for="bytes">Maximum total bytes</label><input type="number" id="bytes" min="1024" max="5000000" value="1000000"></div></div>
+          <button type="submit" id="start" class="primary">Run bounded research</button>
+        </form>
+        <div id="error" class="error" role="alert" hidden></div>
+        <h3>Saved research</h3><p class="muted">Projects and runs persist in the local SQLite database; browser tokens do not.</p><div id="projects" aria-label="Saved projects" class="projects"></div>
+      </div>
+      <div class="panel results" aria-labelledby="results-title">
+        <div class="results-header"><h2 id="results-title">Evidence workspace</h2><span id="run-state" class="status">Not started</span></div>
+        <div id="status-line" role="status" aria-live="polite">Connect and start a research task to view actual source evidence.</div>
+        <div id="run-progress" hidden><div class="metrics" id="metrics"></div><button type="button" class="small" id="resume" hidden>Retry failed sources</button><button type="button" class="small" id="new-run" hidden>Rerun this saved project</button><div id="run-errors" class="muted"></div></div>
+        <div id="dossier" hidden>
+          <div class="notice"><strong>Evidence ≠ factual truth.</strong> “Supported” only means a precise price string appears in the recorded source text; feature keyword mentions always require review. Missing and failed sources stay visible.</div>
+          <div class="actions"><button type="button" id="export-json" class="small">Export JSON</button><button type="button" id="export-md" class="small">Export Markdown</button></div>
+          <div id="comparison" class="comparison" aria-label="Research comparison"></div>
+          <section class="evidence-section" aria-labelledby="evidence-heading"><h3 id="evidence-heading">Source inspector</h3><p class="muted">Choose a claim to inspect its recorded source and exact excerpt.</p><div id="evidence" tabindex="-1" class="evidence-box">No claim selected.</div></section>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>Evidence Radar V0.2-B · Operator-approved public pages · Deterministic extraction · No cloud authorization claims.</footer>
+</body>
+</html>
