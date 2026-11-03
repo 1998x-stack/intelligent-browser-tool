@@ -15,6 +15,38 @@ python main.py --help
 See [foundation merge decisions](docs/v0.1-conflict-resolution.md) and
 [original design notes](docs/v0.1-foundation.md).
 
+## V0.1.4 — 统一核心模块 / Unified Core
+
+这一版本合并 SQLite Frontier、受控浏览器网络策略、任务恢复、独立评测和真实 Chrome E2E。
+原有内存队列仍是默认行为；只有 `--durable-frontier` 才启用持久化任务调度。
+
+```bash
+python -m pip install -e ".[test,browser,search]"
+intelligent-browser --url https://example.com/ --intent "research" \
+  --no-selenium --no-search-seeds --durable-frontier \
+  --task-namespace local --task-id example-research
+```
+
+SQLite Frontier 会将页面分析结果与本页发现的链接**同事务写入**，重启后可恢复队列和汇总报告。
+`--task-namespace` 是逻辑任务分区，**不是用户身份验证或操作系统隔离**。
+
+真实 Chrome 测试和 Docker `--internal` 网络 E2E 已纳入 CI。
+**这些测试不构成生产级 SSRF 安全认证**：公网爬取仍需审核并实际验证 Squid/防火墙、
+IPv6、DNS rebinding、WebSocket 和浏览器所有出口通道。严禁未经审查直接提供多租户任意 URL 浏览服务。
+
+评测命令：
+
+```bash
+cd tests && PYTHONPATH=.. python -m pytest -q \
+  test_v01_foundation.py test_pr2_conflict_regression.py \
+  test_v01_batch2.py test_v01_batch3.py test_v014_hardening.py test_unified_core.py
+cd ..
+python -m benchmarks.frontier_scale --sizes 50 500 2000 --repeat 5
+```
+
+详见 [统一 PR 验收说明](docs/UNIFIED_CORE_RELEASE.md) 和
+[安全边界文档](docs/V0.1_NETWORK.md)。
+
 基于Ollama LLM、Selenium/Requests和Trafilatura的智能网页爬取与分析工具。
 
 A smart web crawling and analysis tool powered by Ollama LLM, Selenium/Requests, and Trafilatura.

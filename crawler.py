@@ -105,6 +105,8 @@ class CrawlConfig:
     max_seed_urls: int = 10                  # 最大种子URL数量
     language: str = "zh"                     # 搜索语言 (zh/en)
     durable_frontier: bool = False            # Opt-in SQLite queue (legacy mode remains available)
+    task_namespace: str = "local"              # Logical partition; not authentication
+    task_id: Optional[str] = None              # Caller-controlled task identity
 
 
 @dataclass
@@ -231,7 +233,9 @@ class WebCrawler:
             # URL队列 (需要完整Config对象)
             self.url_queue = (
                 DurableURLQueue(self.config, start_url=self.crawl_config.start_url,
-                                intent=self.crawl_config.intent)
+                                intent=self.crawl_config.intent,
+                                task_namespace=self.crawl_config.task_namespace,
+                                task_id=self.crawl_config.task_id)
                 if self.crawl_config.durable_frontier else URLQueue(self.config)
             )
             
@@ -487,17 +491,26 @@ class WebCrawler:
             
             # 处理页面
             result = self._process_page(item)
-            self.results.append(result)
-            # Keep legacy queue lifecycle counters consistent with actual page attempts.
+            # Durable mode atomically commits page result *and* child links.
+            # A crash after committing a page must not lose its discovered URLs.
             if self.crawl_config.durable_frontier:
-                self.url_queue.mark_processed(item.url, success=result.success,
-                                              error=result.error, result=asdict(result))
+                children = [
+                    {"url": link.get("url", ""),
+                     "priority": link.get("priority", 2),
+                     "depth": item.depth + 1,
+                     "parent_url": item.url,
+                     "context": {"link_text": link.get("link_text"),
+                                 "reason": link.get("reason")}}
+                    for link in result.priority_urls
+                ] if result.success else []
+                self.url_queue.mark_processed(
+                    item.url, success=result.success, error=result.error,
+                    result=asdict(result), discovered=children)
             else:
                 self.url_queue.mark_processed(item.url, success=result.success)
-            
-            # 添加发现的URL到队列
-            if result.success and result.priority_urls:
-                self._add_discovered_urls(result.priority_urls, item)
+                if result.success and result.priority_urls:
+                    self._add_discovered_urls(result.priority_urls, item)
+            self.results.append(result)
             
             # 更新进度
             pages_processed += 1
@@ -827,6 +840,10 @@ Examples:
         help="Use requests instead of selenium"
     )
     
+    parser.add_argument('--task-namespace', default='local',
+                        help='Logical task partition (not an auth boundary)')
+    parser.add_argument('--task-id', default=None,
+                        help='Stable task ID (identity mismatch fails closed)')
     parser.add_argument(
         '--durable-frontier',
         action='store_true',
@@ -873,6 +890,8 @@ def main():
         output_dir=args.output_dir,
         generate_report=not args.no_report,
         durable_frontier=args.durable_frontier,
+        task_namespace=args.task_namespace,
+        task_id=args.task_id,
         use_search_seeds=not args.no_search_seeds
     )
     
