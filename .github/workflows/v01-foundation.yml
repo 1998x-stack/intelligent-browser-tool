@@ -39,3 +39,14 @@ jobs:
       - run: python -m pip install pytest requests loguru selenium
       - name: Real Chrome proxy navigation and subresource E2E
         run: cd tests && PYTHONPATH=.. python -m pytest -q test_v014_chrome_e2e.py
+  isolated-container-e2e:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install selenium
+      - name: Real Chrome inside an internal-only Docker network
+        run: bash scripts/run_isolated_browser_e2e.sh
