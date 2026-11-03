@@ -105,6 +105,8 @@ class CrawlConfig:
     max_seed_urls: int = 10                  # 最大种子URL数量
     language: str = "zh"                     # 搜索语言 (zh/en)
     durable_frontier: bool = False            # Opt-in SQLite queue (legacy mode remains available)
+    task_namespace: str = "local"              # Logical partition; not authentication
+    task_id: Optional[str] = None              # Caller-controlled task identity
 
 
 @dataclass
@@ -231,7 +233,9 @@ class WebCrawler:
             # URL队列 (需要完整Config对象)
             self.url_queue = (
                 DurableURLQueue(self.config, start_url=self.crawl_config.start_url,
-                                intent=self.crawl_config.intent)
+                                intent=self.crawl_config.intent,
+                                task_namespace=self.crawl_config.task_namespace,
+                                task_id=self.crawl_config.task_id)
                 if self.crawl_config.durable_frontier else URLQueue(self.config)
             )
             
@@ -827,6 +831,10 @@ Examples:
         help="Use requests instead of selenium"
     )
     
+    parser.add_argument('--task-namespace', default='local',
+                        help='Logical task partition (not an auth boundary)')
+    parser.add_argument('--task-id', default=None,
+                        help='Stable task ID (identity mismatch fails closed)')
     parser.add_argument(
         '--durable-frontier',
         action='store_true',
@@ -873,6 +881,8 @@ def main():
         output_dir=args.output_dir,
         generate_report=not args.no_report,
         durable_frontier=args.durable_frontier,
+        task_namespace=args.task_namespace,
+        task_id=args.task_id,
         use_search_seeds=not args.no_search_seeds
     )
     
