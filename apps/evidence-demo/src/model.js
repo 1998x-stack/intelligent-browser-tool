@@ -31,8 +31,9 @@ export function validateDataset(data) {
     if (!fieldSet.has(fact.field) || !products.has(fact.product)) problems.push(`Unknown field/product: ${fact.id}`);
     if (!(fact.state in STATES)) problems.push(`Unknown state: ${fact.id}`);
     if (fact.state === 'supported' && !fact.evidence?.some(ref => ref.stance === 'supports')) problems.push(`Unsupported claim labelled supported: ${fact.id}`);
-    if (fact.state === 'conflicted' && (fact.evidence?.length ?? 0) < 2) problems.push(`Conflict has fewer than two sources: ${fact.id}`);
+    if (fact.state === 'conflicted' && new Set((fact.evidence ?? []).map(ref => ref.snapshot_id)).size < 2) problems.push(`Conflict has fewer than two distinct sources: ${fact.id}`);
     for (const ref of fact.evidence ?? []) {
+      if (!['supports', 'conflicts', 'context'].includes(ref.stance)) problems.push(`Invalid evidence stance: ${fact.id}`);
       const source = sourceMap.get(ref.snapshot_id);
       if (!source) { problems.push(`Missing source: ${fact.id}`); continue; }
       if (!Number.isInteger(ref.start) || !Number.isInteger(ref.end) || ref.start < 0 || ref.end <= ref.start || ref.end > source.text.length) problems.push(`Invalid evidence range: ${fact.id}`);
