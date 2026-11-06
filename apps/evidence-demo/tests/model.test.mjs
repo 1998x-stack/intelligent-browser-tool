@@ -119,3 +119,16 @@ test('fictional-domain validation rejects misleading host suffix', () => {
   const bad = clone();bad.snapshots[0].url='https://safe.example.evil.net/pricing';
   assert.match(validateDataset(bad).join(' '), /not fictional/);
 });
+
+test('conflicting claim requires two distinct source snapshots', () => {
+  const bad = clone();
+  const conflict = bad.facts.find(fact => fact.state === 'conflicted');
+  conflict.evidence[1].snapshot_id = conflict.evidence[0].snapshot_id;
+  assert.match(validateDataset(bad).join(' '), /fewer than two distinct sources/);
+});
+
+test('unknown evidence stance fails closed', () => {
+  const bad = clone();
+  bad.facts[0].evidence[0].stance = 'verified_by_ai';
+  assert.match(validateDataset(bad).join(' '), /Invalid evidence stance/);
+});
